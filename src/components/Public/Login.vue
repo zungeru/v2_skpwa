@@ -42,12 +42,25 @@
 
 <script>
 import { required, email } from 'vuelidate/lib/validators'
+import { mapActions } from 'vuex'
 
 export default {
   data () {
     return {
       email: '',
       password: ''
+    }
+  },
+  methods: {
+    ...mapActions({
+      logIn: 'logIn'
+    }),
+    onSubmit () {
+      const userData = {
+        email: this.email,
+        password: this.password
+      }
+      this.logIn(userData)
     }
   },
   validations: {

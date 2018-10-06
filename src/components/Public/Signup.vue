@@ -67,6 +67,7 @@
 <script>
 import { required, email, minLength, maxLength, sameAs } from 'vuelidate/lib/validators'
 import axios from 'axios'
+import { mapActions } from 'vuex'
 
 export default {
   data () {
@@ -75,6 +76,19 @@ export default {
       email: '',
       password: '',
       confirmPassword: ''
+    }
+  },
+  methods: {
+    ...mapActions({
+      signUp: 'signUp'
+    }),
+    onSubmit () {
+      const userData = {
+        username: this.username,
+        email: this.email,
+        password: this.password
+      }
+      this.signUp(userData)
     }
   },
   validations: {
