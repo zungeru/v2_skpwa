@@ -28,7 +28,7 @@ export const getMorePosts = ({ commit }) => {
     })
 }
 
-export const signUp = ({commit}, userData) => {
+export const signUp = ({ commit, dispatch }, userData) => {
   const fd = new FormData()
   fd.append('username', userData.username)
   fd.append('email', userData.email)
@@ -39,11 +39,13 @@ export const signUp = ({commit}, userData) => {
     .then(response => {
       const user = response.data
       console.log(user)
+      commit('SET_TOKEN', user.token)
+      dispatch('storeUser')
     })
     .catch(error => console.log(error))
 }
 
-export const logIn = ({commit}, userData) => {
+export const logIn = ({ commit, dispatch }, userData) => {
   const fd = new FormData()
   fd.append('email', userData.email)
   fd.append('password', userData.password)
@@ -53,6 +55,18 @@ export const logIn = ({commit}, userData) => {
     .then(response => {
       const user = response.data
       console.log(user)
+      commit('SET_TOKEN', user.token)
+      dispatch('storeUser')
+    })
+    .catch(error => console.log(error))
+}
+
+export const storeUser = ({ commit }) => {
+  const token = store.getters.token
+  axios.get('http://localhost:5000/yo', { headers: { 'Authorization': `Bearer ${token}` } })
+    .then(response => {
+      console.log(response.data)
+      commit('SET_USER_DATA', response.data)
     })
     .catch(error => console.log(error))
 }

@@ -3,7 +3,7 @@
     <div class="signup-heading">
       <h4>Signup</h4>
       <span>already have an account?</span>
-      <router-link tag="span" :to="{ name: 'login'}" style="color: #f50057; cursor: pointer;"> Login</router-link>
+      <router-link tag="span" :to="{ name: 'login'}" style="color: #f50057; cursor: pointer;">&nbsp;Login</router-link>
     </div>
     <br>
     <form class="signup-form" action="#" >
