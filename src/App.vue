@@ -14,8 +14,9 @@
           </button>
           <ul class="mdl-menu mdl-js-menu mdl-js-ripple-effect mdl-menu--bottom-right" for="hdrbtn">
             <router-link tag="li" class="mdl-menu__item header_menu" :to="{ name: 'home'}">Home</router-link>
-            <router-link tag="li" class="mdl-menu__item header_menu" :to="{ name: 'login'}">Login</router-link>
             <router-link tag="li" class="mdl-menu__item header_menu" :to="{ name: 'about'}">About</router-link>
+            <router-link v-if="!auth" tag="li" class="mdl-menu__item header_menu" :to="{ name: 'login'}">Log In</router-link>
+            <li  v-if="auth" @click="onLogout" class="mdl-menu__item header_menu">Log Out</li>
           </ul>
         </div>
       </header>
@@ -105,7 +106,17 @@ window.onload = function () {
 }
 
 export default {
-  name: 'App'
+  name: 'App',
+  computed: {
+    auth () {
+      return this.$store.getters.isAuthenticated
+    }
+  },
+  methods: {
+    onLogout() {
+      this.$store.dispatch('logOut')
+    }
+  }
 }
 </script>
 

@@ -1,9 +1,6 @@
 const state = {
   token: null,
-  auth_id: null,
-  username: null,
-  email: null,
-  exp: null
+  userData: null
 }
 
 const mutations = {
@@ -11,10 +8,11 @@ const mutations = {
     state.token = token
   },
   'SET_USER_DATA' (state, userData) {
-    state.auth_id = userData.auth_id
-    state.username = userData.username
-    state.email = userData.email
-    state.exp = userData.exp
+    state.userData = userData
+  },
+  'CLEAR_AUTH_DATA' (state) {
+    state.token = null
+    state.userData = null
   }
 }
 
@@ -25,6 +23,12 @@ const mutations = {
 const getters = {
   token (state) {
     return state.token
+  },
+  userData (state) {
+    return state.userData
+  },
+  isAuthenticated (state) {
+    return state.userData !== null
   }
 }
 

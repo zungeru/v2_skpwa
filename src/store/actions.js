@@ -61,6 +61,10 @@ export const logIn = ({ commit, dispatch }, userData) => {
     .catch(error => console.log(error))
 }
 
+export const logOut = ({ commit }) => {
+  commit('CLEAR_AUTH_DATA')
+}
+
 export const storeUser = ({ commit }) => {
   const token = store.getters.token
   axios.get('http://localhost:5000/yo', { headers: { 'Authorization': `Bearer ${token}` } })
