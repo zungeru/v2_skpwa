@@ -116,6 +116,9 @@ export default {
     onLogout() {
       this.$store.dispatch('logOut')
     }
+  },
+  created () {
+    this.$store.dispatch('tryAutoLogIn')
   }
 }
 </script>

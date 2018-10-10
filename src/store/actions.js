@@ -1,5 +1,6 @@
 import axios from 'axios'
 import store from './store'
+import router from '../router/router'
 
 const CLIENT_ID = 'styleKast_client_server'
 const CLIENT_SECRET = 'bless-styleKast-always'
@@ -37,9 +38,9 @@ export const signUp = ({ commit, dispatch }, userData) => {
   fd.append('client_secret', CLIENT_SECRET)
   axios.post('http://localhost:5001/user/create', fd)
     .then(response => {
-      const user = response.data
-      console.log(user)
-      commit('SET_TOKEN', user.token)
+      console.log(response.data)
+      // commit('SET_TOKEN', response.data.token)
+      localStorage.setItem('token', response.data.token)
       dispatch('storeUser')
     })
     .catch(error => console.log(error))
@@ -53,9 +54,9 @@ export const logIn = ({ commit, dispatch }, userData) => {
   fd.append('client_secret', CLIENT_SECRET)
   axios.post('http://localhost:5001/user/login', fd)
     .then(response => {
-      const user = response.data
-      console.log(user)
-      commit('SET_TOKEN', user.token)
+      console.log(response.data)
+      // commit('SET_TOKEN', response.data.token)
+      localStorage.setItem('token', response.data.token)
       dispatch('storeUser')
     })
     .catch(error => console.log(error))
@@ -63,14 +64,39 @@ export const logIn = ({ commit, dispatch }, userData) => {
 
 export const logOut = ({ commit }) => {
   commit('CLEAR_AUTH_DATA')
+  localStorage.removeItem('token')
+  localStorage.removeItem('expirationDate')
+  router.replace('logIn')
 }
 
-export const storeUser = ({ commit }) => {
-  const token = store.getters.token
+export const storeUser = ({ commit, dispatch }) => {
+  const token = localStorage.getItem('token')
   axios.get('http://localhost:5000/yo', { headers: { 'Authorization': `Bearer ${token}` } })
     .then(response => {
       console.log(response.data)
       commit('SET_USER_DATA', response.data)
+      const expirationDate = new Date(response.data.exp * 1000)
+      localStorage.setItem('expirationDate', expirationDate)
+      dispatch('setLogOutTimer', response.data.life_span)
     })
     .catch(error => console.log(error))
+}
+
+export const tryAutoLogIn = ({ dispatch }) => {
+  const token = localStorage.getItem('token')
+  if (!token) {
+    return
+  }
+  const expirationDate = localStorage.getItem('expirationDate')
+  const now = new Date()
+  if (now >= expirationDate) {
+    return
+  }
+  dispatch('storeUser')
+}
+
+export const setLogOutTimer = ({ dispatch }, expirationTime) => {
+    setTimeout(() => {
+      dispatch('logOut')
+    }, expirationTime * 1000)
 }

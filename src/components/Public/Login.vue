@@ -23,9 +23,7 @@
         <input
           type="password"
           id="password"
-          @input="$v.password.$touch()"
           v-model.lazy="password">
-          <p v-if="!$v.password.required && $v.password.$dirty"> password required</p>
       </div>
       <br>
       <div>
@@ -63,13 +61,14 @@ export default {
       this.logIn(userData)
     }
   },
+  deactivated () {
+    this.email = ''
+    this.password = ''
+  },
   validations: {
     email: {
       required,
       email
-    },
-    password: {
-      required
     }
   }
 }
