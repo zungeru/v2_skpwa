@@ -66,11 +66,32 @@ export const logIn = ({ commit, dispatch }, userData) => {
     .catch(error => console.log(error))
 }
 
+export const updateUser = ({ commit, dispatch }, userData) => {
+  const fd = new FormData()
+  fd.append('auth_id', userData.auth_id)
+  fd.append('old_email', userData.currentEmail)
+  fd.append('new_email', userData.newEmail)
+  fd.append('old_password', userData.currentPassword)
+  fd.append('new_password', userData.newPassword)
+  fd.append('client_id', CLIENT_ID)
+  fd.append('client_secret', CLIENT_SECRET)
+  axios.post('http://localhost:5001/user/update', fd)
+    .then(response => {
+      console.log(response.data)
+      // commit('SET_TOKEN', response.data.token)
+      if (response.data.token){
+        localStorage.setItem('token', response.data.token)
+        dispatch('storeUser')
+      }
+    })
+    .catch(error => console.log(error))
+}
+
 export const logOut = ({ commit }) => {
   commit('CLEAR_AUTH_DATA')
   localStorage.removeItem('token')
   localStorage.removeItem('expirationDate')
-  router.replace('logIn')
+  router.replace({ name: 'login'})
 }
 
 export const storeUser = ({ commit, dispatch }) => {

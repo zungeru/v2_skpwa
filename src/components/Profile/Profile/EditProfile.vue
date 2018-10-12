@@ -90,14 +90,12 @@
 
       <br>
 
-      <div>
         <button
           class="mdl-button mdl-button--raised mdl-button--colored"
-          :disabled="$v.$invalid"
+          :disabled="formInvalid"
           @click.prevent="onSubmit">
           update
         </button>
-      </div>
 
     </form>
 
@@ -141,22 +139,29 @@ export default {
       this.newPassword = ''
       this.confirmPassword = ''
     },
+    ...mapActions({
+      updateUser: 'updateUser'
+    }),
     onSubmit () {
-      const updateData = {
+      const userData = {
         auth_id: this.userData.auth_id,
         currentEmail: this.userData.email,
-        newEmail: this.newEmail,
+        newEmail: this.newEmail !== '' ? this.newEmail : this.userData.email,
         currentPassword: this.currentPassword,
-        newPassword: this.newPassword
+        newPassword: this.newPassword !== '' ? this.newPassword : this.currentPassword
       }
-      console.log(updateData)
+      console.log(userData)
       // this.signUp(updateData)
+      this.updateUser(userData)
     }
   },
   computed: {
     ...mapGetters({
       userData: 'userData'
-    })
+    }),
+    formInvalid () {
+      return ((this.$v.$invalid) || ((this.newEmail === '') && (this.newPassword === '')))
+    }
   },
   validations: {
     newEmail: {
