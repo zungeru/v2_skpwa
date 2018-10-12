@@ -40,8 +40,10 @@ export const signUp = ({ commit, dispatch }, userData) => {
     .then(response => {
       console.log(response.data)
       // commit('SET_TOKEN', response.data.token)
-      localStorage.setItem('token', response.data.token)
-      dispatch('storeUser')
+      if (response.data.token){
+        localStorage.setItem('token', response.data.token)
+        dispatch('storeUser')
+      }
     })
     .catch(error => console.log(error))
 }
@@ -56,8 +58,10 @@ export const logIn = ({ commit, dispatch }, userData) => {
     .then(response => {
       console.log(response.data)
       // commit('SET_TOKEN', response.data.token)
-      localStorage.setItem('token', response.data.token)
-      dispatch('storeUser')
+      if (response.data.token){
+        localStorage.setItem('token', response.data.token)
+        dispatch('storeUser')
+      }
     })
     .catch(error => console.log(error))
 }

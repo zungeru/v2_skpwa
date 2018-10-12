@@ -8,20 +8,20 @@
 
       <span
         v-if="!updateEmail"
-        @click="showEmail">UPDATE EMAIL</span>
+        @click="showEmail">Update Email</span>
       <span
+        style="color: #f50057;"
         v-else
-        @click="hideEmail">CANCEL UPDATE EMAIL</span>
+        @click="hideEmail">Cancel Email Update</span>
 
       <br>
       <br>
-
       <div v-if="updateEmail">
         <div class="edit-item">
           <label for="currentemail">current email</label>
           <input
             type="email"
-            placeholder="midoexo@exascale.com"
+            :placeholder="userData ? userData.email : '' "
             disabled
             id="currentemail">
         </div>
@@ -30,7 +30,11 @@
           <label for="newemail">new email</label>
           <input
             type="email"
-            id="newemail">
+            id="newemail"
+            @blur="$v.newEmail.$touch()"
+            v-model.lazy="newEmail">
+            <p v-if="!$v.newEmail.email"> enter valid email</p>
+            <p v-if="!$v.newEmail.isUnique"> email already used</p>
         </div>
       </div>
 
@@ -39,10 +43,11 @@
 
       <span
         v-if="!updatePassword"
-        @click="showPassword">UPDATE PASSWORD</span>
+        @click="showPassword">Update Password</span>
       <span
+        style="color: #f50057;"
         v-else
-        @click="hidePassword">CANCEL UPDATE PASSWORD</span>
+        @click="hidePassword">Cancel Password Update</span>
 
       <br>
       <br>
@@ -52,14 +57,20 @@
           <label for="newpassword">new password</label>
           <input
             type="password"
-            id="newpassword">
+            id="newpassword"
+            @input="$v.newPassword.$touch()"
+            v-model="newPassword">
+            <p v-if="!$v.newPassword.minLen && $v.newPassword.$dirty"> min 6 characters</p>
         </div>
         <br>
         <div class="edit-item">
           <label for="confirmpassword">confirm new password</label>
           <input
             type="password"
-            id="confirmpassword">
+            id="confirmpassword"
+            @input="$v.confirmPassword.$touch()"
+            v-model="confirmPassword">
+            <p v-if="!$v.confirmPassword.sameAs && $v.confirmPassword.$dirty"> passwords don&#39;t match </p>
         </div>
       </div>
 
@@ -68,10 +79,13 @@
       <br>
 
       <div class="edit-item">
-        <label for="oldpassword">enter current password to confirm updates</label>
+        <label for="currentpassword">enter current password to confirm updates</label>
         <input
           type="password"
-          id="oldpassword">
+          id="currentpassword"
+          @input="$v.currentPassword.$touch()"
+          v-model="currentPassword">
+          <p v-if="!$v.currentPassword.required && $v.currentPassword.$dirty"> current password required</p>
       </div>
 
       <br>
@@ -79,21 +93,36 @@
       <div>
         <button
           class="mdl-button mdl-button--raised mdl-button--colored"
+          :disabled="$v.$invalid"
           @click.prevent="onSubmit">
           update
         </button>
       </div>
 
     </form>
+
+    <div class="edit-heading">
+      <h5>Update Profile Info</h5>
+    </div>
+    <br>
+
   </div>
 </template>
 
 <script>
+import {required, email, minLength, sameAs } from 'vuelidate/lib/validators'
+import axios from 'axios'
+import { mapActions, mapGetters } from 'vuex'
+
 export default {
   data () {
     return {
       updateEmail: false,
-      updatePassword: false
+      updatePassword: false,
+      newEmail: '',
+      newPassword:'',
+      confirmPassword: '',
+      currentPassword: ''
     }
   },
   methods: {
@@ -102,12 +131,57 @@ export default {
     },
     hideEmail () {
       this.updateEmail = false
+      this.newEmail = ''
     },
     showPassword () {
       this.updatePassword = true
     },
     hidePassword () {
       this.updatePassword = false
+      this.newPassword = ''
+      this.confirmPassword = ''
+    },
+    onSubmit () {
+      const updateData = {
+        auth_id: this.userData.auth_id,
+        currentEmail: this.userData.email,
+        newEmail: this.newEmail,
+        currentPassword: this.currentPassword,
+        newPassword: this.newPassword
+      }
+      console.log(updateData)
+      // this.signUp(updateData)
+    }
+  },
+  computed: {
+    ...mapGetters({
+      userData: 'userData'
+    })
+  },
+  validations: {
+    newEmail: {
+      email,
+      isUnique (value) {
+        // standalone validator ideally should not assume a field is required
+        if (value === '') return true
+        const fd = new FormData()
+        fd.append('email', value)
+        return axios.post('http://localhost:5001/email/check', fd)
+          .then(res => {
+            // return false if res.data is true
+            // return true if res.data is false
+            return !res.data
+          })
+      }
+    },
+    newPassword: {
+      minLen: minLength(6)
+    },
+    confirmPassword: {
+      sameAs: sameAs('newPassword')
+    },
+    currentPassword: {
+      required
     }
   }
 }

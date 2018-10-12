@@ -23,7 +23,8 @@
         <input
           type="password"
           id="password"
-          v-model.lazy="password">
+          @input="$v.password.$touch()"
+          v-model="password">
       </div>
       <br>
       <div>
@@ -69,6 +70,9 @@ export default {
     email: {
       required,
       email
+    },
+    password: {
+      required
     }
   }
 }
