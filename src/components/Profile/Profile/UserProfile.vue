@@ -27,6 +27,12 @@
         <span style="font-weight: 600">username</span>
         <p>Ok, this is where I put all the other information... Ok, this is where I put all the other information...
           Ok,</p>
+            <router-link
+              tag="span"
+              :to="{ name: 'editprofile'}"
+              style="color: #f50057; cursor: pointer;">Edit Profile
+            </router-link>
+
       </div>
       <hr>
     </div>

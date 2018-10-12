@@ -105,15 +105,18 @@ export default {
     },
     onFilePicked (event) {
       const files = event.target.files
-      this.picsLength = event.target.files.length
+      // this.picsLength = event.target.files.length
       if (files[0]) {
         this.pics.push({'id': 0, 'file': files[0], url: ''})
+        this.picsLength++
       }
       if (files[1]) {
         this.pics.push({'id': 1, 'file': files[1], url: ''})
+        this.picsLength++
       }
       if (files[2]) {
         this.pics.push({'id': 2, 'file': files[2], url: ''})
+        this.picsLength++
       }
 
       for (let c of this.pics) {
@@ -122,7 +125,6 @@ export default {
       console.log(this.pics)
     },
     fileReader (file) {
-      return new Promise((resolve, reject) => {
         const fileReader = new FileReader()
         fileReader.addEventListener('load', () => {
           file['url'] = fileReader.result
@@ -131,7 +133,6 @@ export default {
           }
         })
         fileReader.readAsDataURL(file['file'])
-      })
     },
     onSubmit () {
       const fd = new FormData()
@@ -160,7 +161,6 @@ export default {
   margin-left: auto;
   max-width: 500px;
 }
-
 .sk-upload-input {
   margin-top: 60px;
   text-align: center;
