@@ -223,14 +223,15 @@ export default {
 .edit-item > p {
   margin: 0px;
   padding: 0px;
-  color: gray;
+  color: #f50057;
 }
 .edit-item > input  {
   width:100%;
   height: 40px;
   padding: 10px 15px;
   box-sizing: border-box;
-  border: 2px solid rgb(245,0,87, .15);
+  /* border: 2px solid rgb(245,0,87, .15); */
+  border: 2px solid rgb(176,176,176, .35);
   border-radius: 5px;
   background-color: rgb(237,237,237, .4);
   font-family: 'Avenir', Helvetica, Arial, sans-serif;

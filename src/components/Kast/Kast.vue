@@ -28,25 +28,28 @@
             >drag photos to reorder
           </div>
           <div class="form-item">
-            <label for="piece">piece</label>
+            <label for="piece">piece</label> <span>&nbsp;({{pieceCharsLeft()}})</span>
             <input
               type="text"
               name="piece"
               id="piece"
-              required
+              maxlength="40"
+              placeholder="max 40 chars"
+              @input="$v.piece.$touch()"
               v-model="piece">
+              <p v-if="!$v.piece.required && $v.piece.$dirty"> field required</p>
           </div>
           <br>
           <div class="form-item">
             <label for="price">price</label>
             <input
-              type="number"
-              min="0.00"
-              step="0.01"
               name="price"
               id="price"
-              required
+              placeholder="(ex: 99.00)"
+              @input="$v.price.$touch()"
               v-model="price">
+              <p v-if="!$v.price.required && $v.price.$dirty"> field required</p>
+              <p v-if="!$v.price.decimal && $v.price.$dirty"> enter a dollar amount</p>
           </div>
           <br>
           <div class="form-item">
@@ -54,23 +57,31 @@
             <input
               type="text"
               name="place"
+              placeholder="link (url) or address (irl)"
               id="place"
-              required
+              @input="$v.place.$touch()"
               v-model="place">
+              <p v-if="!$v.place.required && $v.place.$dirty"> field required</p>
           </div>
           <br>
           <div class="form-item">
-            <label for="style-note">style note </label>
+            <label for="style-note">style note </label><span>&nbsp;({{noteCharsLeft()}})</span>
             <textarea
               type="text"
               name="style-note"
               id="style-note"
+              maxlength="200"
+              placeholder="max 200 chars"
+              @input="$v.note.$touch()"
               v-model="note">
             </textarea>
+            <p v-if="!$v.note.required && $v.note.$dirty"> field required</p>
           </div>
+          <br>
           <div>
             <button
-              class="mdl-button mdl-button--primary"
+              class="mdl-button mdl-button--raised mdl-button--colored"
+              :disabled="$v.$invalid"
               @click.prevent="onSubmit">
               submit
             </button>
@@ -82,6 +93,7 @@
 
 <script>
 import draggable from 'vuedraggable'
+import { required, maxLength, decimal } from 'vuelidate/lib/validators'
 import axios from 'axios'
 
 export default {
@@ -98,6 +110,23 @@ export default {
   },
   components: {
     draggable
+  },
+  validations: {
+    piece: {
+      required,
+      maxLen: maxLength(40)
+    },
+    note: {
+      required,
+      maxLen: maxLength(200)
+    },
+    price: {
+      required,
+      decimal
+    },
+    place: {
+      required
+    }
   },
   methods: {
     onPickFile () {
@@ -134,7 +163,14 @@ export default {
         })
         fileReader.readAsDataURL(file['file'])
     },
+    pieceCharsLeft () {
+      return this.$v.piece.$params.maxLen.max - this.piece.length
+    },
+    noteCharsLeft() {
+      return this.$v.note.$params.maxLen.max - this.note.length
+    },
     onSubmit () {
+      const token = localStorage.getItem('token')
       const fd = new FormData()
       fd.append('piece', this.piece)
       fd.append('price', this.price)
@@ -144,7 +180,10 @@ export default {
       fd.append('pic_2', (this.pics[1] ? this.pics[1]['file'] : null), (this.pics[1] ? this.pics[1]['file'].name : 'none_1'))
       fd.append('pic_3', (this.pics[2] ? this.pics[2]['file'] : null), (this.pics[2] ? this.pics[2]['file'].name : 'none_2'))
       console.log(fd)
-      axios.post('http://localhost:5000/upload', fd, { headers: {'Content-Type': 'multipart/form-data'} })
+      axios.post('http://localhost:5000/post/create', fd, {
+        headers:
+          {'Content-Type': 'multipart/form-data', 'Authorization': `Bearer ${token}` }
+        })
         .then(res => {
           console.log(res)
         })
@@ -189,12 +228,18 @@ li {
 .form-item > label {
   font-size: 16px;
 }
+.form-item > p {
+  margin: 0px;
+  padding: 0px;
+  color: #f50057;
+}
 .form-item > input  {
   width:100%;
   height: 40px;
   padding: 10px 15px;
   box-sizing: border-box;
-  border: 2px solid rgb(245,0,87, .15);
+  /* border: 2px solid rgb(245,0,87, .15); */
+  border: 2px solid rgb(176,176,176, .35);
   border-radius: 5px;
   background-color: rgb(237,237,237, .4);
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
@@ -205,7 +250,8 @@ li {
   height: 100px;
   padding: 10px 15px;
   box-sizing: border-box;
-  border: 2px solid rgb(245,0,87, .15);
+  /* border: 2px solid rgb(245,0,87, .15); */
+  border: 2px solid rgb(176,176,176, .35);
   border-radius: 5px;
   background-color: rgb(237,237,237, .4);
   resize: none;
