@@ -48,6 +48,7 @@
 
 <script>
 import StyleKard from '../../Shared/Stylekard/StyleKard'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
   data () {
@@ -57,9 +58,9 @@ export default {
           'id': 1,
           'name': 'mido1',
           'pics': [
-            {'src': 'img/1080/slide2_A.jpeg'},
-            {'src': 'img/1080/slide1_A.jpeg'},
-            {'src': 'img/1080/slide4_A.jpeg'}
+            { 'src': 'img/1080/slide2_A.jpeg' },
+            { 'src': 'img/1080/slide1_A.jpeg' },
+            { 'src': 'img/1080/slide4_A.jpeg' }
           ],
           'piece': 'New Bomber Jacket',
           'price': '598.00',
@@ -73,9 +74,9 @@ export default {
           'id': 2,
           'name': 'mido2',
           'pics': [
-            {'src': 'img/1080/slide3_A.jpeg'},
-            {'src': 'img/1080/slide1_A.jpeg'},
-            {'src': 'img/1080/slide3_A.jpeg'}
+            { 'src': 'img/1080/slide3_A.jpeg' },
+            { 'src': 'img/1080/slide1_A.jpeg' },
+            { 'src': 'img/1080/slide3_A.jpeg' }
           ],
           'piece': 'New Bomber Jacket',
           'price': '598.00',
@@ -89,9 +90,9 @@ export default {
           'id': 3,
           'name': 'mido3',
           'pics': [
-            {'src': 'img/1080/slide2_A.jpeg'},
-            {'src': 'img/1080/slide1_A.jpeg'},
-            {'src': 'img/1080/slide3_A.jpeg'}
+            { 'src': 'img/1080/slide2_A.jpeg' },
+            { 'src': 'img/1080/slide1_A.jpeg' },
+            { 'src': 'img/1080/slide3_A.jpeg' }
           ],
           'piece': 'New Bomber Jacket',
           'price': '598.00',
@@ -104,8 +105,24 @@ export default {
       ]
     }
   },
+  computed: {
+    ...mapGetters({
+      userPosts: 'userPosts',
+      userRound: 'userRound'
+    })
+  },
+  methods: {
+    ...mapActions({
+      getInitialUserPosts: 'getInitialUserPosts',
+      getMoreUserPosts: 'getMoreUserPosts'
+    })
+  },
   components: {
     StyleKard
+  },
+  activated () {
+    this.getInitialUserPosts()
+    console.log('Feed View: Before mount')
   }
 }
 

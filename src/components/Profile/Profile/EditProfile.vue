@@ -108,7 +108,7 @@
 </template>
 
 <script>
-import {required, email, minLength, sameAs } from 'vuelidate/lib/validators'
+import { required, email, minLength, sameAs } from 'vuelidate/lib/validators'
 import axios from 'axios'
 import { mapActions, mapGetters } from 'vuex'
 
@@ -118,7 +118,7 @@ export default {
       updateEmail: false,
       updatePassword: false,
       newEmail: '',
-      newPassword:'',
+      newPassword: '',
       confirmPassword: '',
       currentPassword: ''
     }

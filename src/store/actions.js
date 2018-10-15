@@ -10,25 +10,7 @@ const CLIENT_SECRET = 'bless-styleKast-always'
 // the global vue instance. for me to use anything from the store, I neeeded
 // to import it.
 
-export const getInitialPosts = ({ commit }) => {
-  axios.get('http://localhost:5000/')
-    .then(response => {
-      const posts = response.data
-      commit('SET_POSTS', posts)
-    })
-}
-
-export const getMorePosts = ({ commit }) => {
-  const currentRound = store.getters.loadRound
-  axios.get('http://localhost:5000/' + currentRound)
-    .then(response => {
-      const posts = response.data
-      console.log(currentRound)
-      commit('ADD_POSTS', posts)
-      commit('ADD_ROUND')
-    })
-}
-
+// for auth.js
 export const signUp = ({ commit, dispatch }, userData) => {
   const fd = new FormData()
   fd.append('username', userData.username)
@@ -40,7 +22,7 @@ export const signUp = ({ commit, dispatch }, userData) => {
     .then(response => {
       console.log(response.data)
       // commit('SET_TOKEN', response.data.token)
-      if (response.data.token){
+      if (response.data.token) {
         localStorage.setItem('token', response.data.token)
         dispatch('storeUser')
       }
@@ -48,6 +30,7 @@ export const signUp = ({ commit, dispatch }, userData) => {
     .catch(error => console.log(error))
 }
 
+// for auth.js
 export const logIn = ({ commit, dispatch }, userData) => {
   const fd = new FormData()
   fd.append('email', userData.email)
@@ -58,7 +41,7 @@ export const logIn = ({ commit, dispatch }, userData) => {
     .then(response => {
       console.log(response.data)
       // commit('SET_TOKEN', response.data.token)
-      if (response.data.token){
+      if (response.data.token) {
         localStorage.setItem('token', response.data.token)
         dispatch('storeUser')
       }
@@ -66,6 +49,7 @@ export const logIn = ({ commit, dispatch }, userData) => {
     .catch(error => console.log(error))
 }
 
+// for auth.js
 export const updateUser = ({ commit, dispatch }, userData) => {
   const fd = new FormData()
   fd.append('auth_id', userData.auth_id)
@@ -79,7 +63,7 @@ export const updateUser = ({ commit, dispatch }, userData) => {
     .then(response => {
       console.log(response.data)
       // commit('SET_TOKEN', response.data.token)
-      if (response.data.token){
+      if (response.data.token) {
         localStorage.setItem('token', response.data.token)
         dispatch('storeUser')
       }
@@ -87,13 +71,15 @@ export const updateUser = ({ commit, dispatch }, userData) => {
     .catch(error => console.log(error))
 }
 
+// for auth.js
 export const logOut = ({ commit }) => {
   commit('CLEAR_AUTH_DATA')
   localStorage.removeItem('token')
   localStorage.removeItem('expirationDate')
-  router.replace({ name: 'login'})
+  router.replace({ name: 'login' })
 }
 
+// for auth.js
 export const storeUser = ({ commit, dispatch }) => {
   const token = localStorage.getItem('token')
   axios.get('http://localhost:5000/yo', { headers: { 'Authorization': `Bearer ${token}` } })
@@ -107,6 +93,7 @@ export const storeUser = ({ commit, dispatch }) => {
     .catch(error => console.log(error))
 }
 
+// for auth.js
 export const tryAutoLogIn = ({ dispatch }) => {
   const token = localStorage.getItem('token')
   if (!token) {
@@ -120,8 +107,56 @@ export const tryAutoLogIn = ({ dispatch }) => {
   dispatch('storeUser')
 }
 
+// for auth.js
 export const setLogOutTimer = ({ dispatch }, expirationTime) => {
-    setTimeout(() => {
-      dispatch('logOut')
-    }, expirationTime * 1000)
+  setTimeout(() => {
+    dispatch('logOut')
+  }, expirationTime * 1000)
+}
+
+// for stylefeed.js (needs to be updated)
+export const getInitialPosts = ({ commit }) => {
+  axios.get('http://localhost:5000/')
+    .then(response => {
+      const posts = response.data
+      commit('SET_POSTS', posts)
+    })
+}
+
+// for stylefeed.js (needs to be updated)
+export const getMorePosts = ({ commit }) => {
+  const currentRound = store.getters.loadRound
+  axios.get('http://localhost:5000/' + currentRound)
+    .then(response => {
+      const posts = response.data
+      console.log(currentRound)
+      commit('ADD_POSTS', posts)
+      commit('ADD_ROUND')
+    })
+}
+
+// for userprofile.js
+export const getInitialUserPosts = ({ commit }) => {
+  const token = localStorage.getItem('token')
+  const username = store.getters.userData.username
+  axios.get('http://localhost:5000/' + username + '/posts', { headers: { 'Authorization': `Bearer ${token}` } })
+    .then(response => {
+      const posts = response.data
+      console.log(posts)
+      commit('SET_USER_POSTS', posts)
+    })
+}
+
+// for userprofile.js
+export const getMoreUserPosts = ({ commit }) => {
+  const token = localStorage.getItem('token')
+  const username = store.getters.userData.username
+  const currentRound = store.getters.loadRound
+  axios.get('http://localhost:5000/' + username + '/posts/' + currentRound, { headers: { 'Authorization': `Bearer ${token}` } })
+    .then(response => {
+      const posts = response.data
+      console.log(currentRound)
+      commit('ADD_USER_POSTS', posts)
+      commit('ADD_USER_ROUND')
+    })
 }
