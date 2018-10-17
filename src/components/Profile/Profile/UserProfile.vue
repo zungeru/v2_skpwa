@@ -7,15 +7,15 @@
       <div class="user-profile-stats">
         <div style="display:flex;justify-content:space-between;">
           <div style="text-align: center;">
-            <span style="font-weight: 600">2098 </span><br>
+            <span style="font-weight: 600"> {{profiledUser.posts_count}} </span><br>
             <span>posts</span>
           </div>
           <div style="text-align: center;">
-            <span style="font-weight: 600">8M</span> <br>
+            <span style="font-weight: 600">{{profiledUser.followers_count}}</span> <br>
             <span>followers</span>
           </div>
           <div style="text-align: center;">
-            <span style="font-weight: 600">120</span> <br>
+            <span style="font-weight: 600">{{profiledUser.following_count}}</span> <br>
             <span>following</span>
           </div>
         </div>
@@ -24,9 +24,10 @@
         </div>
       </div>
       <div class="user-profile-info">
-        <span style="font-weight: 600">username</span>
-        <p>Ok, this is where I put all the other information... Ok, this is where I put all the other information...
-          Ok,</p>
+        <span style="font-weight: 600">{{profiledUser.username}}</span> &nbsp;
+        <span>|</span> &nbsp;
+        <span style="font-weight: 600">{{profiledUser.name}}</span>
+        <p>{{profiledUser.about}}</p>
             <router-link
               tag="span"
               :to="{ name: 'editprofile'}"
@@ -49,6 +50,7 @@
 <script>
 import StyleKard from '../../Shared/Stylekard/StyleKard'
 import { mapActions, mapGetters } from 'vuex'
+import axios from 'axios'
 
 export default {
   data () {
@@ -58,9 +60,9 @@ export default {
           'id': 1,
           'name': 'mido1',
           'pics': [
-            { 'src': 'img/1080/slide2_A.jpeg' },
-            { 'src': 'img/1080/slide1_A.jpeg' },
-            { 'src': 'img/1080/slide4_A.jpeg' }
+            { 'src': 'https://res.cloudinary.com/zungeru/image/upload/v1539480523/userphotos/sk_14_pic_1.jpg' },
+            { 'src': 'http://www.trandynow.com/wp-content/uploads/2017/09/How-to-look-fashionable-in-a-Parka-8-copy.jpg' },
+            { 'src': 'https://www.tricountymall.com/wp-content/uploads/2015/09/Ways-to-Make-Flannel-Fashionable.jpg' }
           ],
           'piece': 'New Bomber Jacket',
           'price': '598.00',
@@ -74,9 +76,9 @@ export default {
           'id': 2,
           'name': 'mido2',
           'pics': [
-            { 'src': 'img/1080/slide3_A.jpeg' },
-            { 'src': 'img/1080/slide1_A.jpeg' },
-            { 'src': 'img/1080/slide3_A.jpeg' }
+            { 'src': 'https://res.cloudinary.com/zungeru/image/upload/v1539480523/userphotos/sk_14_pic_1.jpg' },
+            { 'src': 'http://www.trandynow.com/wp-content/uploads/2017/09/How-to-look-fashionable-in-a-Parka-8-copy.jpg' },
+            { 'src': 'https://www.tricountymall.com/wp-content/uploads/2015/09/Ways-to-Make-Flannel-Fashionable.jpg' }
           ],
           'piece': 'New Bomber Jacket',
           'price': '598.00',
@@ -90,9 +92,9 @@ export default {
           'id': 3,
           'name': 'mido3',
           'pics': [
-            { 'src': 'img/1080/slide2_A.jpeg' },
-            { 'src': 'img/1080/slide1_A.jpeg' },
-            { 'src': 'img/1080/slide3_A.jpeg' }
+            { 'src': 'https://res.cloudinary.com/zungeru/image/upload/v1539480523/userphotos/sk_14_pic_1.jpg' },
+            { 'src': 'http://www.trandynow.com/wp-content/uploads/2017/09/How-to-look-fashionable-in-a-Parka-8-copy.jpg' },
+            { 'src': 'https://www.tricountymall.com/wp-content/uploads/2015/09/Ways-to-Make-Flannel-Fashionable.jpg' }
           ],
           'piece': 'New Bomber Jacket',
           'price': '598.00',
@@ -102,7 +104,8 @@ export default {
           'date_created': '2018-08-09 11:07:59.730197',
           'user_liked': false
         }
-      ]
+      ],
+      profiledUser: {}
     }
   },
   computed: {
@@ -115,14 +118,22 @@ export default {
     ...mapActions({
       getInitialUserPosts: 'getInitialUserPosts',
       getMoreUserPosts: 'getMoreUserPosts'
-    })
+    }),
+    getUser (username) {
+      axios.get('http://localhost:5000/user/' + username)
+        .then(response => {
+          // const user = response.data.user
+          this.profiledUser = response.data.user
+          console.log(this.profiledUser)
+        })
+    }
   },
   components: {
     StyleKard
   },
-  activated () {
-    this.getInitialUserPosts()
-    console.log('Feed View: Before mount')
+  beforeMount () {
+    this.getInitialUserPosts(this.$route.params.username)
+    this.getUser(this.$route.params.username)
   }
 }
 

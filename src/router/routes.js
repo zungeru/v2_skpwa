@@ -26,7 +26,7 @@ export const routes = [
   { path: '/search',
     component: SearchHome,
     children: [
-      { path: '', name: 'peole', component: People },
+      { path: 'people', name: 'people', component: People },
       { path: 'tags', name: 'tags', component: Tags }
     ]
   },
@@ -40,7 +40,8 @@ export const routes = [
   { path: '/profile',
     component: ProfileHome,
     children: [
-      { path: '', name: 'userprofile', component: UserProfile },
+      // { path: '', name: 'userprofile', component: UserProfile },
+      { path: ':username', name: 'userprofile', component: UserProfile },
       { path: 'edit', name: 'editprofile', component: EditProfile },
       { path: 'followers', name: 'followers', component: Followers },
       { path: 'following', name: 'following', component: Following }

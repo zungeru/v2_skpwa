@@ -136,10 +136,8 @@ export const getMorePosts = ({ commit }) => {
 }
 
 // for userprofile.js
-export const getInitialUserPosts = ({ commit }) => {
-  const token = localStorage.getItem('token')
-  const username = store.getters.userData.username
-  axios.get('http://localhost:5000/' + username + '/posts', { headers: { 'Authorization': `Bearer ${token}` } })
+export const getInitialUserPosts = ({ commit }, username) => {
+  axios.get('http://localhost:5000/' + username + '/posts')
     .then(response => {
       const posts = response.data
       console.log(posts)
@@ -148,11 +146,9 @@ export const getInitialUserPosts = ({ commit }) => {
 }
 
 // for userprofile.js
-export const getMoreUserPosts = ({ commit }) => {
-  const token = localStorage.getItem('token')
-  const username = store.getters.userData.username
+export const getMoreUserPosts = ({ commit }, username) => {
   const currentRound = store.getters.loadRound
-  axios.get('http://localhost:5000/' + username + '/posts/' + currentRound, { headers: { 'Authorization': `Bearer ${token}` } })
+  axios.get('http://localhost:5000/' + username + '/posts/' + currentRound)
     .then(response => {
       const posts = response.data
       console.log(currentRound)
