@@ -136,8 +136,9 @@ export const getMorePosts = ({ commit }) => {
 }
 
 // for userprofile.js
-export const getInitialUserPosts = ({ commit }, username) => {
-  axios.get('http://localhost:5000/' + username + '/posts')
+export const getInitialUserPosts = ({ commit }, target_user) => {
+  const requesting_user = !store.getters.userData ? 'guest' : store.getters.userData.username
+  axios.get('http://localhost:5000/' + requesting_user + '/posts/' + target_user)
     .then(response => {
       const posts = response.data.posts
       console.log(posts)
@@ -146,9 +147,10 @@ export const getInitialUserPosts = ({ commit }, username) => {
 }
 
 // for userprofile.js
-export const getMoreUserPosts = ({ commit }, username) => {
+export const getMoreUserPosts = ({ commit }, target_user) => {
   const currentRound = store.getters.userRound
-  axios.get('http://localhost:5000/' + username + '/posts/' + currentRound)
+  const requesting_user = !store.getters.userData ? 'guest' : store.getters.userData.username
+  axios.get('http://localhost:5000/' + requesting_user + '/posts/' + target_user + '/' + currentRound)
     .then(response => {
       const posts = response.data.posts
       console.log(currentRound)

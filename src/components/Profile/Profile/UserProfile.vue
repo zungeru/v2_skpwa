@@ -32,7 +32,10 @@
           <div
             v-else
             style="margin-left: -100px; margin-top: 31px; padding: 0px;">
-            <button  class="mdl-button mdl-button--primary">Follow</button>
+            <button
+              @click="toggleFollow"
+              class="mdl-button mdl-button--primary">Follow
+            </button>
           </div>
         </div>
       </div>
@@ -94,6 +97,7 @@ export default {
   },
   watch: {
     '$route'(to, from){
+      // I may not need this function after all
       if(to.params.username){
         const username = to.params.username
         this.getInitialUserPosts(this.$route.params.username)
@@ -120,6 +124,15 @@ export default {
       if (bottom) {
         this.getMoreUserPosts(this.$route.params.username)
       }
+    },
+    toggleFollow () {
+      const token = localStorage.getItem('token')
+      axios.get('http://localhost:5000/follow/' + this.$route.params.username,
+        { headers: { 'Authorization': `Bearer ${token}` } } )
+        .then(response => {
+          // const user = response.data.user
+          console.log(response.data)
+        })
     }
   },
   components: {
