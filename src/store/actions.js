@@ -139,7 +139,7 @@ export const getMorePosts = ({ commit }) => {
 export const getInitialUserPosts = ({ commit }, username) => {
   axios.get('http://localhost:5000/' + username + '/posts')
     .then(response => {
-      const posts = response.data
+      const posts = response.data.posts
       console.log(posts)
       commit('SET_USER_POSTS', posts)
     })
@@ -147,10 +147,10 @@ export const getInitialUserPosts = ({ commit }, username) => {
 
 // for userprofile.js
 export const getMoreUserPosts = ({ commit }, username) => {
-  const currentRound = store.getters.loadRound
+  const currentRound = store.getters.userRound
   axios.get('http://localhost:5000/' + username + '/posts/' + currentRound)
     .then(response => {
-      const posts = response.data
+      const posts = response.data.posts
       console.log(currentRound)
       commit('ADD_USER_POSTS', posts)
       commit('ADD_USER_ROUND')

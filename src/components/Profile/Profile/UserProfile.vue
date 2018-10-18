@@ -19,8 +19,21 @@
             <span>following</span>
           </div>
         </div>
-        <div style="margin-left: -100px; margin-top: 31px; padding: 0px;">
-          <button class="mdl-button mdl-button--primary">Follow</button>
+        <div class="">
+          <div
+            v-if="logedInUserId === profiledUser.auth_id"
+            style="margin-left: -90px; margin-top: 31px; padding: 0px;">
+            <router-link
+              tag="button"
+              :to="{ name: 'editprofile'}"
+              class="mdl-button mdl-button--primary">Edit
+            </router-link>
+          </div>
+          <div
+            v-else
+            style="margin-left: -100px; margin-top: 31px; padding: 0px;">
+            <button  class="mdl-button mdl-button--primary">Follow</button>
+          </div>
         </div>
       </div>
       <div class="user-profile-info">
@@ -28,18 +41,28 @@
         <span>|</span> &nbsp;
         <span style="font-weight: 600">{{profiledUser.name}}</span>
         <p>{{profiledUser.about}}</p>
-            <router-link
-              tag="span"
-              :to="{ name: 'editprofile'}"
-              style="color: #f50057; cursor: pointer;">Edit Profile
-            </router-link>
 
+        <router-link
+          tag="span"
+          :to="{ name: 'userprofile', params: { username: 'mido1' }}"
+          style="color: #f50057; cursor: pointer;">Mido1
+        </router-link>
+        <router-link
+          tag="span"
+          :to="{ name: 'userprofile', params: { username: 'mido2' }}"
+          style="color: #f50057; cursor: pointer;">Mido2
+        </router-link>
+        <router-link
+          tag="span"
+          :to="{ name: 'userprofile', params: { username: 'mido3' }}"
+          style="color: #f50057; cursor: pointer;">Mido3
+        </router-link>
       </div>
       <hr>
     </div>
 
     <StyleKard
-      v-for="(post,index) in posts"
+      v-for="(post,index) in userPosts"
       :key="index"
       :id="post.id"
       :post="post">
@@ -55,56 +78,6 @@ import axios from 'axios'
 export default {
   data () {
     return {
-      posts: [
-        {
-          'id': 1,
-          'name': 'mido1',
-          'pics': [
-            { 'src': 'https://res.cloudinary.com/zungeru/image/upload/v1539480523/userphotos/sk_14_pic_1.jpg' },
-            { 'src': 'http://www.trandynow.com/wp-content/uploads/2017/09/How-to-look-fashionable-in-a-Parka-8-copy.jpg' },
-            { 'src': 'https://www.tricountymall.com/wp-content/uploads/2015/09/Ways-to-Make-Flannel-Fashionable.jpg' }
-          ],
-          'piece': 'New Bomber Jacket',
-          'price': '598.00',
-          'place': 'Barneys New York',
-          'note': 'OK, this jacket just made me smile. #smiles #mynewgoto',
-          'likes_count': 125,
-          'date_created': '2018-08-09 11:07:59.730197',
-          'user_liked': false
-        },
-        {
-          'id': 2,
-          'name': 'mido2',
-          'pics': [
-            { 'src': 'https://res.cloudinary.com/zungeru/image/upload/v1539480523/userphotos/sk_14_pic_1.jpg' },
-            { 'src': 'http://www.trandynow.com/wp-content/uploads/2017/09/How-to-look-fashionable-in-a-Parka-8-copy.jpg' },
-            { 'src': 'https://www.tricountymall.com/wp-content/uploads/2015/09/Ways-to-Make-Flannel-Fashionable.jpg' }
-          ],
-          'piece': 'New Bomber Jacket',
-          'price': '598.00',
-          'place': 'Barneys New York',
-          'note': 'OK, this jacket just made me smile. #smiles #mynewgoto',
-          'likes_count': 125,
-          'date_created': '2018-08-09 11:07:59.730197',
-          'user_liked': false
-        },
-        {
-          'id': 3,
-          'name': 'mido3',
-          'pics': [
-            { 'src': 'https://res.cloudinary.com/zungeru/image/upload/v1539480523/userphotos/sk_14_pic_1.jpg' },
-            { 'src': 'http://www.trandynow.com/wp-content/uploads/2017/09/How-to-look-fashionable-in-a-Parka-8-copy.jpg' },
-            { 'src': 'https://www.tricountymall.com/wp-content/uploads/2015/09/Ways-to-Make-Flannel-Fashionable.jpg' }
-          ],
-          'piece': 'New Bomber Jacket',
-          'price': '598.00',
-          'place': 'Barneys New York',
-          'note': 'OK, this jacket just made me smile. #smiles #mynewgoto',
-          'likes_count': 125,
-          'date_created': '2018-08-09 11:07:59.730197',
-          'user_liked': false
-        }
-      ],
       profiledUser: {}
     }
   },
@@ -112,7 +85,21 @@ export default {
     ...mapGetters({
       userPosts: 'userPosts',
       userRound: 'userRound'
-    })
+    }),
+    logedInUserId () {
+      //I'm adding this property instead of using userData from the store
+      //Because this page does not require login and userData will not nessarily be defined
+      return !this.$store.getters.userData ? false : this.$store.getters.userData.auth_id
+    }
+  },
+  watch: {
+    '$route'(to, from){
+      if(to.params.username){
+        const username = to.params.username
+        this.getInitialUserPosts(this.$route.params.username)
+        this.getUser(this.$route.params.username)
+      }
+    }
   },
   methods: {
     ...mapActions({
@@ -126,6 +113,13 @@ export default {
           this.profiledUser = response.data.user
           console.log(this.profiledUser)
         })
+    },
+    scroll () {
+      let d = document.querySelector('.mdl-layout__content')
+      let bottom = d.scrollHeight - d.scrollTop === d.clientHeight
+      if (bottom) {
+        this.getMoreUserPosts(this.$route.params.username)
+      }
     }
   },
   components: {
@@ -134,6 +128,23 @@ export default {
   beforeMount () {
     this.getInitialUserPosts(this.$route.params.username)
     this.getUser(this.$route.params.username)
+    console.log('Feed View: Before mount')
+  },
+  mounted () {
+    document.querySelector('.mdl-layout__content').addEventListener('scroll', this.scroll)
+    console.log('Feed View: Mounted')
+  },
+  destroyed () {
+    document.querySelector('.mdl-layout__content').removeEventListener('scroll', this.scroll)
+    console.log('Feed View: Destroyed')
+  },
+  activated () {
+    document.querySelector('.mdl-layout__content').addEventListener('scroll', this.scroll)
+    console.log('Feed View: Activated')
+  },
+  deactivated () {
+    document.querySelector('.mdl-layout__content').removeEventListener('scroll', this.scroll)
+    console.log('Feed View: Deactivated')
   }
 }
 

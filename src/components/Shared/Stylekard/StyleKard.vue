@@ -5,9 +5,9 @@
     <!-- MDL-Card Title -->
     <div class="mdl-card__title">
       <div class="avatar">
-          <img src="img/1080/slide5_A.jpeg"/>
+          <img :src="post.url"/>
       </div>
-       <h3 class="mdl-card__title-text"> {{post.name}} </h3>
+       <h3 class="mdl-card__title-text"> {{post.username}} </h3>
     </div>
     <!-- End MDL-Card Title -->
 
@@ -203,11 +203,11 @@ export default {
 
 .avatar > img {
   float:left;
-  border: 2px solid #4db6ac;
+  border: 1px solid black;
   border-radius: 50%;
   height: 40px;
   width: 40px;
-  padding: 2px;
+  padding: 0px;
   margin-left: 5px;
 }
 
