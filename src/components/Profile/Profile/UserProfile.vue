@@ -21,7 +21,7 @@
         </div>
         <div class="">
           <div
-            v-if="logedInUserId === profiledUser.auth_id"
+            v-if="loggedInUser.auth_id === profiledUser.auth_id"
             style="margin-left: -90px; margin-top: 31px; padding: 0px;">
             <router-link
               tag="button"
@@ -30,11 +30,19 @@
             </router-link>
           </div>
           <div
-            v-else
+            v-if="notFollowing"
             style="margin-left: -100px; margin-top: 31px; padding: 0px;">
             <button
-              @click="toggleFollow"
+              @click="follow"
               class="mdl-button mdl-button--primary">Follow
+            </button>
+          </div>
+          <div
+            v-if="following"
+            style="margin-left: -115px; margin-top: 31px; padding: 0px;">
+            <button
+              @click="unFollow"
+              class="mdl-button mdl-button--primary">Unfollow
             </button>
           </div>
         </div>
@@ -89,19 +97,35 @@ export default {
       userPosts: 'userPosts',
       userRound: 'userRound'
     }),
-    logedInUserId () {
+    loggedInUser () {
       //I'm adding this property instead of using userData from the store
       //Because this page does not require login and userData will not nessarily be defined
-      return !this.$store.getters.userData ? false : this.$store.getters.userData.auth_id
+      return !this.$store.getters.userData ? 'guest' : this.$store.getters.userData
+    },
+    following () {
+      if ((this.loggedInUser.auth_id !== this.profiledUser.auth_id) && (this.profiledUser.is_following === true)) {
+        return true
+      }
+      else {
+        return false
+      }
+    },
+    notFollowing () {
+      if ((this.loggedInUser.auth_id !== this.profiledUser.auth_id) && (this.profiledUser.is_following === false)) {
+        return true
+      }
+      else {
+        return false
+      }
     }
   },
   watch: {
-    '$route'(to, from){
+    '$route'(to, from) {
       // I may not need this function after all
       if(to.params.username){
         const username = to.params.username
         this.getInitialUserPosts(this.$route.params.username)
-        this.getUser(this.$route.params.username)
+        this.getUser()
       }
     }
   },
@@ -110,12 +134,13 @@ export default {
       getInitialUserPosts: 'getInitialUserPosts',
       getMoreUserPosts: 'getMoreUserPosts'
     }),
-    getUser (username) {
-      axios.get('http://localhost:5000/user/' + username)
+    getUser () {
+      const requesting_user = !localStorage.getItem('username') ? 'guest' : localStorage.getItem('username')
+      const target_user = this.$route.params.username
+      axios.get('http://localhost:5000/' + requesting_user + '/user/' + target_user)
         .then(response => {
-          // const user = response.data.user
+          console.log(response.data)
           this.profiledUser = response.data.user
-          console.log(this.profiledUser)
         })
     },
     scroll () {
@@ -125,13 +150,24 @@ export default {
         this.getMoreUserPosts(this.$route.params.username)
       }
     },
-    toggleFollow () {
+    follow () {
       const token = localStorage.getItem('token')
       axios.get('http://localhost:5000/follow/' + this.$route.params.username,
         { headers: { 'Authorization': `Bearer ${token}` } } )
         .then(response => {
           // const user = response.data.user
           console.log(response.data)
+          this.getUser()
+        })
+    },
+    unFollow () {
+      const token = localStorage.getItem('token')
+      axios.get('http://localhost:5000/unfollow/' + this.$route.params.username,
+        { headers: { 'Authorization': `Bearer ${token}` } } )
+        .then(response => {
+          // const user = response.data.user
+          console.log(response.data)
+          this.getUser()
         })
     }
   },
@@ -140,8 +176,7 @@ export default {
   },
   beforeMount () {
     this.getInitialUserPosts(this.$route.params.username)
-    this.getUser(this.$route.params.username)
-    console.log('Feed View: Before mount')
+    this.getUser()
   },
   mounted () {
     document.querySelector('.mdl-layout__content').addEventListener('scroll', this.scroll)

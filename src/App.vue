@@ -113,7 +113,7 @@ export default {
       return this.$store.getters.isAuthenticated
     },
     username () {
-      return !this.$store.getters.userData ? false : this.$store.getters.userData.username
+      return !this.$store.getters.userData ? 'false' : this.$store.getters.userData.username
     }
   },
   methods: {

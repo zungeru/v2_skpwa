@@ -76,6 +76,7 @@ export const logOut = ({ commit }) => {
   commit('CLEAR_AUTH_DATA')
   localStorage.removeItem('token')
   localStorage.removeItem('expirationDate')
+  localStorage.removeItem('username')
   router.replace({ name: 'login' })
 }
 
@@ -88,6 +89,7 @@ export const storeUser = ({ commit, dispatch }) => {
       commit('SET_USER_DATA', response.data)
       const expirationDate = new Date(response.data.exp * 1000)
       localStorage.setItem('expirationDate', expirationDate)
+      localStorage.setItem('username', response.data.username)
       dispatch('setLogOutTimer', response.data.life_span)
     })
     .catch(error => console.log(error))
@@ -137,7 +139,8 @@ export const getMorePosts = ({ commit }) => {
 
 // for userprofile.js
 export const getInitialUserPosts = ({ commit }, target_user) => {
-  const requesting_user = !store.getters.userData ? 'guest' : store.getters.userData.username
+  // const requesting_user = !store.getters.userData ? 'guest' : store.getters.userData.username
+  const requesting_user = !localStorage.getItem('username') ? 'guest' : localStorage.getItem('username')
   axios.get('http://localhost:5000/' + requesting_user + '/posts/' + target_user)
     .then(response => {
       const posts = response.data.posts
