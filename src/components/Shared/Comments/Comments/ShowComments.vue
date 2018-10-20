@@ -19,13 +19,13 @@
         </div>
       </div>
       <div class="post-note">
-        <div class="avatar">
-            <img :src="comments[0]['url']"/>
+        <div class="avatar-comments">
+            <img :src="post.user_url"/>
         </div>
         <div class="details">
-          <span style="font-weight: bold;">{{ comments[0]['name']}} </span>
-          {{ comments[0]['comment']}} &nbsp;
-          <span style="font-size: 12px; font-weight: 500;"> {{ comments[0]['date_created']}}</span>
+          <span style="font-weight: bold;">{{post.username}} </span>
+          {{post.postnote}} &nbsp;
+          <span style="font-size: 12px; font-weight: 500;"> {{ post.date_created | fromDate }}</span>
         </div>
         <hr>
       </div>
@@ -33,74 +33,56 @@
         <div v-for="(comment,index) in comments"
             :key="index"
             class="comments">
-          <div class="avatar">
-              <img :src="comment.url"/>
+          <div class="avatar-comments">
+              <img :src="comment.user_url"/>
           </div>
           <div class="details">
-            <span style="font-weight: bold;">{{ comment.name}}  </span>
+            <span style="font-weight: bold;">{{ comment.username}}  </span>
             {{ comment.comment}} &nbsp;
-            <span style="font-size: 12px; font-weight: 500;"> {{comment.date_created}}</span>
+            <span style="font-size: 12px; font-weight: 500;"> {{comment.date_created | fromDate }}</span>
           </div>
         </div>
     </div>
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
   data () {
     return {
-      comments: [
-        { 'name': 'mido1',
-          'url': 'https://cdn.cliqueinc.com/cache/posts/231501/mistakes-stylish-women-make-231501-1501856651717-main.1200x0c.jpg?quality=70&interlace=true',
-          'comment': 'This is a test post. This is a test post. This is a test post. This is a test post. This is a test post. This is a test post. This is a test post. This is a test post. This is a test post. This is a test post. This is a test post. This is a test post.',
-          'date_created': '2 days ago'
-        },
-        { 'name': 'mido2',
-          'url': 'http://cdn2.stylecraze.com/wp-content/uploads/2017/06/Chest-Covering-Hijab-Style.jpg',
-          'comment': 'This is a test post, I am testing my post, keep testing the post, love life...testing',
-          'date_created': '2 days ago'
-        },
-        { 'name': 'mido3',
-          'url': 'http://cdn2.stylecraze.com/wp-content/uploads/2017/06/Chest-Covering-Hijab-Style.jpg',
-          'comment': 'This is a test post, I am testing my post, keep testing the post, love life...testing',
-          'date_created': '2 days ago'
-        },
-        { 'name': 'mido4',
-          'url': 'http://cdn2.stylecraze.com/wp-content/uploads/2017/06/Chest-Covering-Hijab-Style.jpg',
-          'comment': 'This is a test post, I am testing my post, keep testing the post, love life...testing',
-          'date_created': '2 days ago'
-        },
-        { 'name': 'mido5',
-          'url': 'http://cdn2.stylecraze.com/wp-content/uploads/2017/06/Chest-Covering-Hijab-Style.jpg',
-          'comment': 'This is a test post, I am testing my post, keep testing the post, love life...testing',
-          'date_created': '2 days ago'
-        },
-        { 'name': 'mido6',
-          'url': 'http://cdn2.stylecraze.com/wp-content/uploads/2017/06/Chest-Covering-Hijab-Style.jpg',
-          'comment': 'This is a test post, I am testing my post, keep testing the post, love life...testing',
-          'date_created': '2 days ago'
-        },
-        { 'name': 'mido7',
-          'url': 'http://cdn2.stylecraze.com/wp-content/uploads/2017/06/Chest-Covering-Hijab-Style.jpg',
-          'comment': 'This is a test post, I am testing my post, keep testing the post, love life...testing',
-          'date_created': '2 days ago'
-        },
-        { 'name': 'mido8',
-          'url': 'http://cdn2.stylecraze.com/wp-content/uploads/2017/06/Chest-Covering-Hijab-Style.jpg',
-          'comment': 'This is a test post, I am testing my post, keep testing the post, love life...testing',
-          'date_created': '2 days ago'
-        }
-      ]
+      post: '',
+      comments: ''
     }
   },
   methods: {
+    getPost () {
+      const id = this.$route.params.post_id
+      axios.get('http://localhost:5000/postnote/' + id)
+        .then(response => {
+          console.log(response.data)
+          this.post = response.data.post
+        })
+    },
+    getComments () {
+      const id = this.$route.params.post_id
+      axios.get('http://localhost:5000/post/' + id + '/comments')
+        .then(response => {
+          console.log(response.data)
+          this.comments = response.data.comments
+        })
+    },
     goBack () {
       window.history.length > 1 ? this.$router.go(-1) : this.$router.push('/')
     },
     goPost () {
-      this.$router.push({ name: 'addcomment' })
+      this.$router.push({ name: 'addcomment' , params: { post_id: this.post.post_id}})
     }
-  }
+  },
+  beforeMount () {
+    this.getPost()
+    this.getComments()
+  },
 }
 </script>
 
@@ -139,21 +121,21 @@ export default {
   padding: 10px 15px 10px 15px;
   margin-right: auto;
   margin-left: auto;
-  margin-top: 0px;
+  margin-top: 10px;
   max-width: 500px;
 }
-.avatar > img {
+.avatar-comments > img {
   float:left;
   border: 1px solid #4db6ac;
   border-radius: 50%;
-  height: 35px;
-  width: 35px;
+  height: 40px;
+  width: 40px;
   padding: 2px;
   margin-left: 5px;
 }
 .details  {
   font-size: 15px;
-  padding-left: 55px;
+  padding-left: 60px;
   padding-right: 10px;
 }
 </style>

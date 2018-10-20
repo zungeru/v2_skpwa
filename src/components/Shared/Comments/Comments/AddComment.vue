@@ -12,32 +12,44 @@
         </div>
       </div>
       <form class="comment-form" action="#">
-            <label for="comment">add a comment...</label>
+            <label for="comment">add a comment...({{commentCharsLeft()}})</label>
             <hr>
             <textarea
               type="text"
               name="comment"
               id="comment"
-              v-model.lazy.trim="userComment">
+              maxlength="200"
+              placeholder="max 200 chars"
+              @input="$v.comment.$touch()"
+              v-model="comment">
             </textarea>
+            <p v-if="!$v.comment.required && $v.comment.$dirty"> required</p>
           <div>
             <button
-              class="mdl-button mdl-button--primary"
+              class="mdl-button mdl-button--raised mdl-button--colored"
+              :disabled="$v.$invalid"
               @click.prevent="onSubmit">
               add
             </button>
           </div>
-    </form>
-    <p v-if="isSubmitted" style="white-space: pre">Comment: {{userComment}}</p>
+     </form>
     </div>
 </template>
 
 <script>
+import { required, maxLength } from 'vuelidate/lib/validators'
+import axios from 'axios'
+
 export default {
   data () {
     return {
-      userComment: '',
-      isSubmitted: false
+      comment: ''
+    }
+  },
+  validations:{
+    comment: {
+      required,
+      maxLen: maxLength(200)
     }
   },
   methods: {
@@ -45,9 +57,23 @@ export default {
       window.history.length > 1 ? this.$router.go(-1) : this.$router.push('/')
     },
     onSubmit () {
-      this.isSubmitted = true
-      this.goBack()
-    }
+      const token = localStorage.getItem('token')
+      const requesting_user = localStorage.getItem('username')
+      const id = this.$route.params.post_id
+      const fd = new FormData()
+      fd.append('comment', this.comment)
+      axios.post('http://localhost:5000/comment/create/' + id, fd, {
+        headers:
+          {'Content-Type': 'multipart/form-data', 'Authorization': `Bearer ${token}` }
+        })
+        .then(response => {
+          console.log(response.data)
+        })
+        .catch(error => console.log(error))
+    },
+    commentCharsLeft() {
+      return this.$v.comment.$params.maxLen.max - this.comment.length
+    },
   }
 }
 </script>

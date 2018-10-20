@@ -33,8 +33,8 @@ export const routes = [
   { path: '/comments',
     component: CommentsHome,
     children: [
-      { path: ':post_id', name: 'showcomments', component: ShowComments },
-      { path: 'addcomment', name: 'addcomment', component: AddComment }
+      { path: 'post/:post_id', name: 'showcomments', component: ShowComments },
+      { path: '/add/comment/:post_id', name: 'addcomment', component: AddComment }
     ]
   },
   { path: '/profile',

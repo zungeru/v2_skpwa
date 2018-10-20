@@ -1,7 +1,8 @@
 <template>
   <div class="following-main">
     <div class="following-fixed-header">
-      <div class="following-header-items">
+      <div class="following-header-item">
+        <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
         <span @click="goBack">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
               <path d="M0 0h24v24H0z" fill="none"/>
@@ -86,13 +87,15 @@ export default {
   height: 45px;
   width: 100%;
 }
-.following-header-items{
+.following-header-item{
   margin-right: auto;
   margin-left: auto;
   margin-top: 12px;
-  max-width: 300px;
+  max-width: 500px;
+  display: flex;
+  justify-content: flex-start;
 }
-.following-header-items span {
+.following-header-item span {
   cursor: pointer;
 }
 .following-list{
