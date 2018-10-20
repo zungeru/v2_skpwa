@@ -20,8 +20,16 @@
         </div>
         <div class="followers-details">
           <span>{{ follower.username}} </span> &nbsp;
-          <button class="mdl-button mdl-button--primary"> Follow</button>
-          <button class="mdl-button mdl-button--primary"> UnFollow</button>
+          <button
+            v-if="(loggedInUser !== follower.username) && (!follower.is_following)"
+            class="mdl-button mdl-button--primary">
+              Follow
+          </button>
+          <button
+            v-if="follower.is_following"
+            class="mdl-button mdl-button--primary">
+              UnFollow
+            </button>
         </div>
       </div>
     </div>
@@ -37,6 +45,11 @@ export default {
   data () {
     return {
       followers: []
+    }
+  },
+  computed: {
+    loggedInUser () {
+      return localStorage.getItem('username')
     }
   },
   methods: {
