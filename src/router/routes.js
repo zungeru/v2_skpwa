@@ -41,10 +41,10 @@ export const routes = [
     component: ProfileHome,
     children: [
       // { path: '', name: 'userprofile', component: UserProfile },
-      { path: ':username', name: 'userprofile', component: UserProfile },
+      { path: 'user/:username', name: 'userprofile', component: UserProfile },
       { path: 'edit', name: 'editprofile', component: EditProfile },
-      { path: 'followers', name: 'followers', component: Followers },
-      { path: 'following', name: 'following', component: Following }
+      { path: 'followers/:username', name: 'followers', component: Followers },
+      { path: 'following/:username', name: 'following', component: Following }
     ]
   }
 ]

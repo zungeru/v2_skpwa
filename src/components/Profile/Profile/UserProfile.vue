@@ -8,16 +8,21 @@
         <div style="display:flex;justify-content:space-between;">
           <div style="text-align: center;">
             <span style="font-weight: 600"> {{profiledUser.posts_count}} </span><br>
-            <span>posts</span>
+            <span style="font-weight: normal">posts</span>
           </div>
-          <div style="text-align: center;">
-            <span style="font-weight: 600">{{profiledUser.followers_count}}</span> <br>
-            <span>followers</span>
-          </div>
-          <div style="text-align: center;">
+          <router-link
+            :to="{ name: 'followers', params: {username: targetUsername} }"
+             style="text-align: center; color: black; text-decoration: none;">
+              <span style="font-weight: 600">{{profiledUser.followers_count}}</span> <br>
+              <span style="font-weight: normal">followers</span>
+          </router-link>
+
+          <router-link
+            :to="{ name: 'following', params: {username: targetUsername} }"
+             style="text-align: center; color: black; text-decoration: none;">
             <span style="font-weight: 600">{{profiledUser.following_count}}</span> <br>
-            <span>following</span>
-          </div>
+            <span style="font-weight: normal">following</span>
+          </router-link>
         </div>
         <div class="">
           <div
@@ -102,6 +107,9 @@ export default {
       //Because this page does not require login and userData will not nessarily be defined
       return !this.$store.getters.userData ? 'guest' : this.$store.getters.userData
     },
+    targetUsername() {
+      return  !this.$route.params.username ? 'guest' : this.$route.params.username
+    },
     following () {
       if ((this.loggedInUser.auth_id !== this.profiledUser.auth_id) && (this.profiledUser.is_following === true)) {
         return true
@@ -151,6 +159,9 @@ export default {
       }
     },
     follow () {
+      if (this.loggedInUser === 'guest') {
+        return
+      }
       const token = localStorage.getItem('token')
       axios.get('http://localhost:5000/follow/' + this.$route.params.username,
         { headers: { 'Authorization': `Bearer ${token}` } } )
