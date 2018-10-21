@@ -83,7 +83,8 @@ export const logOut = ({ commit }) => {
 // for auth.js
 export const storeUser = ({ commit, dispatch }) => {
   const token = localStorage.getItem('token')
-  axios.get('http://localhost:5000/yo', { headers: { 'Authorization': `Bearer ${token}` } })
+  axios.get('http://localhost:5000/yo',
+    { headers: { 'Authorization': `Bearer ${token}` } })
     .then(response => {
       console.log(response.data)
       commit('SET_USER_DATA', response.data)
@@ -118,19 +119,23 @@ export const setLogOutTimer = ({ dispatch }, expirationTime) => {
 
 // for stylefeed.js (needs to be updated)
 export const getInitialPosts = ({ commit }) => {
-  axios.get('http://localhost:5000/')
+  const token = localStorage.getItem('token')
+  axios.get('http://localhost:5000/feed',
+    { headers: { 'Authorization': `Bearer ${token}` } } )
     .then(response => {
-      const posts = response.data
+      const posts = response.data.posts
       commit('SET_POSTS', posts)
     })
 }
 
 // for stylefeed.js (needs to be updated)
 export const getMorePosts = ({ commit }) => {
+  const token = localStorage.getItem('token')
   const currentRound = store.getters.loadRound
-  axios.get('http://localhost:5000/' + currentRound)
+  axios.get('http://localhost:5000/feed/' + currentRound,
+    { headers: { 'Authorization': `Bearer ${token}` } } )
     .then(response => {
-      const posts = response.data
+      const posts = response.data.posts
       console.log(currentRound)
       commit('ADD_POSTS', posts)
       commit('ADD_ROUND')
