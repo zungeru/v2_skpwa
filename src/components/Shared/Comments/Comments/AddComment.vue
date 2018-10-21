@@ -25,6 +25,7 @@
             </textarea>
             <p v-if="!$v.comment.required && $v.comment.$dirty"> required</p>
           <div>
+            <br>
             <button
               class="mdl-button mdl-button--raised mdl-button--colored"
               :disabled="$v.$invalid"

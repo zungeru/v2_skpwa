@@ -3,7 +3,7 @@
   <div class="mdl-card mdl-shadow--2dp" ref="stylekard" :style="{width: kardSize + 'px'}">
 
     <!-- MDL-Card Title -->
-    <div class="mdl-card__title">
+    <div class="mdl-card__title" @click="goToUser">
       <div class="avatar">
           <img :src="post.url"/>
       </div>
@@ -69,7 +69,7 @@
         </svg>
       </span>
       <span @click="updateLiked">
-          <svg v-if="post.liked" fill="#FF0000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+          <svg v-if="post.user_liked" fill="#FF0000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
               <path d="M0 0h24v24H0z" fill="none"/>
               <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
           </svg>
@@ -80,12 +80,12 @@
        <span style="margin-left:0px; font-size:14px;">{{post.likes_count}}</span>
       </span>
 
-      <router-link tag="span" exact :to="{ name: 'showcomments', params: { post_id: post.id}}">
+      <router-link tag="span" exact :to="{ name: 'showcomments', params: { post_id: post.post_id}}">
         <svg fill="#B0B0B0" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
            <path d="M0 0h24v24H0V0z" fill="none"/>
            <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/>
         </svg>
-        <span style="margin-left:0px; font-size:14px;">100</span>
+        <span style="margin-left:0px; font-size:14px;">{{post.comments_count}}</span>
       </router-link>
 
       <span style="font-size: 14px;">${{post.price}}</span>
@@ -102,16 +102,24 @@
         <span style="font-weight: bold;">stylenote:</span> {{post.note}}
       </div>
       <div v-if="place">
-        <span style="font-weight: bold;">where:</span> {{post.place}}
+        <span style="font-weight: bold;">where:</span>
+        &nbsp;
+        <span v-if="placeUrl">
+          <a v-bind:href="post.place" style="text-decoration: none; color: gray;">
+            see link ...
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M0 0h24v24H0z" fill="none"/><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/></svg>
+          </a>
+        </span>
+        <span v-else>{{post.place}}</span>
       </div>
     </div>
     <!-- End Info Detail -->
-
   </div>
   <!-- End Main Div MDL-Card -->
 </template>
 
 <script>
+import axios from 'axios'
 import Slide from './Slide'
 
 export default {
@@ -133,6 +141,15 @@ export default {
   computed: {
     slidesInnerMarginLeft () {
       return this.currentIndex * this.singleWidth
+    },
+    placeUrl () {
+        let substring1 = this.post.place.substring(0,7)
+        let substring2 = this.post.place.substring(0,8)
+        if ( (substring1 === 'http://') || (substring2 === 'https://') ){
+          return true
+        } else {
+          return false
+        }
     }
   },
   methods: {
@@ -163,12 +180,40 @@ export default {
       this.currentIndex = index
     },
     updateLiked () {
-      this.post.liked = !this.post.liked
-      if (this.post.liked) {
-        this.post.likes_count++
+      if (!this.post.user_liked) {
+        this.likePost()
       } else {
-        this.post.likes_count--
+        this.unlikePost()
       }
+    },
+    likePost () {
+      const token = localStorage.getItem('token')
+      const id = this.post.post_id
+      axios.get('http://localhost:5000/post/like/' + id,
+        { headers: { 'Authorization': `Bearer ${token}` } } )
+        .then(response => {
+          console.log(response.data)
+          //I'm updating the likes count here to keep it in sync with
+          //The Backend without having to make another API Call
+          this.post.likes_count++
+          this.post.user_liked = !this.post.user_liked
+        })
+    },
+    unlikePost () {
+      const token = localStorage.getItem('token')
+      const id = this.post.post_id
+      axios.get('http://localhost:5000/post/unlike/' + id,
+        { headers: { 'Authorization': `Bearer ${token}` } } )
+        .then(response => {
+          console.log(response.data)
+          //I'm updating the likes count here to keep it in sync with
+          //The Backend without having to make another API Call
+          this.post.likes_count--
+          this.post.user_liked = !this.post.user_liked
+        })
+    },
+    goToUser () {
+      this.$router.push({ name: 'userprofile' , params: { username: this.post.username}})
     }
   },
   components: {
@@ -199,6 +244,7 @@ export default {
 .mdl-card__title {
   margin: 0px;
   padding: 5px;
+  cursor: pointer;
 }
 
 .avatar > img {
