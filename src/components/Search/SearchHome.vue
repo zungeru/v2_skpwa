@@ -5,14 +5,10 @@
         <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
         <!-- NOTE: I'm overriding the mdl active link class here -->
         <router-link tag="div" active-class="active" exact :to="{name: 'people'}">
-          <div class="search-item">
-            PEOPLE
-          </div>
+          <div> PEOPLE </div>
         </router-link>
         <router-link tag="div" active-class="active" exact :to="{name: 'tags'}">
-            <div class="search-item">
-              TAGS
-            </div>
+          <div> TAGS </div>
         </router-link>
         <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
       </div>

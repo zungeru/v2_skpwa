@@ -1,11 +1,72 @@
 <template>
   <div class="edit-profile-main">
-    <div class="edit-heading">
-      <h5>Update Login Info</h5>
+    <div class="edit-fixed-header">
+      <div class="edit-header-items">
+        <span>&nbsp;&nbsp;</span>
+        <span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+              <path d="M0 0h24v24H0z" fill="none"/>
+              <path d="M21 11H6.83l3.58-3.59L9 6l-6 6 6 6 1.41-1.41L6.83 13H21z"/>
+          </svg>
+        </span>
+        <span> PROFILE UPDATES</span>
+        <span> LOGIN UPDATES</span>
+        <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+      </div>
     </div>
-    <br>
-    <form class="edit-form" action="#">
 
+    <form v-if="profileView" class="edit-form" action="#">
+      <div>
+        <div class="avatar-form">
+            <img src="https://stroseschool.stroselions.net/wp-content/uploads/2018/04/profile-blank-reva.png"/>
+        </div>
+        <div class="upload">
+          <button class="mdl-button mdl-js-button mdl-button--primary"> Upload Photo</button>
+          <input
+            type="file"
+            style="display: none;"
+            ref="fileInput"
+            accept="image/*"
+            multiple>
+        </div>
+      </div>
+      <br>
+      <br>
+      <br>
+        <div class="edit-item">
+          <label for="name">name</label>
+          <input
+            type="text"
+            id="name"
+            @blur="$v.name.$touch()"
+            v-model.lazy="name">
+        </div>
+        <br>
+        <div class="edit-item">
+          <label for="about">about you</label><span>&nbsp;</span>
+          <textarea
+            type="text"
+            name="about"
+            id="about"
+            maxlength="200"
+            placeholder="max 200 chars"
+            @input="$v.about.$touch()"
+            v-model="about">
+          </textarea>
+        </div>
+
+      <hr>
+
+        <button
+          class="mdl-button mdl-button--raised mdl-button--colored"
+          :disabled="formInvalid"
+          @click.prevent="onSubmit">
+          update
+        </button>
+    </form>
+
+
+    <form v-if="!profileView" class="edit-form" action="#">
       <span
         v-if="!updateEmail"
         @click="showEmail">Update Email</span>
@@ -96,12 +157,8 @@
           @click.prevent="onSubmit">
           update
         </button>
-
     </form>
 
-    <div class="edit-heading">
-      <h5>Update Profile Info</h5>
-    </div>
     <br>
 
   </div>
@@ -115,6 +172,9 @@ import { mapActions, mapGetters } from 'vuex'
 export default {
   data () {
     return {
+      profileView: true,
+      about: '',
+      name: '',
       updateEmail: false,
       updatePassword: false,
       newEmail: '',
@@ -194,21 +254,56 @@ export default {
 
 <style>
 .edit-profile-main{
-  padding: 20px 15px 10px 15px;
+  position: relative;
+  /* padding: 20px 15px 10px 15px;
   margin-right: auto;
   margin-left: auto;
+  max-width: 500px; */
+}
+.edit-fixed-header {
+  position: fixed;
+  top: 0px;
+  background-color: #ededed;
+  margin-top: 56px;
+  height: 45px;
+  width: 100%;
+}
+.edit-header-items{
+  margin-right: auto;
+  margin-left: auto;
+  margin-top: 17px;
   max-width: 500px;
+  justify-content: space-between;
+  display: flex;
 }
-.edit-heading{
-  text-align: center;
+.edit-header-items span {
+  cursor: pointer;
 }
+
 .edit-form{
   padding: 0px 15px 10px 15px;
   margin-right: auto;
   margin-left: auto;
-  margin-top: 0px;
+  margin-top: 70px;
   max-width: 500px;
 }
+
+.avatar-form > img {
+  float:left;
+  border: 1px solid #4db6ac;
+  border-radius: 50%;
+  height: 70px;
+  width: 70px;
+  padding: 2px;
+  margin-left: 5px;
+}
+.upload  {
+  font-size: 15px;
+  padding-top: 15px;
+  padding-left: 80px;
+  padding-right: 10px;
+}
+
 .edit-form > span {
   color: gray;
   cursor: pointer;
@@ -225,7 +320,7 @@ export default {
   padding: 0px;
   color: #f50057;
 }
-.edit-item > input  {
+.edit-item > input {
   width:100%;
   height: 40px;
   padding: 10px 15px;
@@ -237,4 +332,17 @@ export default {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   font-size: 16px;
 }
+
+.edit-item > textarea {
+  width:100%;
+  padding: 10px 15px;
+  box-sizing: border-box;
+  /* border: 2px solid rgb(245,0,87, .15); */
+  border: 2px solid rgb(176,176,176, .35);
+  border-radius: 5px;
+  background-color: rgb(237,237,237, .4);
+  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-size: 16px;
+}
+
 </style>
