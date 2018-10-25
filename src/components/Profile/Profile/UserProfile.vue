@@ -2,7 +2,7 @@
   <div class="user-profile-main">
     <div class="user-profile-top">
       <div class="user-profile-avatar">
-        <img src='http://cdn2.stylecraze.com/wp-content/uploads/2017/06/Chest-Covering-Hijab-Style.jpg'/>
+        <img :src='profiledUser.url'/>
       </div>
       <div class="user-profile-stats">
         <div style="display:flex;justify-content:space-between;">

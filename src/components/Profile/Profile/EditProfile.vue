@@ -3,77 +3,94 @@
     <div class="edit-fixed-header">
       <div class="edit-header-items">
         <span>&nbsp;&nbsp;</span>
-        <span>
+        <span @click="goBack">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
               <path d="M0 0h24v24H0z" fill="none"/>
               <path d="M21 11H6.83l3.58-3.59L9 6l-6 6 6 6 1.41-1.41L6.83 13H21z"/>
           </svg>
         </span>
-        <span> PROFILE UPDATES</span>
-        <span> LOGIN UPDATES</span>
+        <span
+          @click="selectProfile"
+          :class="{active: profileView}">
+            PROFILE UPDATES
+        </span>
+        <span
+          @click="selectLogin"
+          :class="{active: !profileView}">
+            LOGIN UPDATES
+        </span>
         <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
       </div>
     </div>
 
-    <form v-if="profileView" class="edit-form" action="#">
-      <div>
-        <div class="avatar-form">
-            <img src="https://stroseschool.stroselions.net/wp-content/uploads/2018/04/profile-blank-reva.png"/>
-        </div>
-        <div class="upload">
-          <button class="mdl-button mdl-js-button mdl-button--primary"> Upload Photo</button>
-          <input
-            type="file"
-            style="display: none;"
-            ref="fileInput"
-            accept="image/*"
-            multiple>
-        </div>
+    <div v-if="profileView" class="edit-form">
+      <div class="avatar-form">
+          <img :src="profileURL"/>
       </div>
+
+      <div class="upload">
+        <button class="mdl-button mdl-js-button mdl-button--primary" @click="onPickPhoto"> Upload Photo</button>
+        <input
+          type="file"
+          style="display: none;"
+          ref="photoInput"
+          accept="image/*"
+          @change="onPhotoPicked">
+      </div>
+
       <br>
       <br>
       <br>
-        <div class="edit-item">
-          <label for="name">name</label>
-          <input
-            type="text"
-            id="name"
-            @blur="$v.name.$touch()"
-            v-model.lazy="name">
-        </div>
-        <br>
-        <div class="edit-item">
-          <label for="about">about you</label><span>&nbsp;</span>
-          <textarea
-            type="text"
-            name="about"
-            id="about"
-            maxlength="200"
-            placeholder="max 200 chars"
-            @input="$v.about.$touch()"
-            v-model="about">
-          </textarea>
-        </div>
 
-      <hr>
+      <form>
+          <div class="edit-item">
+            <label for="name">name</label><span>&nbsp;({{nameCharsLeft()}})</span>
+            <input
+              type="text"
+              id="name"
+              maxlength="25"
+              placeholder="your display name, max 25 chars"
+              @input="$v.name.$touch()"
+              v-model="name">
+          </div>
+          <br>
+          <div class="edit-item">
+            <label for="about">about you</label><span>&nbsp;({{aboutCharsLeft()}})</span>
+            <textarea
+              type="text"
+              name="about"
+              id="about"
+              maxlength="200"
+              placeholder="tell us about your style, max 200 chars"
+              @input="$v.about.$touch()"
+              v-model="about">
+            </textarea>
+          </div>
 
-        <button
-          class="mdl-button mdl-button--raised mdl-button--colored"
-          :disabled="formInvalid"
-          @click.prevent="onSubmit">
-          update
-        </button>
-    </form>
+        <hr>
 
+          <button
+            class="mdl-button mdl-button--raised mdl-button--colored"
+            :disabled="profileFormInvalid"
+            @click.prevent="submitProfile">
+            update
+          </button>
+      </form>
+    </div>
 
-    <form v-if="!profileView" class="edit-form" action="#">
-      <span
+    <form v-if="!profileView" class="edit-form">
+      <button
         v-if="!updateEmail"
-        @click="showEmail">Update Email</span>
-      <span
-        style="color: #f50057;"
-        v-else
-        @click="hideEmail">Cancel Email Update</span>
+        class="mdl-button mdl-button--primary"
+        @click.prevent="showEmail">
+        update email
+      </button>
+      <button
+        v-if="updateEmail"
+        class="mdl-button mdl-button--primary"
+        @click.prevent="hideEmail">
+        cancel email update
+      </button>
 
       <br>
       <br>
@@ -102,13 +119,18 @@
       <br>
       <br>
 
-      <span
+      <button
         v-if="!updatePassword"
-        @click="showPassword">Update Password</span>
-      <span
-        style="color: #f50057;"
-        v-else
-        @click="hidePassword">Cancel Password Update</span>
+        class="mdl-button mdl-button--primary"
+        @click.prevent="showPassword">
+        update password
+      </button>
+      <button
+        v-if="updatePassword"
+        class="mdl-button mdl-button--primary"
+        @click.prevent="hidePassword">
+        cancel password update
+      </button>
 
       <br>
       <br>
@@ -153,8 +175,8 @@
 
         <button
           class="mdl-button mdl-button--raised mdl-button--colored"
-          :disabled="formInvalid"
-          @click.prevent="onSubmit">
+          :disabled="loginFormInvalid"
+          @click.prevent="submitLogin">
           update
         </button>
     </form>
@@ -165,7 +187,7 @@
 </template>
 
 <script>
-import { required, email, minLength, sameAs } from 'vuelidate/lib/validators'
+import { required, email, minLength, sameAs, maxLength } from 'vuelidate/lib/validators'
 import axios from 'axios'
 import { mapActions, mapGetters } from 'vuex'
 
@@ -180,10 +202,32 @@ export default {
       newEmail: '',
       newPassword: '',
       confirmPassword: '',
-      currentPassword: ''
+      currentPassword: '',
+      photo: '',
+      profileURL:'https://stroseschool.stroselions.net/wp-content/uploads/2018/04/profile-blank-reva.png'
     }
   },
   methods: {
+    onPickPhoto () {
+      this.$refs.photoInput.click()
+    },
+    onPhotoPicked (event) {
+        const files = event.target.files
+        console.log(files)
+        // let filename  = files[0].filename
+        const fileReader = new FileReader()
+        fileReader.addEventListener('load', ()=> {
+          this.profileURL = fileReader.result
+        })
+        fileReader.readAsDataURL(files[0])
+        this.photo = files[0]
+    },
+    selectProfile () {
+      this.profileView = true
+    },
+    selectLogin () {
+      this.profileView = false
+    },
     showEmail () {
       this.updateEmail = true
     },
@@ -202,7 +246,26 @@ export default {
     ...mapActions({
       updateUser: 'updateUser'
     }),
-    onSubmit () {
+    submitProfile () {
+      // NOTEE! I am not sending this via Vuex because this upload
+      // Does not impact the state...If I ever need to store any of
+      // The below items in the state...then I may need to use Vuex
+      const token = localStorage.getItem('token')
+      const fd = new FormData()
+      fd.append('photo', this.photo, this.photo.name)
+      fd.append('name', this.name)
+      fd.append('about', this.about)
+      console.log(fd)
+      axios.post('http://localhost:5000/user/profile/update', fd, {
+        headers:
+          {'Content-Type': 'multipart/form-data', 'Authorization': `Bearer ${token}` }
+        })
+        .then(res => {
+          console.log(res)
+        })
+        .catch(error => console.log(error))
+    },
+    submitLogin () {
       const userData = {
         auth_id: this.userData.auth_id,
         currentEmail: this.userData.email,
@@ -213,17 +276,35 @@ export default {
       console.log(userData)
       // this.signUp(updateData)
       this.updateUser(userData)
+    },
+    aboutCharsLeft () {
+      return this.$v.about.$params.maxLen.max - this.about.length
+    },
+    nameCharsLeft() {
+      return this.$v.name.$params.maxLen.max - this.name.length
+    },
+    goBack () {
+      window.history.length > 1 ? this.$router.go(-1) : this.$router.push('/')
     }
   },
   computed: {
     ...mapGetters({
       userData: 'userData'
     }),
-    formInvalid () {
+    profileFormInvalid () {
+      return ((this.about === '') && (this.name === '') && (this.photo === ''))
+    },
+    loginFormInvalid () {
       return ((this.$v.$invalid) || ((this.newEmail === '') && (this.newPassword === '')))
     }
   },
   validations: {
+    name: {
+      maxLen: maxLength(25)
+    },
+    about: {
+      maxLen: maxLength(200)
+    },
     newEmail: {
       email,
       isUnique (value) {
@@ -292,8 +373,8 @@ export default {
   float:left;
   border: 1px solid #4db6ac;
   border-radius: 50%;
-  height: 70px;
-  width: 70px;
+  height: 75px;
+  width: 75px;
   padding: 2px;
   margin-left: 5px;
 }
@@ -304,14 +385,6 @@ export default {
   padding-right: 10px;
 }
 
-.edit-form > span {
-  color: gray;
-  cursor: pointer;
-  font-weight: 500;
-  border: 3px solid #E8E8E8;
-  padding: 5px;
-  border-radius: 7px;
-}
 .edit-item > label {
   font-size: 16px;
 }
@@ -343,6 +416,10 @@ export default {
   background-color: rgb(237,237,237, .4);
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   font-size: 16px;
+}
+.active {
+  color: #f50057;
+  font-weight: 500;
 }
 
 </style>
