@@ -3,11 +3,18 @@
   <div class="mdl-card mdl-shadow--2dp" ref="stylekard" :style="{width: kardSize + 'px'}">
 
     <!-- MDL-Card Title -->
-    <div class="mdl-card__title" @click="goToUser">
-      <div class="avatar">
+    <div class="mdl-card__title">
+      <div class="avatar" @click="goToUser">
           <img :src="post.url"/>
       </div>
-       <h3 class="mdl-card__title-text"> {{post.username}} </h3>
+       <h3 class="mdl-card__title-text" @click="goToUser"> {{post.username}} </h3>
+        <div class="mdl-layout-spacer"></div>
+        <span v-if="canEditPost" @click="editPost">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+            <path fill="none" d="M0 0h24v24H0V0z"/><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM21.41 6.34l-3.75-3.75-2.53 2.54 3.75 3.75 2.53-2.54z"/>
+          </svg>
+          &nbsp;&nbsp;
+        </span>
     </div>
     <!-- End MDL-Card Title -->
 
@@ -150,6 +157,13 @@ export default {
         } else {
           return false
         }
+    },
+    canEditPost () {
+      if ( (!localStorage.getItem('username')) || (localStorage.getItem('username') !== this.post.username) ) {
+        return false
+      } else {
+        return true
+        }
     }
   },
   methods: {
@@ -214,6 +228,9 @@ export default {
     },
     goToUser () {
       this.$router.push({ name: 'userprofile' , params: { username: this.post.username}})
+    },
+    editPost () {
+      this.$router.push({ name: 'editkast', params: { post_id: this.post.post_id}})
     }
   },
   components: {
@@ -223,8 +240,6 @@ export default {
     this.kardSize = Math.min(window.innerWidth - 15, 400)
     this.singleWidth = this.kardSize
     this.innerWidth = this.singleWidth * this.pics_count
-  },
-  activated () {
   }
 }
 </script>

@@ -66,15 +66,15 @@ export default {
       axios.post('http://localhost:5000/comment/create/' + id, fd, {
         headers:
           {'Content-Type': 'multipart/form-data', 'Authorization': `Bearer ${token}` }
-        })
-        .then(response => {
-          console.log(response.data)
-        })
-        .catch(error => console.log(error))
+      })
+      .then(response => {
+        console.log(response.data)
+      })
+      .catch(error => console.log(error))
     },
-    commentCharsLeft() {
+    commentCharsLeft () {
       return this.$v.comment.$params.maxLen.max - this.comment.length
-    },
+    }
   }
 }
 </script>

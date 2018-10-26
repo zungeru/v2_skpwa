@@ -121,7 +121,7 @@ export const setLogOutTimer = ({ dispatch }, expirationTime) => {
 export const getInitialPosts = ({ commit }) => {
   const token = localStorage.getItem('token')
   axios.get('http://localhost:5000/feed',
-    { headers: { 'Authorization': `Bearer ${token}` } } )
+    { headers: { 'Authorization': `Bearer ${token}` } })
     .then(response => {
       const posts = response.data.posts
       commit('SET_POSTS', posts)
@@ -133,7 +133,7 @@ export const getMorePosts = ({ commit }) => {
   const token = localStorage.getItem('token')
   const currentRound = store.getters.loadRound
   axios.get('http://localhost:5000/feed/' + currentRound,
-    { headers: { 'Authorization': `Bearer ${token}` } } )
+    { headers: { 'Authorization': `Bearer ${token}` } })
     .then(response => {
       const posts = response.data.posts
       console.log(currentRound)

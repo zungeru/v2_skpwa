@@ -28,7 +28,7 @@
             >drag photos to reorder
           </div>
           <div class="form-item">
-            <label for="piece">piece</label> <span>&nbsp;({{pieceCharsLeft()}})</span>
+            <label for="piece">piece</label><span>&nbsp;({{pieceCharsLeft()}})</span>
             <input
               type="text"
               name="piece"

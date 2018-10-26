@@ -7,6 +7,7 @@ import CommentsHome from '../components/Shared/Comments/CommentsHome.vue'
 import ShowComments from '../components/Shared/Comments/Comments/ShowComments.vue'
 import AddComment from '../components/Shared/Comments/Comments/AddComment.vue'
 import Kast from '../components/Kast/Kast.vue'
+import EditKast from '../components/Kast/EditKast.vue'
 import SearchHome from '../components/Search/SearchHome.vue'
 import People from '../components/Search/SearchBy/People.vue'
 import Tags from '../components/Search/SearchBy/Tags.vue'
@@ -23,6 +24,7 @@ export const routes = [
   { path: '/about', name: 'about', component: About },
   { path: '/feed', name: 'feed', component: Feed },
   { path: '/kast', name: 'kast', component: Kast },
+  { path: '/edit/kast/:post_id', name: 'editkast', component: EditKast },
   { path: '/search',
     component: SearchHome,
     children: [
