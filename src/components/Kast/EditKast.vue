@@ -88,7 +88,8 @@
         <div>
           <button
             class="mdl-button mdl-button--raised mdl-button--colored"
-            :disabled="$v.$invalid">
+            :disabled="$v.$invalid"
+            @click.prevent="onSubmit">
             submit
           </button>
         </div>
@@ -188,6 +189,27 @@ export default {
     },
     noteCharsLeft() {
       return this.$v.note.$params.maxLen.max - this.note.length
+    },
+    onSubmit () {
+      const token = localStorage.getItem('token')
+      const fd = new FormData()
+      fd.append('post_id', this.$route.params.post_id)
+      fd.append('piece', this.piece)
+      fd.append('price', this.price)
+      fd.append('place', this.place)
+      fd.append('note', this.note)
+      fd.append('pic_1', (this.pics[0] ? this.pics[0]['file'] : null), (this.pics[0] ? this.pics[0]['file'].name : 'none_0'))
+      fd.append('pic_2', (this.pics[1] ? this.pics[1]['file'] : null), (this.pics[1] ? this.pics[1]['file'].name : 'none_1'))
+      fd.append('pic_3', (this.pics[2] ? this.pics[2]['file'] : null), (this.pics[2] ? this.pics[2]['file'].name : 'none_2'))
+      console.log(fd)
+      axios.post('http://localhost:5000/post/update', fd, {
+        headers:
+          {'Content-Type': 'multipart/form-data', 'Authorization': `Bearer ${token}` }
+        })
+        .then(res => {
+          console.log(res)
+        })
+        .catch(error => console.log(error))
     }
   },
   beforeMount () {
