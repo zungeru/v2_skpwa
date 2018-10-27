@@ -6,6 +6,7 @@ import Feed from '../components/Feed/Feed.vue'
 import CommentsHome from '../components/Shared/Comments/CommentsHome.vue'
 import ShowComments from '../components/Shared/Comments/Comments/ShowComments.vue'
 import AddComment from '../components/Shared/Comments/Comments/AddComment.vue'
+import EditComment from '../components/Shared/Comments/Comments/EditComment.vue'
 import Kast from '../components/Kast/Kast.vue'
 import EditKast from '../components/Kast/EditKast.vue'
 import SearchHome from '../components/Search/SearchHome.vue'
@@ -36,7 +37,8 @@ export const routes = [
     component: CommentsHome,
     children: [
       { path: 'post/:post_id', name: 'showcomments', component: ShowComments },
-      { path: '/add/comment/:post_id', name: 'addcomment', component: AddComment }
+      { path: '/add/comment/:post_id', name: 'addcomment', component: AddComment },
+      { path: '/edit/comment/:comment_id', name: 'editcomment', component: EditComment }
     ]
   },
   { path: '/profile',

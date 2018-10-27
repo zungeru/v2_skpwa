@@ -2,19 +2,27 @@
   <div class="edit-kast-main">
     <div class="edit-kast-fixed-header">
       <div class="edit-kast-header-item">
-        <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-        <span>
+        <span @click="goBack">
+          <span>&nbsp;&nbsp;&nbsp;</span>
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
               <path d="M0 0h24v24H0z" fill="none"/>
               <path d="M21 11H6.83l3.58-3.59L9 6l-6 6 6 6 1.41-1.41L6.83 13H21z"/>
           </svg>
         </span>
+        <span @click="deletePost">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+            <path fill="none" d="M0 0h24v24H0V0z"/><path d="M6 21h12V7H6v14zm2.46-9.12l1.41-1.41L12 12.59l2.12-2.12 1.41 1.41L13.41 14l2.12 2.12-1.41 1.41L12 15.41l-2.12 2.12-1.41-1.41L10.59 14l-2.13-2.12zM15.5 4l-1-1h-5l-1 1H5v2h14V4h-3.5z"/>
+          </svg>
+          <span>&nbsp;&nbsp;&nbsp;</span>
+        </span>
       </div>
     </div>
     <div class="edit-kast-body">
-      <div class="edit-kast-pics" v-if="!picUploaded" @click="onPickFile">
-        <button class="mdl-button mdl-button--raised mdl-button--colored">
-          Reupload Photos
+      <div class="edit-kast-pics" v-if="!picUploaded">
+        <button
+            class="mdl-button mdl-button--raised mdl-button--colored"
+            @click="onPickFile">
+          Reupload Photo
         </button>
         <input
           type="file"
@@ -210,11 +218,26 @@ export default {
           console.log(res)
         })
         .catch(error => console.log(error))
+    },
+    goBack () {
+      window.history.length > 1 ? this.$router.go(-1) : this.$router.push('/')
+    },
+    deletePost () {
+      const token = localStorage.getItem('token')
+      const username = localStorage.getItem('username')
+      const post_id = this.$route.params.post_id
+      axios.get('http://localhost:5000/post/delete/' + post_id,
+        { headers: { 'Authorization': `Bearer ${token}` } })
+        .then(response => {
+          console.log(response.data)
+          this.$router.replace({ name: 'userprofile', params: { username: username }})
+        })
+        .catch(error => console.log(error))
     }
   },
   beforeMount () {
     this.getPost()
-  },
+  }
 }
 </script>
 
@@ -236,7 +259,7 @@ export default {
   margin-top: 12px;
   max-width: 500px;
   display: flex;
-  justify-content: flex-start;
+  justify-content: space-between;
 }
 .edit-kast-header-item span {
   cursor: pointer;

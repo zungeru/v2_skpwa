@@ -72,6 +72,22 @@ export const updateUser = ({ commit, dispatch }, userData) => {
 }
 
 // for auth.js
+export const deleteUser = ({ dispatch }, userData) => {
+  const fd = new FormData()
+  fd.append('auth_id', userData.auth_id)
+  fd.append('email', userData.email)
+  fd.append('password', userData.password)
+  fd.append('client_id', CLIENT_ID)
+  fd.append('client_secret', CLIENT_SECRET)
+  axios.post('http://localhost:5001/user/delete', fd)
+    .then(response => {
+      console.log(response.data)
+      dispatch('logOut')
+    })
+    .catch(error => console.log(error))
+}
+
+// for auth.js
 export const logOut = ({ commit }) => {
   commit('CLEAR_AUTH_DATA')
   localStorage.removeItem('token')

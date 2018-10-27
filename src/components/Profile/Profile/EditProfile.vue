@@ -66,9 +66,7 @@
               v-model="about">
             </textarea>
           </div>
-
-        <hr>
-
+          <br>
           <button
             class="mdl-button mdl-button--raised mdl-button--colored"
             :disabled="profileFormInvalid"
@@ -76,6 +74,35 @@
             update
           </button>
       </form>
+      <hr>
+      <div class="edit-form-delete">
+        <span @click="confirmDelete=!confirmDelete" style="cursor: pointer;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+            <path fill="none" d="M0 0h24v24H0V0z"/><path d="M6 21h12V7H6v14zm2.46-9.12l1.41-1.41L12 12.59l2.12-2.12 1.41 1.41L13.41 14l2.12 2.12-1.41 1.41L12 15.41l-2.12 2.12-1.41-1.41L10.59 14l-2.13-2.12zM15.5 4l-1-1h-5l-1 1H5v2h14V4h-3.5z"/>
+          </svg>
+        </span>
+        <button
+          class="mdl-button mdl-button--primary"
+          @click.prevent="confirmDelete=!confirmDelete">
+          delete account
+        </button>
+        <div class="edit-item" v-if="confirmDelete">
+          <br>
+          <label for="confirmdelete">enter current password to confirm delete</label>
+          <input
+            type="password"
+            id="confirmdelete"
+            v-model="deletePasswordInput">
+          <br>
+          <br>
+          <button
+            class="mdl-button mdl-button--raised mdl-button--colored"
+            :disabled="deleteFormInvalid"
+            @click.prevent="submitDelete">
+            delete
+          </button>
+        </div>
+      </div>
     </div>
 
     <form v-if="!profileView" class="edit-form">
@@ -204,10 +231,16 @@ export default {
       confirmPassword: '',
       currentPassword: '',
       photo: '',
-      profileURL:'https://stroseschool.stroselions.net/wp-content/uploads/2018/04/profile-blank-reva.png'
+      profileURL:'https://stroseschool.stroselions.net/wp-content/uploads/2018/04/profile-blank-reva.png',
+      confirmDelete: false,
+      deletePasswordInput: ''
     }
   },
   methods: {
+    ...mapActions({
+      updateUser: 'updateUser',
+      deleteUser: 'deleteUser'
+    }),
     onPickPhoto () {
       this.$refs.photoInput.click()
     },
@@ -243,9 +276,6 @@ export default {
       this.newPassword = ''
       this.confirmPassword = ''
     },
-    ...mapActions({
-      updateUser: 'updateUser'
-    }),
     submitProfile () {
       // NOTEE! I am not sending this via Vuex because this upload
       // Does not impact the state...If I ever need to store any of
@@ -277,6 +307,18 @@ export default {
       // this.signUp(updateData)
       this.updateUser(userData)
     },
+    submitDelete () {
+      // NOTEE! I am  sending this via Vuex although I'm not changing the
+      // the state because I want to leverage the client id and client secrete
+      // already referenced in the action.js file
+      const userData = {
+        auth_id: this.userData.auth_id,
+        email: this.userData.email,
+        password: this.deletePasswordInput
+      }
+      console.log(userData)
+      this.deleteUser(userData)
+    },
     aboutCharsLeft () {
       return this.$v.about.$params.maxLen.max - this.about.length
     },
@@ -296,7 +338,10 @@ export default {
     },
     loginFormInvalid () {
       return ((this.$v.$invalid) || ((this.newEmail === '') && (this.newPassword === '')))
-    }
+    },
+    deleteFormInvalid () {
+      return ( this.deletePasswordInput.length === 0 )
+    },
   },
   validations: {
     name: {
