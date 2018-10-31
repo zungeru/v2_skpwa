@@ -123,6 +123,13 @@ export default {
       note: ''
     }
   },
+  watch: {
+    $route (to, from) {
+      if(to.params.post_id) {
+        this.getPost()
+      }
+    }
+  },
   components: {
     draggable
   },

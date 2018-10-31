@@ -53,7 +53,7 @@ export default {
       comment: ''
     }
   },
-  validations:{
+  validations: {
     comment: {
       required,
       maxLen: maxLength(200)
@@ -62,8 +62,8 @@ export default {
   methods: {
     getComment () {
       const token = localStorage.getItem('token')
-      const comment_id = this.$route.params.comment_id
-      axios.get('http://localhost:5000/comment/' + comment_id,
+      const commentId = this.$route.params.comment_id
+      axios.get('http://localhost:5000/comment/' + commentId,
         { headers: { 'Authorization': `Bearer ${token}` } })
         .then(response => {
           console.log(response.data)
@@ -81,20 +81,20 @@ export default {
       fd.append('comment', this.comment)
       axios.post('http://localhost:5000/comment/update', fd, {
         headers:
-          {'Content-Type': 'multipart/form-data', 'Authorization': `Bearer ${token}` }
+          { 'Content-Type': 'multipart/form-data', 'Authorization': `Bearer ${token}` }
       })
-      .then(response => {
-        console.log(response.data)
-      })
-      .catch(error => console.log(error))
+        .then(response => {
+          console.log(response.data)
+        })
+        .catch(error => console.log(error))
     },
     commentCharsLeft () {
       return this.$v.comment.$params.maxLen.max - this.comment.length
     },
     deleteComment () {
       const token = localStorage.getItem('token')
-      const comment_id = this.$route.params.comment_id
-      axios.get('http://localhost:5000/comment/delete/' + comment_id,
+      const commentId = this.$route.params.comment_id
+      axios.get('http://localhost:5000/comment/delete/' + commentId,
         { headers: { 'Authorization': `Bearer ${token}` } })
         .then(response => {
           console.log(response.data)
@@ -108,7 +108,7 @@ export default {
   },
   activated () {
     this.getComment()
-  },
+  }
 }
 </script>
 

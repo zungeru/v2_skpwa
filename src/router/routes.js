@@ -17,6 +17,7 @@ import UserProfile from '../components/Profile/Profile/UserProfile.vue'
 import EditProfile from '../components/Profile/Profile/EditProfile.vue'
 import Followers from '../components/Profile/Profile/Followers.vue'
 import Following from '../components/Profile/Profile/Following.vue'
+import Post from '../components/Profile/Profile/Post.vue'
 
 export const routes = [
   { path: '', name: 'home', component: Home },
@@ -48,7 +49,8 @@ export const routes = [
       { path: 'user/:username', name: 'userprofile', component: UserProfile },
       { path: 'edit', name: 'editprofile', component: EditProfile },
       { path: 'followers/:username', name: 'followers', component: Followers },
-      { path: 'following/:username', name: 'following', component: Following }
+      { path: 'following/:username', name: 'following', component: Following },
+      { path: 'post/:post_id', name: 'post', component: Post }
     ]
   }
 ]

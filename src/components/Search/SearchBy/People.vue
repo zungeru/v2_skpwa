@@ -2,7 +2,7 @@
   <div class="search-people-main" ref="peoplemain">
     <div class="search-people-fixed-header" :style="{width: divsize + 'px'}">
       <div class="search-people-form">
-        <input type="text" :style="{width: divsize - 40 + 'px'}" />
+        <input type="text" :style="{width: divsize - 40 + 'px'}" v-model="keyword" />
         <span>
           <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
               <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
@@ -11,65 +11,76 @@
         </span>
       </div>
     </div>
-    <div class="search-people-result">
+    <div class="search-people-result" v-if="results.length > 0">
       <div v-for="(result,index) in results"
         :key="index"
-        class="search-people-result-item">
+        class="search-people-result-item"
+          @click="goToUser(result.username)">
           <div class="search-avatar">
             <img :src="result.url"/>
           </div>
           <div class="search-people-details">
-            <span style="font-weight: bold;">{{result.name}}</span>
+            <span style="font-weight: bold;">{{result.username}}</span>
             <br>
             <span style="font-size: 14px;">{{result.name}}</span>
           </div>
       </div>
     </div>
+    <div class="search-people-result" v-else>
+      <p> Find A StyleKaster...</p>
+    </div>
   </div>
 </template>
 
 <script>
+import debounce from 'lodash/debounce'
+import axios from 'axios'
+
 export default {
   data () {
     return {
       divsize: 0,
-      results: [
-        { 'name': 'hello_cynthia',
-          'url': 'https://cdn.cliqueinc.com/cache/posts/231501/mistakes-stylish-women-make-231501-1501856651717-main.1200x0c.jpg?quality=70&interlace=true'
-        },
-        { 'name': 'hellomsaara',
-          'url': 'https://cdn.cliqueinc.com/cache/posts/231501/mistakes-stylish-women-make-231501-1501856651717-main.1200x0c.jpg?quality=70&interlace=true'
-        },
-        { 'name': 'hellofresh',
-          'url': 'https://cdn.cliqueinc.com/cache/posts/231501/mistakes-stylish-women-make-231501-1501856651717-main.1200x0c.jpg?quality=70&interlace=true'
-        },
-        { 'name': 'hellokatyxo',
-          'url': 'https://cdn.cliqueinc.com/cache/posts/231501/mistakes-stylish-women-make-231501-1501856651717-main.1200x0c.jpg?quality=70&interlace=true'
-        },
-        { 'name': 'hellodarlinglife',
-          'url': 'https://cdn.cliqueinc.com/cache/posts/231501/mistakes-stylish-women-make-231501-1501856651717-main.1200x0c.jpg?quality=70&interlace=true'
-        },
-        { 'name': 'helloIamhugo',
-          'url': 'https://cdn.cliqueinc.com/cache/posts/231501/mistakes-stylish-women-make-231501-1501856651717-main.1200x0c.jpg?quality=70&interlace=true'
-        },
-        { 'name': 'hellokitty',
-          'url': 'https://cdn.cliqueinc.com/cache/posts/231501/mistakes-stylish-women-make-231501-1501856651717-main.1200x0c.jpg?quality=70&interlace=true'
-        },
-        { 'name': 'hellobody_fr',
-          'url': 'https://cdn.cliqueinc.com/cache/posts/231501/mistakes-stylish-women-make-231501-1501856651717-main.1200x0c.jpg?quality=70&interlace=true'
-        }
-      ]
+      keyword: null,
+      results: []
+    }
+  },
+  watch: {
+    keyword (newVal, oldval) {
+      this.debouncedSearchPeople()
     }
   },
   methods: {
     getDivSize () {
       this.divsize = this.$refs.peoplemain.offsetWidth - 35
       console.log(this.divsize)
+    },
+    searchPeople () {
+      if (this.keyword.length === 0) {
+        return
+      }
+      const token = localStorage.getItem('token')
+      const fd = new FormData()
+      fd.append('keyword', this.keyword)
+      let vm = this
+      axios.post('http://localhost:5000/people/search', fd, {
+        headers: { 'Authorization': `Bearer ${token}` } })
+        .then(response => {
+          console.log(response.data)
+          vm.results = response.data.results
+        })
+        .catch(error => console.log(error))
+    },
+    goToUser (username) {
+      this.$router.push({ name: 'userprofile', params: { username: username }})
     }
+  },
+  created () {
+    this.debouncedSearchPeople = debounce(this.searchPeople, 1000)
   },
   activated () {
     this.divsize = this.$refs.peoplemain.offsetWidth - 35
     window.addEventListener('resize', this.getDivSize)
+    console.log('Search People View: Activated')
   },
   deactivated () {
     window.removeEventListener('resize', this.getDivSize)
@@ -103,12 +114,14 @@ export default {
 .search-people-form > input:focus {
   border-color: #f50057;
 }
-.search-people-result{
+.search-people-result {
   margin-top:110px;
   margin-left: 45px;
 }
 .search-people-result-item{
   margin-top: 25px;
+  cursor: pointer;
+  max-width: 300px;
 }
 .search-avatar > img {
   float:left;

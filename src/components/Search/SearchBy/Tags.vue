@@ -2,7 +2,7 @@
   <div class="search-tags-main" ref="tagsmain">
     <div class="search-tags-fixed-header" :style="{width: divsize + 'px'}">
       <div class="search-tags-form">
-        <input type="text" :style="{width: divsize - 40 + 'px'}" />
+        <input type="text" :style="{width: divsize - 40 + 'px'}" v-model="keyword" />
         <span>
           <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
               <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
@@ -11,65 +11,78 @@
         </span>
       </div>
     </div>
-    <div class="search-tags-result">
+    <div class="search-tags-result" v-if="results.length > 0">
       <div v-for="(result,index) in results"
         :key="index"
-        class="search-tags-result-item">
+        class="search-tags-result-item"
+        @click="goToPost(result.post_id)">
           <div class="search-tags-avatar">
-            <img :src="result.url"/>
+            <img :src="result.pics[0]['src']"/>
           </div>
           <div class="search-tags-details">
-            <span style="font-weight: bold;">{{result.name}}</span>
+            <span style="font-weight: bold;">{{result.piece}}</span>
             <br>
-            <span style="font-size: 14px;">{{result.name}}</span>
+            <span style="font-size: 14px;">${{result.price}}</span>
           </div>
       </div>
     </div>
+    <div class="search-tags-result" v-else>
+      <p> Find A Post...</p>
+    </div>
+
   </div>
 </template>
 
 <script>
+import debounce from 'lodash/debounce'
+import axios from 'axios'
+
 export default {
   data () {
     return {
       divsize: 0,
-      results: [
-        { 'name': 'hello_cynthia',
-          'url': 'http://cdn2.stylecraze.com/wp-content/uploads/2017/06/Chest-Covering-Hijab-Style.jpg'
-        },
-        { 'name': 'hellomsaara',
-          'url': 'http://cdn2.stylecraze.com/wp-content/uploads/2017/06/Chest-Covering-Hijab-Style.jpg'
-        },
-        { 'name': 'hellofresh',
-          'url': 'http://cdn2.stylecraze.com/wp-content/uploads/2017/06/Chest-Covering-Hijab-Style.jpg'
-        },
-        { 'name': 'hellokatyxo',
-          'url': 'http://cdn2.stylecraze.com/wp-content/uploads/2017/06/Chest-Covering-Hijab-Style.jpg'
-        },
-        { 'name': 'hellodarlinglife',
-          'url': 'http://cdn2.stylecraze.com/wp-content/uploads/2017/06/Chest-Covering-Hijab-Style.jpg'
-        },
-        { 'name': 'helloIamhugo',
-          'url': 'http://cdn2.stylecraze.com/wp-content/uploads/2017/06/Chest-Covering-Hijab-Style.jpg'
-        },
-        { 'name': 'hellokitty',
-          'url': 'http://cdn2.stylecraze.com/wp-content/uploads/2017/06/Chest-Covering-Hijab-Style.jpg'
-        },
-        { 'name': 'hellobody_fr',
-          'url': 'http://cdn2.stylecraze.com/wp-content/uploads/2017/06/Chest-Covering-Hijab-Style.jpg'
-        }
-      ]
+      keyword: null,
+      results: []
+    }
+  },
+  watch: {
+    keyword (newVal, oldval) {
+      this.debouncedSearchTags()
     }
   },
   methods: {
     getDivSize () {
       this.divsize = this.$refs.tagsmain.offsetWidth - 35
       console.log(this.divsize)
+    },
+    searchTags () {
+      if (this.keyword.length === 0) {
+        return
+      }
+      const token = localStorage.getItem('token')
+      const fd = new FormData()
+      fd.append('keyword', this.keyword)
+      let vm = this
+      console.log(this.keyword)
+      axios.post('http://localhost:5000/tags/search', fd, {
+        headers: { 'Authorization': `Bearer ${token}` } })
+        .then(response => {
+          console.log(response.data)
+          vm.results = response.data.results
+        })
+        .catch(error => console.log(error))
+    },
+    goToPost (id) {
+      this.$router.push({ name: 'post', params: { post_id: id }})
     }
+  },
+  created () {
+    this.debouncedSearchTags = debounce(this.searchTags, 1000)
   },
   activated () {
     this.divsize = this.$refs.tagsmain.offsetWidth - 35
     window.addEventListener('resize', this.getDivSize)
+    console.log('Search Tags View: Activated')
   },
   deactivated () {
     window.removeEventListener('resize', this.getDivSize)
@@ -109,6 +122,8 @@ export default {
 }
 .search-tags-result-item{
   margin-top: 25px;
+  cursor: pointer;
+  max-width: 300px;
 }
 .search-tags-avatar > img {
   float:left;
