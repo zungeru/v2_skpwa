@@ -2,7 +2,7 @@
   <div class="">
     <div class="post-fixed-header">
       <div class="post-header-item">
-        <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+        <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
         <span span @click="goBack">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
               <path d="M0 0h24v24H0z" fill="none"/>
@@ -14,12 +14,15 @@
 
     <div class="post-body">
       <StyleKard
+        class="post-body"
         v-for="(post,index) in posts"
         :key="index"
         :id="post.id"
         :post="post">
       </StyleKard>
+
     </div>
+
   </div>
 </template>
 
@@ -91,10 +94,6 @@ export default {
   cursor: pointer;
 }
 .post-body {
-  padding: 0px 15px 10px 15px;
-  margin-right: auto;
-  margin-left: auto;
   margin-top: 70px;
-  max-width: 500px;
 }
 </style>
