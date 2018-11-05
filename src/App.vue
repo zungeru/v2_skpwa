@@ -60,13 +60,13 @@
       <footer class="mdl-mini-footer">
         <div class="social-icons">
           <router-link :to="{name: 'feed'}" class="mobnav">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+            <svg fill="#137E8D" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                 <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
                 <path d="M0 0h24v24H0z" fill="none"/>
             </svg>
           </router-link>
           <router-link :to="{name: 'kast'}" class="mobnav">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+              <svg fill="#000000" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                   <circle cx="12" cy="12" r="3.2"/>
                   <path d="M9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/>
                   <path d="M0 0h24v24H0z" fill="none"/>
@@ -79,11 +79,12 @@
               </svg>
           </router-link>
           <router-link :to="{ name: 'userprofile', params: { username: username }}" class="mobnav">
-          <!-- <router-link to="/profile" class="mobnav"> -->
-              <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+            <img src="./assets/svg/profile.svg">
+            <!-- <router-link to="/profile" class="mobnav"> -->
+              <!-- <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
                   <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
                   <path d="M0 0h24v24H0z" fill="none"/>
-              </svg>
+              </svg> -->
           </router-link>
         </div>
       </footer>
@@ -258,7 +259,18 @@ export default {
   transform: translate(0, -50%); /* 4 */
 }
 
+.mobnav img {
+  margin: 0;
+  position: absolute;  /* 2 */
+  top: 50%;            /* 3 */
+  transform: translate(0, -50%); /* 4 */
+}
+
 .mobnav svg:hover {
+      fill: #f50057 !important;
+    }
+
+.mobnav img:hover {
       fill: #f50057 !important;
     }
 
@@ -267,6 +279,10 @@ export default {
 }
 
 .router-link-active svg {
+  fill: #F50057;
+}
+
+.router-link-active img {
   fill: #F50057;
 }
 
