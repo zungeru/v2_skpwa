@@ -10,7 +10,7 @@
           <div class="mdl-layout-spacer"></div>
 
           <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon" id="hdrbtn">
-            <i class="material-icons">more_vert</i>
+            <img src="./assets/svg/vertical.svg">
           </button>
           <ul class="mdl-menu mdl-js-menu mdl-js-ripple-effect mdl-menu--bottom-right" for="hdrbtn">
             <router-link tag="li" class="mdl-menu__item header_menu" :to="{ name: 'home'}">Home</router-link>
@@ -36,10 +36,37 @@
         </header>
 
         <nav class="sk-navigation mdl-navigation mdl-color--white mdl-color-text--black">
-          <router-link :to="{name: 'feed'}" class="mdl-navigation__link"><i class="material-icons" role="presentation">style</i>Style Feed</router-link>
-          <router-link :to="{name: 'kast'}" class="mdl-navigation__link"><i class="material-icons" role="presentation">record_voice_over</i>Kast</router-link>
-          <router-link :to="{name: 'people'}" class="mdl-navigation__link"><i class="material-icons" role="presentation">search</i>Search</router-link>
-          <router-link :to="{ name: 'userprofile', params: { username: username }}" class="mdl-navigation__link"><i class="material-icons" role="presentation">person</i>Profile</router-link>
+          <router-link :to="{name: 'feed'}"  class="mdl-navigation__link">
+            <span @click="updateRoute('feed')">
+              <img v-if="currentRoute==='feed'" src="./assets/svg/home_active.svg">
+              <img v-else src="./assets/svg/home.svg">
+              <span>&nbsp;&nbsp;&nbsp;&nbsp;Style Feed</span>
+            </span>
+          </router-link>
+
+          <router-link :to="{name: 'kast'}" class="mdl-navigation__link">
+            <span @click="updateRoute('kast')">
+              <img v-if="currentRoute==='kast'" src="./assets/svg/camera_active.svg">
+              <img v-else src="./assets/svg/camera.svg">
+              <span>&nbsp;&nbsp;&nbsp;&nbsp;Kast</span>
+            </span>
+          </router-link>
+
+          <router-link :to="{name: 'people'}" class="mdl-navigation__link">
+            <span @click="updateRoute('people')">
+              <img v-if="currentRoute==='people'" src="./assets/svg/search_active.svg">
+              <img v-else src="./assets/svg/search.svg">
+              <span>&nbsp;&nbsp;&nbsp;&nbsp;Search</span>
+            </span>
+          </router-link>
+
+          <router-link :to="{ name: 'userprofile', params: { username: username }}" class="mdl-navigation__link">
+            <span @click="updateRoute('userprofile')">
+              <img v-if="currentRoute==='userprofile'" src="./assets/svg/profile_active.svg">
+              <img v-else src="./assets/svg/profile.svg">
+              <span>&nbsp;&nbsp;&nbsp;&nbsp;Profile</span>
+            </span>
+          </router-link>
         </nav>
 
       </div>
@@ -47,45 +74,39 @@
 
       <!-- Start Main -->
       <main class="mdl-layout__content mdl-color--white">
-        <!-- #TODO Need Use Appropriate Grid For Each Top Level Component...Home/Kast/Search/Profile-->
-        <!-- <div class="mdl-grid sk-content"> -->
         <keep-alive>
           <router-view></router-view>
         </keep-alive>
-        <!-- </div> -->
       </main>
       <!-- End Main -->
 
       <!-- Start Footer -->
       <footer class="mdl-mini-footer">
         <div class="social-icons">
-          <router-link :to="{name: 'feed'}" class="mobnav">
-            <svg fill="#137E8D" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
-                <path d="M0 0h24v24H0z" fill="none"/>
-            </svg>
-          </router-link>
-          <router-link :to="{name: 'kast'}" class="mobnav">
-              <svg fill="#000000" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                  <circle cx="12" cy="12" r="3.2"/>
-                  <path d="M9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/>
-                  <path d="M0 0h24v24H0z" fill="none"/>
-              </svg>
-          </router-link>
-          <router-link :to="{name: 'people'}" class="mobnav">
-              <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
-                  <path d="M0 0h24v24H0z" fill="none"/>
-              </svg>
-          </router-link>
-          <router-link :to="{ name: 'userprofile', params: { username: username }}" class="mobnav">
-            <img src="./assets/svg/profile.svg">
-            <!-- <router-link to="/profile" class="mobnav"> -->
-              <!-- <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-                  <path d="M0 0h24v24H0z" fill="none"/>
-              </svg> -->
-          </router-link>
+          <span @click="updateRoute('feed')">
+            <router-link :to="{name: 'feed'}" class="mobnav">
+                <img v-if="currentRoute==='feed'" src="./assets/svg/home_active.svg">
+                <img v-else  src="./assets/svg/home.svg">
+            </router-link>
+          </span>
+          <span @click="updateRoute('kast')">
+            <router-link :to="{name: 'kast'}" class="mobnav">
+                <img v-if="currentRoute==='kast'" src="./assets/svg/camera_active.svg">
+                <img v-else src="./assets/svg/camera.svg">
+            </router-link>
+          </span>
+          <span @click="updateRoute('people')">
+            <router-link :to="{name: 'people'}" class="mobnav">
+                <img v-if="currentRoute==='people'" src="./assets/svg/search_active.svg">
+                <img v-else src="./assets/svg/search.svg">
+            </router-link>
+          </span>
+          <span @click="updateRoute('userprofile')">
+            <router-link :to="{ name: 'userprofile', params: { username: username }}" class="mobnav">
+                <img v-if="currentRoute==='userprofile'" src="./assets/svg/profile_active.svg">
+                <img v-else src="./assets/svg/profile.svg">
+            </router-link>
+          </span>
         </div>
       </footer>
       <!-- End Footer -->
@@ -109,6 +130,11 @@ window.onload = function () {
 
 export default {
   name: 'App',
+  data () {
+    return{
+      currentRoute: this.$router.currentRoute.name
+    }
+  },
   computed: {
     auth () {
       return this.$store.getters.isAuthenticated
@@ -120,6 +146,10 @@ export default {
   methods: {
     onLogout () {
       this.$store.dispatch('logOut')
+    },
+    updateRoute (route) {
+      this.currentRoute = route
+      console.log(route)
     }
   },
   created () {
@@ -215,21 +245,17 @@ export default {
 }
 
 .sk-layout .sk-navigation .mdl-navigation__link:hover {
-  background-color: #f50057;
+  /* background-color: #f50057; */
   color: #FFFFFF;
 }
 
-.sk-navigation .mdl-navigation__link .material-icons {
-  font-size: 24px;
+.sk-navigation .mdl-navigation__link {
+  /* font-size: 24px; */
   /* color: rgba(255, 255, 255, 0.56); */
   /*color: rgba(255, 255, 255, 1);*/
   color: black;
   margin-right: 32px;
 }
-
-/* .sk-content {
-  max-width: 920px; /This is related to the mdl-grid that I commented out above
-} */
 
 .mdl-mini-footer{
   padding-left: 0px;
@@ -252,38 +278,11 @@ export default {
   text-align: center;
 }
 
-.mobnav svg {
-  margin: 0;
-  position: absolute;  /* 2 */
-  top: 50%;            /* 3 */
-  transform: translate(0, -50%); /* 4 */
-}
-
 .mobnav img {
   margin: 0;
   position: absolute;  /* 2 */
   top: 50%;            /* 3 */
   transform: translate(0, -50%); /* 4 */
-}
-
-.mobnav svg:hover {
-      fill: #f50057 !important;
-    }
-
-.mobnav img:hover {
-      fill: #f50057 !important;
-    }
-
-.router-link-active {
-  color: #f50057 !important;
-}
-
-.router-link-active svg {
-  fill: #F50057;
-}
-
-.router-link-active img {
-  fill: #F50057;
 }
 
 @media (max-width: 580px) {
