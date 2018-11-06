@@ -288,8 +288,8 @@ export default {
       console.log(fd)
       axios.post('http://localhost:5000/user/profile/update', fd, {
         headers:
-          {'Content-Type': 'multipart/form-data', 'Authorization': `Bearer ${token}` }
-        })
+          { 'Content-Type': 'multipart/form-data', 'Authorization': `Bearer ${token}` }
+      })
         .then(res => {
           console.log(res)
         })
@@ -322,7 +322,7 @@ export default {
     aboutCharsLeft () {
       return this.$v.about.$params.maxLen.max - this.about.length
     },
-    nameCharsLeft() {
+    nameCharsLeft () {
       return this.$v.name.$params.maxLen.max - this.name.length
     },
     goBack () {
@@ -340,8 +340,8 @@ export default {
       return ((this.$v.$invalid) || ((this.newEmail === '') && (this.newPassword === '')))
     },
     deleteFormInvalid () {
-      return ( this.deletePasswordInput.length === 0 )
-    },
+      return (this.deletePasswordInput.length === 0)
+    }
   },
   validations: {
     name: {
