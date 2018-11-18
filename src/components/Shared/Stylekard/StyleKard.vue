@@ -10,9 +10,7 @@
        <h3 class="mdl-card__title-text" @click="goToUser"> {{post.username}} </h3>
         <div class="mdl-layout-spacer"></div>
         <span v-if="canEditPost" @click="editPost">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-            <path fill="none" d="M0 0h24v24H0V0z"/><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM21.41 6.34l-3.75-3.75-2.53 2.54 3.75 3.75 2.53-2.54z"/>
-          </svg>
+          <img src="../../../assets/svg/edit.svg">
           &nbsp;&nbsp;
         </span>
     </div>
