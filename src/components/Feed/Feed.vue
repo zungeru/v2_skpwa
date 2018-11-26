@@ -1,11 +1,15 @@
 <template>
-<div >
-  <StyleKard
-    v-for="(post,index) in posts"
-    :key="index"
-    :id="post.id"
-    :post="post">
-  </StyleKard>
+<div>
+  <div v-if="posts.length === 0">
+    <h1>No Post To View Yet, Follow Others </h1>
+  </div>
+  <div v-else>
+    <StyleKard
+      v-for="(post,index) in posts"
+      :key="index"
+      :post="post">
+    </StyleKard>
+  </div>
 </div>
 </template>
 

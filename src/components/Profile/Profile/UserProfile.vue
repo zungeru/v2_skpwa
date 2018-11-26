@@ -16,7 +16,6 @@
               <span style="font-weight: 600">{{profiledUser.followers_count}}</span> <br>
               <span style="font-weight: normal">followers</span>
           </router-link>
-
           <router-link
             :to="{ name: 'following', params: {username: targetUsername} }"
              style="text-align: center; color: black; text-decoration: none;">
@@ -24,7 +23,7 @@
             <span style="font-weight: normal">following</span>
           </router-link>
         </div>
-        <div class="">
+        <div>
           <div
             v-if="loggedInUser.auth_id === profiledUser.auth_id"
             style="margin-left: -90px; margin-top: 31px; padding: 0px;">
@@ -52,6 +51,7 @@
           </div>
         </div>
       </div>
+
       <div class="user-profile-info">
         <span style="font-weight: 600">{{profiledUser.username}}</span> &nbsp;
         <span>|</span> &nbsp;
@@ -103,35 +103,33 @@ export default {
       userRound: 'userRound'
     }),
     loggedInUser () {
-      //I'm adding this property instead of using userData from the store
-      //Because this page does not require login and userData will not nessarily be defined
+      // I'm adding this property instead of using userData from the store
+      // Because this page does not require login and userData will not nessarily be defined
       return !this.$store.getters.userData ? 'guest' : this.$store.getters.userData
     },
-    targetUsername() {
-      return  !this.$route.params.username ? 'guest' : this.$route.params.username
+    targetUsername () {
+      return !this.$route.params.username ? 'guest' : this.$route.params.username
     },
     following () {
       if ((this.loggedInUser.auth_id !== this.profiledUser.auth_id) && (this.profiledUser.is_following === true)) {
         return true
-      }
-      else {
+      } else {
         return false
       }
     },
     notFollowing () {
       if ((this.loggedInUser.auth_id !== this.profiledUser.auth_id) && (this.profiledUser.is_following === false)) {
         return true
-      }
-      else {
+      } else {
         return false
       }
     }
   },
   watch: {
-    '$route'(to, from) {
+    '$route' (to, from) {
       // I may not need this function after all
-      if(to.params.username){
-        const username = to.params.username
+      if (to.params.username) {
+        // const username = to.params.username
         this.getInitialUserPosts(this.$route.params.username)
         this.getUser()
       }
@@ -143,9 +141,9 @@ export default {
       getMoreUserPosts: 'getMoreUserPosts'
     }),
     getUser () {
-      const requesting_user = !localStorage.getItem('username') ? 'guest' : localStorage.getItem('username')
-      const target_user = this.$route.params.username
-      axios.get('http://localhost:5000/' + requesting_user + '/user/' + target_user)
+      const requestingUser = !localStorage.getItem('username') ? 'guest' : localStorage.getItem('username')
+      const targetUser = this.$route.params.username
+      axios.get('http://localhost:5000/' + requestingUser + '/user/' + targetUser)
         .then(response => {
           console.log(response.data)
           this.profiledUser = response.data.user
@@ -154,7 +152,9 @@ export default {
     scroll () {
       let d = document.querySelector('.mdl-layout__content')
       let bottom = d.scrollHeight - d.scrollTop === d.clientHeight
-      if (bottom) {
+      if (bottom && d.scrollTop > 0) {
+        console.log('SCROLL')
+        console.log(d.scrollTop)
         this.getMoreUserPosts(this.$route.params.username)
       }
     },
@@ -164,7 +164,7 @@ export default {
       }
       const token = localStorage.getItem('token')
       axios.get('http://localhost:5000/follow/' + this.$route.params.username,
-        { headers: { 'Authorization': `Bearer ${token}` } } )
+        { headers: { 'Authorization': `Bearer ${token}` } })
         .then(response => {
           // const user = response.data.user
           console.log(response.data)
@@ -174,7 +174,7 @@ export default {
     unFollow () {
       const token = localStorage.getItem('token')
       axios.get('http://localhost:5000/unfollow/' + this.$route.params.username,
-        { headers: { 'Authorization': `Bearer ${token}` } } )
+        { headers: { 'Authorization': `Bearer ${token}` } })
         .then(response => {
           // const user = response.data.user
           console.log(response.data)
@@ -190,20 +190,22 @@ export default {
     this.getUser()
   },
   mounted () {
+    document.querySelector('.mdl-layout__content').scrollTop = 0
     document.querySelector('.mdl-layout__content').addEventListener('scroll', this.scroll)
-    console.log('Feed View: Mounted')
+    console.log('Profile View: Mounted')
   },
   destroyed () {
     document.querySelector('.mdl-layout__content').removeEventListener('scroll', this.scroll)
-    console.log('Feed View: Destroyed')
+    console.log('Profile View: Destroyed')
   },
   activated () {
     document.querySelector('.mdl-layout__content').addEventListener('scroll', this.scroll)
-    console.log('Feed View: Activated')
+    document.querySelector('.mdl-layout__content').scrollTop = 0
+    console.log('Profile View: Activated')
   },
   deactivated () {
     document.querySelector('.mdl-layout__content').removeEventListener('scroll', this.scroll)
-    console.log('Feed View: Deactivated')
+    console.log('Profile View: Deactivated')
   }
 }
 

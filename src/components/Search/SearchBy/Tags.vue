@@ -70,7 +70,7 @@ export default {
         .catch(error => console.log(error))
     },
     goToPost (id) {
-      this.$router.push({ name: 'post', params: { post_id: id }})
+      this.$router.push({ name: 'post', params: { post_id: id } })
     }
   },
   created () {

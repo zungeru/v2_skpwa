@@ -1,6 +1,6 @@
 <template>
   <!-- Main Div MDL-Card -->
-  <div class="mdl-card mdl-shadow--2dp" ref="stylekard" :style="{width: kardSize + 'px'}">
+  <div class="mdl-card mdl-shadow--2dp" :style="{width: kardSize + 'px'}">
 
     <!-- MDL-Card Title -->
     <div class="mdl-card__title">
@@ -148,20 +148,20 @@ export default {
       return this.currentIndex * this.singleWidth
     },
     placeUrl () {
-        let substring1 = this.post.place.substring(0,7)
-        let substring2 = this.post.place.substring(0,8)
-        if ( (substring1 === 'http://') || (substring2 === 'https://') ){
-          return true
-        } else {
-          return false
-        }
+      let substring1 = this.post.place.substring(0, 7)
+      let substring2 = this.post.place.substring(0, 8)
+      if ((substring1 === 'http://') || (substring2 === 'https://')) {
+        return true
+      } else {
+        return false
+      }
     },
     canEditPost () {
-      if ( (!localStorage.getItem('username')) || (localStorage.getItem('username') !== this.post.username) ) {
+      if ((!localStorage.getItem('username')) || (localStorage.getItem('username') !== this.post.username)) {
         return false
       } else {
         return true
-        }
+      }
     }
   },
   methods: {
@@ -202,11 +202,11 @@ export default {
       const token = localStorage.getItem('token')
       const id = this.post.post_id
       axios.get('http://localhost:5000/post/like/' + id,
-        { headers: { 'Authorization': `Bearer ${token}` } } )
+        { headers: { 'Authorization': `Bearer ${token}` } })
         .then(response => {
           console.log(response.data)
-          //I'm updating the likes count here to keep it in sync with
-          //The Backend without having to make another API Call
+          // I'm updating the likes count here to keep it in sync with
+          // The Backend without having to make another API Call
           this.post.likes_count++
           this.post.user_liked = !this.post.user_liked
         })
@@ -215,20 +215,20 @@ export default {
       const token = localStorage.getItem('token')
       const id = this.post.post_id
       axios.get('http://localhost:5000/post/unlike/' + id,
-        { headers: { 'Authorization': `Bearer ${token}` } } )
+        { headers: { 'Authorization': `Bearer ${token}` } })
         .then(response => {
           console.log(response.data)
-          //I'm updating the likes count here to keep it in sync with
-          //The Backend without having to make another API Call
+          // I'm updating the likes count here to keep it in sync with
+          // The Backend without having to make another API Call
           this.post.likes_count--
           this.post.user_liked = !this.post.user_liked
         })
     },
     goToUser () {
-      this.$router.push({ name: 'userprofile' , params: { username: this.post.username}})
+      this.$router.push({ name: 'userprofile', params: { username: this.post.username } })
     },
     editPost () {
-      this.$router.push({ name: 'editkast', params: { post_id: this.post.post_id}})
+      this.$router.push({ name: 'editkast', params: { post_id: this.post.post_id } })
     }
   },
   components: {

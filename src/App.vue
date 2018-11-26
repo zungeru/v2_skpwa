@@ -5,7 +5,7 @@
       <header class="mdl-layout__header mdl-color--white mdl-color-text--black">
         <div class="mdl-layout__header-row">
           <router-link tag="span" class="mdl-layout-title" style="cursor:pointer;" :to="{ name: 'home'}">
-            StyleKast
+            styleKast
           </router-link>
           <div class="mdl-layout-spacer"></div>
 

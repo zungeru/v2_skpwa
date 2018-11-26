@@ -12,12 +12,12 @@
         <input
           type="text"
           id="username"
-          maxlength="12"
-          placeholder="max 12 chars"
+          maxlength="15"
+          placeholder="max 15 chars"
           @blur="$v.username.$touch()"
           v-model.lazy="username">
           <p v-if="!$v.username.required && $v.username.$dirty"> username required</p>
-          <p v-if="!$v.username.maxLen && $v.username.$dirty"> max 12 characters</p>
+          <p v-if="!$v.username.maxLen && $v.username.$dirty"> max 15 characters</p>
           <p v-if="!$v.username.isUnique"> name already taken</p>
       </div>
       <br>
@@ -96,7 +96,7 @@ export default {
   validations: {
     username: {
       required,
-      maxLen: maxLength(12),
+      maxLen: maxLength(15),
       isUnique (value) {
         // standalone validator ideally should not assume a field is required
         if (value === '') return true
