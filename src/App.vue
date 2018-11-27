@@ -131,7 +131,7 @@ window.onload = function () {
 export default {
   name: 'App',
   data () {
-    return{
+    return {
       currentRoute: this.$router.currentRoute.name
     }
   },
