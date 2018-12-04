@@ -20,7 +20,7 @@ import { mapActions, mapGetters } from 'vuex'
 export default {
   data () {
     return {
-      currentScrollPos: 0
+      feedScrollPos: 0
     }
   },
   computed: {
@@ -58,7 +58,7 @@ export default {
     console.log('Feed View: Destroyed')
   },
   activated () {
-    document.querySelector('.mdl-layout__content').scrollTop = this.currentScrollPos
+    document.querySelector('.mdl-layout__content').scrollTop = this.feedScrollPos
     document.querySelector('.mdl-layout__content').addEventListener('scroll', this.scroll)
     console.log('Feed View: Activated')
   },
@@ -67,7 +67,7 @@ export default {
     console.log('Feed View: Deactivated')
   },
   beforeRouteLeave (to, from, next) {
-    this.currentScrollPos = document.querySelector('.mdl-layout__content').scrollTop
+    this.feedScrollPos = document.querySelector('.mdl-layout__content').scrollTop
     next()
   }
 }

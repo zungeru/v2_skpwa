@@ -94,6 +94,7 @@ import axios from 'axios'
 export default {
   data () {
     return {
+      profileScrollPos: 0,
       profiledUser: {}
     }
   },
@@ -127,11 +128,24 @@ export default {
   },
   watch: {
     '$route' (to, from) {
-      // I may not need this function after all
-      if (to.params.username) {
-        // const username = to.params.username
-        this.getInitialUserPosts(this.$route.params.username)
-        this.getUser()
+      // Case where we nagivate from one user profile to another
+      // profile/user/mido1 ==> profile/user/mido2
+      if (to.params.username && from.params.username) {
+        if(from.params.username != to.params.username) {
+          document.querySelector('.mdl-layout__content').scrollTop = 0
+          this.getInitialUserPosts(this.$route.params.username)
+          this.getUser()
+        }
+      }
+      // Case where we navigate from another component to the profile
+      // But the profiel user is different from the one that was previously loaded
+      // Home Component => profile/user/mido2 where profile/user/mido1 is the current profile loaded
+      if (to.params.username && !from.params.username){
+        if(to.params.username != this.profiledUser.username){
+          console.log("HelloTonight!")
+          this.getInitialUserPosts(this.$route.params.username)
+          this.getUser()
+        }
       }
     }
   },
@@ -152,7 +166,7 @@ export default {
     scroll () {
       let d = document.querySelector('.mdl-layout__content')
       let bottom = d.scrollHeight - d.scrollTop === d.clientHeight
-      if (bottom && d.scrollTop > 0) {
+      if (bottom) {
         console.log('SCROLL')
         console.log(d.scrollTop)
         this.getMoreUserPosts(this.$route.params.username)
@@ -199,13 +213,22 @@ export default {
     console.log('Profile View: Destroyed')
   },
   activated () {
+    if(this.$route.params.username != this.profiledUser.username){
+      console.log("HelloTonight!")
+      document.querySelector('.mdl-layout__content').scrollTop = 0
+    } else {
+      document.querySelector('.mdl-layout__content').scrollTop = this.profileScrollPos
+    }
     document.querySelector('.mdl-layout__content').addEventListener('scroll', this.scroll)
-    document.querySelector('.mdl-layout__content').scrollTop = 0
     console.log('Profile View: Activated')
   },
   deactivated () {
     document.querySelector('.mdl-layout__content').removeEventListener('scroll', this.scroll)
     console.log('Profile View: Deactivated')
+  },
+  beforeRouteLeave (to, from, next) {
+    this.profileScrollPos = document.querySelector('.mdl-layout__content').scrollTop
+    next()
   }
 }
 
