@@ -1,7 +1,22 @@
 <template>
 <div>
   <div v-if="posts.length === 0">
-    <h1>No Post To View Yet, Follow Others </h1>
+    <div class="no-feed-main">
+      <img src="../../assets/svg/shop.svg">
+      <br>
+      <span>no posts to view yet...</span>
+      <br>
+      <br>
+      <span>when you follow styleKasters</span>
+      <br>
+      <span>their posts appear here</span>
+
+      <router-link
+        tag="p"
+        :to="{ name: 'people'}"
+        style="color: #ff0800 ; cursor: pointer;">find styleKasters
+      </router-link>
+    </div>
   </div>
   <div v-else>
     <StyleKard
@@ -74,5 +89,21 @@ export default {
 </script>
 
 <style>
+.no-feed-main {
+  margin-right: auto;
+  margin-left: auto;
+  margin-top: 50px;
+  max-width: 500px;
+  text-align: center;
+}
 
+.no-feed-main span {
+  font-size: 16px;
+}
+
+.no-feed-main p {
+  margin-top: 15px;
+  font-size: 14px;
+  font-weight: 500;
+}
 </style>

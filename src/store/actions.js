@@ -108,6 +108,7 @@ export const storeUser = ({ commit, dispatch }) => {
       localStorage.setItem('expirationDate', expirationDate)
       localStorage.setItem('username', response.data.username)
       dispatch('setLogOutTimer', response.data.life_span)
+      router.push({name: 'feed'})
     })
     .catch(error => console.log(error))
 }
