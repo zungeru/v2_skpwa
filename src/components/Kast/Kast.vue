@@ -1,9 +1,13 @@
 <template>
   <div class="sk-upload-main">
     <div class="sk-upload-input" v-if="!picUploaded">
-      <button class="mdl-button mdl-button--raised mdl-button--colored" @click="onPickFile">
+      <img src="../../assets/svg/share.svg" style="cursor: pointer;" @click="onPickFile">
+      <br>
+      <br>
+      <span @click="onPickFile">kast</span>
+      <!-- <button class="mdl-button mdl-button--raised mdl-button--colored" @click="onPickFile">
         Kast
-      </button>
+      </button> -->
       <input
         type="file"
         style="display: none;"
@@ -204,6 +208,12 @@ export default {
   margin-top: 60px;
   text-align: center;
   color: #2c3e50;
+}
+.sk-upload-input span {
+  font-size: 25px;
+  font-weight: 500;
+  color: #ff0800;
+  cursor: pointer;
 }
 .sk-upload-form {
   margin: 20px;

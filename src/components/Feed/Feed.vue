@@ -15,13 +15,13 @@
         <router-link
           tag="span"
           :to="{ name: 'editprofile'}"
-          style="color: #ff0800 ; cursor: pointer;">update profile
+          style="color: #ff0800; cursor: pointer;">update profile
         </router-link>
         &nbsp;&nbsp;&nbsp;&nbsp;
         <router-link
           tag="span"
           :to="{ name: 'people'}"
-          style="color: #ff0800 ; cursor: pointer;">find styleKasters
+          style="color: #ff0800; cursor: pointer;">find styleKasters
         </router-link>
       </div>
 
