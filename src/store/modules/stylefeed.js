@@ -14,6 +14,10 @@ const mutations = {
   },
   'ADD_ROUND' (state) {
     state.loadRound++
+  },
+  'CLEAR_FEED_DATA' (state) {
+    state.loadRound = 1
+    state.posts = []
   }
 }
 

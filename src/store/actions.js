@@ -90,6 +90,8 @@ export const deleteUser = ({ dispatch }, userData) => {
 // for auth.js
 export const logOut = ({ commit }) => {
   commit('CLEAR_AUTH_DATA')
+  commit('CLEAR_PROFILE_DATA')
+  commit('CLEAR_FEED_DATA')
   localStorage.removeItem('token')
   localStorage.removeItem('expirationDate')
   localStorage.removeItem('username')
@@ -108,7 +110,9 @@ export const storeUser = ({ commit, dispatch }) => {
       localStorage.setItem('expirationDate', expirationDate)
       localStorage.setItem('username', response.data.username)
       dispatch('setLogOutTimer', response.data.life_span)
-      router.push({name: 'feed'})
+      if(router.currentRoute.name === 'singup' || router.currentRoute.name === 'login') {
+        router.push({name: 'feed'})
+      }
     })
     .catch(error => console.log(error))
 }

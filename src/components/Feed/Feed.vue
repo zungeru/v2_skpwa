@@ -11,11 +11,20 @@
       <br>
       <span>their posts appear here</span>
 
-      <router-link
-        tag="p"
-        :to="{ name: 'people'}"
-        style="color: #ff0800 ; cursor: pointer;">find styleKasters
-      </router-link>
+      <div class="no-feed-links">
+        <router-link
+          tag="span"
+          :to="{ name: 'editprofile'}"
+          style="color: #ff0800 ; cursor: pointer;">update profile
+        </router-link>
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        <router-link
+          tag="span"
+          :to="{ name: 'people'}"
+          style="color: #ff0800 ; cursor: pointer;">find styleKasters
+        </router-link>
+      </div>
+
     </div>
   </div>
   <div v-else>
@@ -62,24 +71,28 @@ export default {
   },
   beforeMount () {
     this.getInitialPosts()
-    console.log('Feed View: Before mount')
   },
   mounted () {
     document.querySelector('.mdl-layout__content').addEventListener('scroll', this.scroll)
-    console.log('Feed View: Mounted')
   },
   destroyed () {
     document.querySelector('.mdl-layout__content').removeEventListener('scroll', this.scroll)
-    console.log('Feed View: Destroyed')
   },
   activated () {
     document.querySelector('.mdl-layout__content').scrollTop = this.feedScrollPos
     document.querySelector('.mdl-layout__content').addEventListener('scroll', this.scroll)
-    console.log('Feed View: Activated')
   },
   deactivated () {
     document.querySelector('.mdl-layout__content').removeEventListener('scroll', this.scroll)
-    console.log('Feed View: Deactivated')
+  },
+  beforeRouteEnter (to, from, next) {
+    next(vm => {
+      if(from.name !== 'signup' || from.name !== 'login'){
+        if (vm.posts.length === 0) {
+          vm.getInitialPosts()
+        }
+      }
+    })
   },
   beforeRouteLeave (to, from, next) {
     this.feedScrollPos = document.querySelector('.mdl-layout__content').scrollTop
@@ -101,8 +114,11 @@ export default {
   font-size: 16px;
 }
 
-.no-feed-main p {
-  margin-top: 15px;
+.no-feed-links {
+  margin-top: 30px;
+}
+
+.no-feed-links span {
   font-size: 14px;
   font-weight: 500;
 }

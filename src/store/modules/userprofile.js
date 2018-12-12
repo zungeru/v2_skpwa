@@ -14,6 +14,10 @@ const mutations = {
   },
   'ADD_USER_ROUND' (state) {
     state.userRound++
+  },
+  'CLEAR_PROFILE_DATA' (state) {
+    state.userRound = 1
+    state.userPosts = []
   }
 }
 
