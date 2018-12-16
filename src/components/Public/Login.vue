@@ -3,7 +3,7 @@
     <div class="login-heading">
       <h4>Login</h4>
       <span>don't have an account?</span>
-      <router-link tag="span" :to="{ name: 'signup'}" style="color: #f50057; cursor: pointer;">&nbsp;Signup</router-link>
+      <router-link tag="span" :to="{ name: 'signup'}" style="color: #ff0800; cursor: pointer;">&nbsp;Signup</router-link>
     </div>
     <br>
     <form class="login-form" action="#" >
@@ -109,7 +109,7 @@ export default {
 .login-item > p {
   margin: 0px;
   padding: 0px;
-  color: #f50057;
+  color: #ff0800;
 }
 .login-item > input  {
   width:100%;

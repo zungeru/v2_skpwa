@@ -3,7 +3,7 @@
     <div class="signup-heading">
       <h4>Signup</h4>
       <span>already have an account?</span>
-      <router-link tag="span" :to="{ name: 'login'}" style="color: #f50057; cursor: pointer;">&nbsp;Login</router-link>
+      <router-link tag="span" :to="{ name: 'login'}" style="color: #ff0800; cursor: pointer;">&nbsp;Login</router-link>
     </div>
     <br>
     <form class="signup-form" action="#" >
@@ -93,6 +93,12 @@ export default {
       this.signUp(userData)
     }
   },
+  deactivated () {
+    this.username = ''
+    this.email = ''
+    this.password = ''
+    this.confirmPassword = ''
+  },
   validations: {
     username: {
       required,
@@ -167,7 +173,7 @@ export default {
 .signup-item > p {
   margin: 0px;
   padding: 0px;
-  color: #f50057;
+  color: #ff0800;
 }
 .signup-item > input  {
   width:100%;

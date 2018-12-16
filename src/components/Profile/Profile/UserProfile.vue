@@ -5,49 +5,57 @@
         <img :src='profiledUser.url'/>
       </div>
       <div class="user-profile-stats">
-        <div style="display:flex;justify-content:space-between;">
+        <div style="display:flex;justify-content:space-between;width:90%;margin-left:10px;">
           <div style="text-align: center;">
-            <span style="font-weight: 600"> {{profiledUser.posts_count}} </span><br>
+            <span style="font-weight: 600"> {{formatCount(profiledUser.posts_count)}} </span><br>
             <span style="font-weight: normal">posts</span>
           </div>
           <router-link
             :to="{ name: 'followers', params: {username: targetUsername} }"
              style="text-align: center; color: black; text-decoration: none;">
-              <span style="font-weight: 600">{{profiledUser.followers_count}}</span> <br>
+              <span style="font-weight: 600">{{formatCount(profiledUser.followers_count)}}</span> <br>
               <span style="font-weight: normal">followers</span>
           </router-link>
           <router-link
             :to="{ name: 'following', params: {username: targetUsername} }"
              style="text-align: center; color: black; text-decoration: none;">
-            <span style="font-weight: 600">{{profiledUser.following_count}}</span> <br>
+            <span style="font-weight: 600">{{formatCount(profiledUser.following_count)}}</span> <br>
             <span style="font-weight: normal">following</span>
           </router-link>
         </div>
         <div>
           <div
             v-if="loggedInUser.auth_id === profiledUser.auth_id"
-            style="margin-left: -90px; margin-top: 31px; padding: 0px;">
+            style="margin-left: -75px; margin-top: 40px; padding: 0px;">
             <router-link
-              tag="button"
+              tag="p"
               :to="{ name: 'editprofile'}"
-              class="mdl-button mdl-button--primary">Edit
+              style="color: #ff0800; cursor: pointer; font-size:18px;">edit
             </router-link>
           </div>
           <div
             v-if="notFollowing"
-            style="margin-left: -100px; margin-top: 31px; padding: 0px;">
-            <button
+            style="margin-left: -83px; margin-top: 40px; padding: 0px;">
+            <!-- <button
               @click="follow"
               class="mdl-button mdl-button--primary">Follow
-            </button>
+            </button> -->
+            <p
+              @click="follow"
+              style="color: #ff0800; cursor: pointer; font-size:18px;">follow
+            </p>
           </div>
           <div
             v-if="following"
-            style="margin-left: -115px; margin-top: 31px; padding: 0px;">
-            <button
+            style="margin-left: -90px; margin-top: 40px; padding: 0px;">
+            <!-- <button
               @click="unFollow"
               class="mdl-button mdl-button--primary">Unfollow
-            </button>
+            </button> -->
+            <p
+              @click="unFollow"
+              style="color: #ff0800; cursor: pointer; font-size:18px;">unfollow
+            </p>
           </div>
         </div>
       </div>
@@ -89,6 +97,7 @@
 <script>
 import StyleKard from '../../Shared/Stylekard/StyleKard'
 import { mapActions, mapGetters } from 'vuex'
+import { formatCount } from '../../../mixins/formatcount'
 import axios from 'axios'
 
 export default {
@@ -98,6 +107,7 @@ export default {
       profiledUser: {}
     }
   },
+  mixins: [formatCount],
   computed: {
     ...mapGetters({
       userPosts: 'userPosts',

@@ -13,10 +13,10 @@
             <img src="./assets/svg/vertical.svg">
           </button>
           <ul class="mdl-menu mdl-js-menu mdl-js-ripple-effect mdl-menu--bottom-right" for="hdrbtn">
-            <router-link tag="li" class="mdl-menu__item header_menu" :to="{ name: 'home'}">Home</router-link>
-            <router-link tag="li" class="mdl-menu__item header_menu" :to="{ name: 'about'}">About</router-link>
-            <router-link v-if="!auth" tag="li" class="mdl-menu__item header_menu" :to="{ name: 'login'}">Log In</router-link>
-            <li  v-if="auth" @click="onLogout" class="mdl-menu__item header_menu">Log Out</li>
+            <router-link tag="li" class="mdl-menu__item header_menu" style="color: #ff0800" :to="{ name: 'home'}">Home</router-link>
+            <router-link tag="li" class="mdl-menu__item header_menu" style="color: #ff0800" :to="{ name: 'about'}">About</router-link>
+            <router-link v-if="!auth" tag="li" class="mdl-menu__item header_menu" style="color: #ff0800" :to="{ name: 'login'}">Log In</router-link>
+            <li  v-if="auth" @click="onLogout" class="mdl-menu__item header_menu" style="color: #ff0800">Log Out</li>
           </ul>
         </div>
       </header>
@@ -146,10 +146,10 @@ export default {
   methods: {
     onLogout () {
       this.$store.dispatch('logOut')
+      this.currentRoute = 'feed'
     },
     updateRoute (route) {
       this.currentRoute = route
-      console.log(route)
     }
   },
   created () {
