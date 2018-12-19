@@ -264,11 +264,11 @@ export default {
 
 .avatar > img {
   float:left;
-  border: 1px solid black;
+  border: 1px solid #137E8D;
   border-radius: 50%;
   height: 40px;
   width: 40px;
-  padding: 0px;
+  padding: 2px;
   margin-left: 5px;
 }
 

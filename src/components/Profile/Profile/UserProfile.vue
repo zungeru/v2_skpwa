@@ -36,24 +36,14 @@
           <div
             v-if="notFollowing"
             style="margin-left: -83px; margin-top: 40px; padding: 0px;">
-            <!-- <button
-              @click="follow"
-              class="mdl-button mdl-button--primary">Follow
-            </button> -->
-            <p
-              @click="follow"
+            <p @click="follow"
               style="color: #ff0800; cursor: pointer; font-size:18px;">follow
             </p>
           </div>
           <div
             v-if="following"
             style="margin-left: -90px; margin-top: 40px; padding: 0px;">
-            <!-- <button
-              @click="unFollow"
-              class="mdl-button mdl-button--primary">Unfollow
-            </button> -->
-            <p
-              @click="unFollow"
+            <p @click="unFollow"
               style="color: #ff0800; cursor: pointer; font-size:18px;">unfollow
             </p>
           </div>
@@ -62,7 +52,7 @@
 
       <div class="user-profile-info">
         <span style="font-weight: 600">{{profiledUser.username}}</span> &nbsp;
-        <span>|</span> &nbsp;
+        <span v-if="profiledUser.name">|</span> &nbsp;
         <span style="font-weight: 600">{{profiledUser.name}}</span>
         <p>{{profiledUser.about}}</p>
 
@@ -85,12 +75,32 @@
       <hr>
     </div>
 
-    <StyleKard
-      v-for="(post,index) in userPosts"
-      :key="index"
-      :id="post.id"
-      :post="post">
-    </StyleKard>
+    <div v-if="userPosts.length === 0">
+      <div class="no-userPosts-main">
+        <img src="../../../assets/svg/shop.svg">
+        <br>
+        <span>no posts to view yet...</span>
+        <div
+          class="no-userPosts-links"
+          v-if="loggedInUser.auth_id === profiledUser.auth_id">
+          <p>your styleKasts will appear here</p>
+          <router-link
+            tag="span"
+            :to="{ name: 'kast'}"
+            style="color: #ff0800; cursor: pointer;">kast
+          </router-link>
+        </div>
+
+      </div>
+    </div>
+    <div v-else>
+      <StyleKard
+        v-for="(post,index) in userPosts"
+        :key="index"
+        :id="post.id"
+        :post="post">
+      </StyleKard>
+    </div>
   </div>
 </template>
 
@@ -255,11 +265,11 @@ export default {
 }
 .user-profile-avatar > img {
   float:left;
-  border: 1px solid #4db6ac;
+  border: 2px solid #4db6ac;
   border-radius: 50%;
   height: 75px;
   width: 75px;
-  padding: 2px;
+  padding: 3px;
   margin-left: 10px;
 }
 .user-profile-stats {
@@ -271,5 +281,31 @@ export default {
   padding-top: 5px;
   padding-right: 10px;
   margin-left: 20px;
+}
+.no-userPosts-main {
+  margin-right: auto;
+  margin-left: auto;
+  margin-top: 50px;
+  max-width: 500px;
+  text-align: center;
+}
+
+.no-userPosts-main span {
+  font-size: 16px;
+}
+
+.no-userPosts-links {
+  margin-top: 5px;
+}
+
+.no-userPosts-links p {
+  margin-top: 0px;
+  font-size:16px;
+
+}
+
+.no-userPosts-links span {
+  font-size: 18px;
+  font-weight: 500;
 }
 </style>
