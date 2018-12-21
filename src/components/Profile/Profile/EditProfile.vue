@@ -9,12 +9,12 @@
         <span
           @click="selectProfile"
           :class="{active: profileView}">
-            PROFILE UPDATES
+            update profile
         </span>
         <span
           @click="selectLogin"
           :class="{active: !profileView}">
-            LOGIN UPDATES
+            update login
         </span>
         <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
       </div>
@@ -26,7 +26,7 @@
       </div>
 
       <div class="upload">
-        <button class="mdl-button mdl-js-button mdl-button--primary" @click="onPickPhoto"> Upload Photo</button>
+        <p @click="onPickPhoto">upload photo</p>
         <input
           type="file"
           style="display: none;"
@@ -72,15 +72,15 @@
           </button>
       </form>
       <hr>
-      <div class="edit-form-delete">
+      <div>
         <span @click="confirmDelete=!confirmDelete" style="cursor: pointer;">
-          <img src="../../../assets/svg/delete.svg">
+          <img style="padding-bottom: 5px;" src="../../../assets/svg/delete.svg">
         </span>
-        <button
-          class="mdl-button mdl-button--primary"
+        <span
+          style="cursor: pointer;font-weight:500;font-size:15px;"
           @click.prevent="confirmDelete=!confirmDelete">
           delete account
-        </button>
+        </span>
         <div class="edit-item" v-if="confirmDelete">
           <br>
           <label for="confirmdelete">enter current password to confirm delete</label>
@@ -226,7 +226,7 @@ export default {
       confirmPassword: '',
       currentPassword: '',
       photo: '',
-      profileURL:'https://stroseschool.stroselions.net/wp-content/uploads/2018/04/profile-blank-reva.png',
+      profileURL:'https://res.cloudinary.com/zungeru/image/upload/v1542857696/userphotos/defaultProfile2.jpg',
       confirmDelete: false,
       deletePasswordInput: ''
     }
@@ -399,8 +399,12 @@ export default {
 }
 .edit-header-items span {
   cursor: pointer;
+  font-size: 15px;
 }
-
+.active {
+  color: #ff0800;
+  font-weight: 500;
+}
 .edit-form{
   padding: 0px 15px 10px 15px;
   margin-right: auto;
@@ -408,23 +412,31 @@ export default {
   margin-top: 70px;
   max-width: 500px;
 }
-
 .avatar-form > img {
   float:left;
-  border: 1px solid #4db6ac;
+  border: 2px solid #4db6ac;
   border-radius: 50%;
   height: 75px;
   width: 75px;
   padding: 2px;
   margin-left: 5px;
 }
+
 .upload  {
   font-size: 15px;
   padding-top: 15px;
   padding-left: 80px;
   padding-right: 10px;
 }
-
+.upload p {
+  padding-top: 10px;
+  padding-left: 15px;
+  max-width: 100px;
+  font-size: 15px;
+  cursor: pointer;
+  color: #ff0800;
+  font-weight: 500;
+}
 .edit-item > label {
   font-size: 16px;
 }
@@ -445,7 +457,6 @@ export default {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   font-size: 16px;
 }
-
 .edit-item > textarea {
   width:100%;
   padding: 10px 15px;
@@ -457,9 +468,4 @@ export default {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   font-size: 16px;
 }
-.active {
-  color: #f50057;
-  font-weight: 500;
-}
-
 </style>
