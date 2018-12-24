@@ -21,7 +21,7 @@
         <router-link
           tag="span"
           :to="{ name: 'people'}"
-          style="color: #ff0800; cursor: pointer;">find styleKasters
+          style="color: #ff0800 ; cursor: pointer;">find styleKasters
         </router-link>
       </div>
 
@@ -119,7 +119,7 @@ export default {
 }
 
 .no-feed-links span {
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 500;
 }
 </style>

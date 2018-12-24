@@ -90,7 +90,6 @@
             style="color: #ff0800; cursor: pointer;">kast
           </router-link>
         </div>
-
       </div>
     </div>
     <div v-else>

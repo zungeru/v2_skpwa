@@ -26,7 +26,7 @@
       </div>
 
       <div class="upload">
-        <p @click="onPickPhoto">upload photo</p>
+        <p class="upload-button" @click="onPickPhoto">upload photo</p>
         <input
           type="file"
           style="display: none;"
@@ -88,8 +88,7 @@
             type="password"
             id="confirmdelete"
             v-model="deletePasswordInput">
-          <br>
-          <br>
+          <br><br>
           <button
             class="mdl-button mdl-button--raised mdl-button--colored"
             :disabled="deleteFormInvalid"
@@ -101,21 +100,19 @@
     </div>
 
     <form v-if="!profileView" class="edit-form">
-      <button
+      <p
+        class="update-button"
         v-if="!updateEmail"
-        class="mdl-button mdl-button--primary"
         @click.prevent="showEmail">
         update email
-      </button>
-      <button
+      </p>
+      <p
+        class="update-button"
         v-if="updateEmail"
-        class="mdl-button mdl-button--primary"
         @click.prevent="hideEmail">
         cancel email update
-      </button>
+      </p>
 
-      <br>
-      <br>
       <div v-if="updateEmail">
         <div class="edit-item">
           <label for="currentemail">current email</label>
@@ -139,23 +136,19 @@
       </div>
 
       <br>
-      <br>
 
-      <button
+      <p
         v-if="!updatePassword"
-        class="mdl-button mdl-button--primary"
+        class="update-button"
         @click.prevent="showPassword">
         update password
-      </button>
-      <button
+      </p>
+      <p
         v-if="updatePassword"
-        class="mdl-button mdl-button--primary"
+        class="update-button"
         @click.prevent="hidePassword">
         cancel password update
-      </button>
-
-      <br>
-      <br>
+      </p>
 
       <div v-if="updatePassword">
         <div class="edit-item">
@@ -179,9 +172,7 @@
         </div>
       </div>
 
-      <br>
-      <hr>
-      <br>
+      <br><hr><br>
 
       <div class="edit-item">
         <label for="currentpassword">enter current password to confirm updates</label>
@@ -192,9 +183,7 @@
           v-model="currentPassword">
           <p v-if="!$v.currentPassword.required && $v.currentPassword.$dirty"> current password required</p>
       </div>
-
       <br>
-
         <button
           class="mdl-button mdl-button--raised mdl-button--colored"
           :disabled="loginFormInvalid"
@@ -376,10 +365,6 @@ export default {
 <style>
 .edit-profile-main{
   position: relative;
-  /* padding: 20px 15px 10px 15px;
-  margin-right: auto;
-  margin-left: auto;
-  max-width: 500px; */
 }
 .edit-fixed-header {
   position: fixed;
@@ -421,21 +406,27 @@ export default {
   padding: 2px;
   margin-left: 5px;
 }
-
 .upload  {
   font-size: 15px;
   padding-top: 15px;
   padding-left: 80px;
   padding-right: 10px;
 }
-.upload p {
+.upload-button{
   padding-top: 10px;
   padding-left: 15px;
   max-width: 100px;
   font-size: 15px;
   cursor: pointer;
   color: #ff0800;
-  font-weight: 500;
+  font-weight: 450;
+}
+.update-button{
+  max-width: 180px;
+  font-size: 15px;
+  cursor: pointer;
+  color: #137E8D;
+  font-weight: 450;
 }
 .edit-item > label {
   font-size: 16px;
@@ -443,7 +434,7 @@ export default {
 .edit-item > p {
   margin: 0px;
   padding: 0px;
-  color: #f50057;
+  color: #ff0800;
 }
 .edit-item > input {
   width:100%;

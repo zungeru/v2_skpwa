@@ -13,9 +13,20 @@
     </div>
 
     <div class="followers-list">
-      <div v-for="(follower,index) in followers"
-          :key="index"
-          class="followers">
+      <div
+        v-if="followers.length === 0">
+        <div class="no-followers-main">
+          <img src="../../../assets/svg/shop.svg">
+          <br>
+          <br>
+          <span>no followers yet...</span>
+        </div>
+      </div>
+      <div
+        v-else
+        v-for="(follower,index) in followers"
+        :key="index"
+        class="followers">
         <div class="avatar">
             <img :src="follower.url"/>
         </div>
@@ -105,6 +116,16 @@ export default {
   margin-left: auto;
   margin-top: 5px;
   max-width: 500px;
+}
+.no-followers-main{
+  margin-right: auto;
+  margin-left: auto;
+  margin-top: 100px;
+  max-width: 500px;
+  text-align: center;
+}
+.no-followers-main span {
+  font-size: 16px;
 }
 .followers {
   padding: 10px 15px 10px 15px;

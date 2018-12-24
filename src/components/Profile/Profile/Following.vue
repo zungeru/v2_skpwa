@@ -13,9 +13,28 @@
     </div>
 
     <div class="following-list">
-      <div v-for="(follow,index) in following"
-          :key="index"
-          class="following">
+      <div
+        v-if="following.length === 0">
+        <div class="no-following-main">
+          <img src="../../../assets/svg/shop.svg">
+          <br>
+          <br>
+          <span>no following yet...</span>
+          <div class="no-following-links">
+            <router-link
+              tag="span"
+              :to="{ name: 'people'}"
+              style="color: #ff0800; cursor: pointer;">find styleKasters &nbsp;
+            </router-link>
+          </div>
+
+        </div>
+      </div>
+      <div
+        v-else
+        v-for="(follow,index) in following"
+        :key="index"
+        class="following">
         <div class="avatar">
             <img :src="follow.url"/>
         </div>
@@ -105,6 +124,24 @@ export default {
   margin-left: auto;
   margin-top: 5px;
   max-width: 500px;
+}
+.no-following-main{
+  margin-right: auto;
+  margin-left: auto;
+  margin-top: 100px;
+  max-width: 500px;
+  text-align: center;
+}
+.no-following-main span {
+  font-size: 16px;
+}
+.no-following-links {
+  margin-top: 30px;
+}
+
+.no-following-links span {
+  font-size: 16px;
+  font-weight: 500;
 }
 .following {
   padding: 10px 15px 10px 15px;
