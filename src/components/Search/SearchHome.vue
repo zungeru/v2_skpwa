@@ -2,15 +2,15 @@
   <div class="search-main">
     <div class="search-fixed-header">
       <div class="search-header-items">
-        <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+        <!-- <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> -->
         <!-- NOTE: I'm overriding the mdl active link class here -->
         <router-link tag="div" active-class="active" exact :to="{name: 'people'}">
-          <div> PEOPLE </div>
+          <div> people </div>
         </router-link>
         <router-link tag="div" active-class="active" exact :to="{name: 'tags'}">
-          <div> TAGS </div>
+          <div> tags </div>
         </router-link>
-        <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+        <!-- <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> -->
       </div>
     </div>
 
@@ -40,15 +40,16 @@
   margin-right: auto;
   margin-left: auto;
   margin-top: 20px;
-  max-width: 500px;
+  max-width: 200px;
   justify-content: space-between;
   display: flex;
 }
 .search-header-items div {
   cursor: pointer;
+  font-size: 16px;
 }
 .active {
   font-weight: 550;
-  color: #f50057;
+  color: #ff0800;
 }
 </style>

@@ -62,6 +62,9 @@ export default {
       this.logIn(userData)
     }
   },
+  activated () {
+    document.querySelector('.mdl-layout__content').scrollTop = 0
+  },
   deactivated () {
     this.email = ''
     this.password = ''

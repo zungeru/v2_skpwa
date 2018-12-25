@@ -12,8 +12,8 @@
       <div v-for="(result,index) in results"
         :key="index"
         class="search-people-result-item"
-          @click="goToUser(result.username)">
-          <div class="search-avatar">
+        @click="goToUser(result.username)">
+          <div class="search-people-avatar">
             <img :src="result.url"/>
           </div>
           <div class="search-people-details">
@@ -118,9 +118,10 @@ export default {
 .search-people-result-item{
   margin-top: 25px;
   cursor: pointer;
-  max-width: 300px;
+  max-width: 450px;
+  background-color: gray;
 }
-.search-avatar > img {
+.search-people-avatar > img {
   float:left;
   border: 2px solid #4db6ac;
   border-radius: 50%;

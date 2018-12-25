@@ -72,6 +72,9 @@ export default {
     commentCharsLeft () {
       return this.$v.comment.$params.maxLen.max - this.comment.length
     }
+  },
+  activated () {
+    document.querySelector('.mdl-layout__content').scrollTop = 0
   }
 }
 </script>

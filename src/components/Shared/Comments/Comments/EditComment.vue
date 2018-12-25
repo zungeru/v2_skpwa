@@ -107,6 +107,7 @@ export default {
     this.getComment()
   },
   activated () {
+    document.querySelector('.mdl-layout__content').scrollTop = 0
     this.getComment()
   }
 }

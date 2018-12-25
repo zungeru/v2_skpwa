@@ -193,6 +193,9 @@ export default {
         })
         .catch(error => console.log(error))
     }
+  },
+  activated () {
+    document.querySelector('.mdl-layout__content').scrollTop = 0
   }
 }
 </script>

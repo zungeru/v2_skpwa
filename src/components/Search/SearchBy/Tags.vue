@@ -121,6 +121,7 @@ export default {
   margin-top: 25px;
   cursor: pointer;
   max-width: 300px;
+  background-color: gray;
 }
 .search-tags-avatar > img {
   float:left;

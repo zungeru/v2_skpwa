@@ -239,6 +239,9 @@ export default {
   },
   beforeMount () {
     this.getPost()
+  },
+  activated () {
+    document.querySelector('.mdl-layout__content').scrollTop = 0
   }
 }
 </script>

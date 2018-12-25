@@ -78,7 +78,7 @@ export default {
       const requesting_user = localStorage.getItem('username')
       const target_user = this.$route.params.username
       axios.get('http://localhost:5000/' + requesting_user + '/following/' + target_user,
-        { headers: { 'Authorization': `Bearer ${token}` } } )
+        { headers: { 'Authorization': `Bearer ${token}` } })
         .then(response => {
           console.log(response.data)
           this.following = response.data.following
@@ -86,7 +86,7 @@ export default {
     },
     goBack () {
       window.history.length > 1 ? this.$router.go(-1) : this.$router.push('/')
-    },
+    }
   },
   beforeMount () {
     this.getFollowing()

@@ -266,7 +266,7 @@ export default {
       // The below items in the state...then I may need to use Vuex
       const token = localStorage.getItem('token')
       const fd = new FormData()
-      fd.append('photo', this.photo, this.photo.name)
+      fd.append('photo', this.photo)
       fd.append('name', this.name)
       fd.append('about', this.about)
       console.log(fd)
@@ -358,6 +358,9 @@ export default {
     currentPassword: {
       required
     }
+  },
+  activated () {
+    document.querySelector('.mdl-layout__content').scrollTop = 0
   }
 }
 </script>
