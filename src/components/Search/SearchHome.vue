@@ -8,7 +8,7 @@
           <div> people </div>
         </router-link>
         <router-link tag="div" active-class="active" exact :to="{name: 'tags'}">
-          <div> tags </div>
+          <div> tags &nbsp;&nbsp;&nbsp;</div>
         </router-link>
         <!-- <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> -->
       </div>

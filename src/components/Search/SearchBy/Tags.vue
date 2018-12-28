@@ -13,14 +13,15 @@
         :key="index"
         class="search-tags-result-item"
         @click="goToPost(result.post_id)">
-          <div class="search-tags-avatar">
-            <img :src="result.pics[0]['src']"/>
-          </div>
+          <img class="search-tags-image" :src="result.pics[0]['src']"/>
           <div class="search-tags-details">
             <span style="font-weight: bold;">{{result.piece}}</span>
             <br>
             <span style="font-size: 14px;">${{result.price}}</span>
           </div>
+          <!-- clear Divs -->
+          <div style="clear:both;"></div>
+          <!-- clear Divs -->
       </div>
     </div>
     <div class="search-tags-result" v-else>
@@ -77,6 +78,7 @@ export default {
     this.debouncedSearchTags = debounce(this.searchTags, 1000)
   },
   activated () {
+    document.querySelector('.mdl-layout__content').scrollTop = 0
     this.divsize = this.$refs.tagsmain.offsetWidth - 35
     window.addEventListener('resize', this.getDivSize)
     console.log('Search Tags View: Activated')
@@ -108,7 +110,7 @@ export default {
   border-width: 0 0 2px;
   border-color: black;
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  font-size: 16px;
+  font-size: 15px;
 }
 .search-tags-form > input:focus {
   border-color: #f50057;
@@ -120,10 +122,10 @@ export default {
 .search-tags-result-item{
   margin-top: 25px;
   cursor: pointer;
-  max-width: 300px;
-  background-color: gray;
+  max-width: 350px;
 }
-.search-tags-avatar > img {
+.search-tags-image {
+  /* only one */
   float:left;
   border: 2px solid #4db6ac;
   border-radius: 50%;
@@ -133,6 +135,7 @@ export default {
   margin-left: 5px;
 }
 .search-tags-details  {
+  /* only one */
   padding-left: 10px;
   padding-top: 5px;
   font-size: 15px;

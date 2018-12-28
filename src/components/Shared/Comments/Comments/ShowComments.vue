@@ -96,6 +96,9 @@ export default {
     this.getPost()
     this.getComments()
   },
+  activated () {
+    document.querySelector('.mdl-layout__content').scrollTop = 0
+  }
 }
 </script>
 

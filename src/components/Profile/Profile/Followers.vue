@@ -78,10 +78,13 @@ export default {
     },
     goBack () {
       window.history.length > 1 ? this.$router.go(-1) : this.$router.push('/')
-    },
+    }
   },
   beforeMount () {
     this.getFollowers()
+  },
+  activated () {
+    document.querySelector('.mdl-layout__content').scrollTop = 0
   }
 }
 </script>

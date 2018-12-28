@@ -90,6 +90,9 @@ export default {
   },
   beforeMount () {
     this.getFollowing()
+  },
+  activated () {
+    document.querySelector('.mdl-layout__content').scrollTop = 0
   }
 }
 </script>
