@@ -175,6 +175,7 @@ export const getInitialUserPosts = ({ commit }, target_user) => {
       console.log(posts)
       commit('SET_USER_POSTS', posts)
     })
+    .catch(error => console.log(error))
 }
 
 // for userprofile.js
@@ -188,4 +189,5 @@ export const getMoreUserPosts = ({ commit }, target_user) => {
       commit('ADD_USER_POSTS', posts)
       commit('ADD_USER_ROUND')
     })
+    .catch(error => console.log(error))
 }

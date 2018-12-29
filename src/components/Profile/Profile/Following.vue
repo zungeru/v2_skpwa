@@ -37,16 +37,16 @@
         </div>
         <div class="following-details">
           <span>{{ follow.username}} </span> &nbsp;
-          <button
-            v-if="(loggedInUser !== follow.username) && (!follow.is_following)"
-            class="mdl-button mdl-button--primary">
-              Follow
-          </button>
-          <button
+          <span
+            v-if="(loggedInUser !== follow.username) && (!follow.is_following)">
+              follow
+          </span>
+          <span>&nbsp;&nbsp;</span>
+          <span
             v-if="follow.is_following"
-            class="mdl-button mdl-button--primary">
-              UnFollow
-            </button>
+            style="color: #ff0800; cursor: pointer; font-weight: 500">
+              unfollow
+            </span>
         </div>
       </div>
     </div>
@@ -61,7 +61,8 @@ import axios from 'axios'
 export default {
   data () {
     return {
-      following: []
+      following: [],
+      currentRound: 1
     }
   },
   computed: {
@@ -81,6 +82,27 @@ export default {
           this.following = response.data.following
         })
     },
+    getMoreFollowing () {
+      const token = localStorage.getItem('token')
+      const requesting_user = localStorage.getItem('username')
+      const target_user = this.$route.params.username
+      axios.get('http://localhost:5000/' + requesting_user + '/following/' + target_user + '/' + this.currentRound,
+        { headers: { 'Authorization': `Bearer ${token}` } })
+        .then(response => {
+          console.log(response.data)
+          for (let x of response.data.following) {
+              this.following.push(x)
+          }
+          this.currentRound++
+        })
+    },
+    scroll () {
+      let d = document.querySelector('.mdl-layout__content')
+      let bottom = d.scrollHeight - d.scrollTop === d.clientHeight
+      if (bottom) {
+        this.getMoreFollowing()
+      }
+    },
     goBack () {
       window.history.length > 1 ? this.$router.go(-1) : this.$router.push('/')
     }
@@ -88,8 +110,18 @@ export default {
   beforeMount () {
     this.getFollowing()
   },
+  mounted () {
+    document.querySelector('.mdl-layout__content').addEventListener('scroll', this.scroll)
+  },
+  destroyed () {
+    document.querySelector('.mdl-layout__content').removeEventListener('scroll', this.scroll)
+  },
   activated () {
     document.querySelector('.mdl-layout__content').scrollTop = 0
+    document.querySelector('.mdl-layout__content').addEventListener('scroll', this.scroll)
+  },
+  deactivated () {
+    document.querySelector('.mdl-layout__content').removeEventListener('scroll', this.scroll)
   }
 }
 </script>
@@ -160,10 +192,9 @@ export default {
   margin-left: 5px;
 }
 .following-details  {
-  font-size: 18px;
-  padding-left: 90px;
+  font-size: 16px;
+  padding-left: 75px;
   padding-right: 10px;
   padding-top: 15px;
-  font-weight: 500;
 }
 </style>
