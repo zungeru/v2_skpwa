@@ -2,13 +2,23 @@
   <div class="search-tags-main" ref="tagsmain">
     <div class="search-tags-fixed-header" :style="{width: divsize + 'px'}">
       <div class="search-tags-form">
-        <input type="text" :style="{width: divsize - 40 + 'px'}" v-model="keyword" />
-        <span>
+        <input
+          type="text"
+          placeholder="  search here..."
+          :style="{width: divsize - 40 + 'px'}"
+          v-model="keyword" />
+        <!-- <span>
           <img src="../../../assets/svg/search.svg">
-        </span>
+        </span> -->
       </div>
     </div>
-    <div class="search-tags-result" v-if="results.length > 0">
+    <div class="no-tags-main" v-if="results.length === 0">
+      <img src="../../../assets/svg/search_profile.svg">
+      <br/>
+      <span v-if="noResults">no results found</span>
+      <span v-else> search #hashtags in recent styleKasts</span>
+    </div>
+    <div class="search-tags-result" v-else>
       <div v-for="(result,index) in results"
         :key="index"
         class="search-tags-result-item"
@@ -24,10 +34,6 @@
           <!-- clear Divs -->
       </div>
     </div>
-    <div class="search-tags-result" v-else>
-      <p> Find A Post...</p>
-    </div>
-
   </div>
 </template>
 
@@ -40,7 +46,8 @@ export default {
     return {
       divsize: 0,
       keyword: null,
-      results: []
+      results: [],
+      noResults: false
     }
   },
   watch: {
@@ -57,6 +64,7 @@ export default {
       if (this.keyword.length === 0) {
         return
       }
+      this.noResults = false
       const token = localStorage.getItem('token')
       const fd = new FormData()
       fd.append('keyword', this.keyword)
@@ -66,7 +74,12 @@ export default {
         headers: { 'Authorization': `Bearer ${token}` } })
         .then(response => {
           console.log(response.data)
-          vm.results = response.data.results
+          if(response.data.results.length === 0) {
+            vm.results = []
+            vm.noResults = true
+          } else {
+            vm.results = response.data.results
+          }
         })
         .catch(error => console.log(error))
     },
@@ -97,11 +110,13 @@ export default {
   margin-right: auto;
   margin-left: auto;
   margin-top: 90px;
+  background-color: yellow;
 }
 .search-tags-fixed-header {
   position: fixed;
   top: 41px;
-  padding: 10px 0px 0px 20px;
+  text-align: center;
+  padding: 10px 0px 0px 15px;
   background-color: white;
   margin-top: 60px;
 }
@@ -113,7 +128,15 @@ export default {
   font-size: 15px;
 }
 .search-tags-form > input:focus {
-  border-color: #f50057;
+  border-color: #ff0800;
+}
+.no-tags-main{
+  margin-top: 120px;
+  text-align: center;
+}
+.no-tags-main span {
+  font-size: 14px;
+  font-weight: 500;
 }
 .search-tags-result{
   margin-top:110px;
@@ -125,7 +148,6 @@ export default {
   max-width: 350px;
 }
 .search-tags-image {
-  /* only one */
   float:left;
   border: 2px solid #4db6ac;
   border-radius: 50%;
@@ -135,7 +157,6 @@ export default {
   margin-left: 5px;
 }
 .search-tags-details  {
-  /* only one */
   padding-left: 10px;
   padding-top: 5px;
   font-size: 15px;

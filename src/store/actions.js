@@ -147,6 +147,7 @@ export const getInitialPosts = ({ commit }) => {
       const posts = response.data.posts
       commit('SET_POSTS', posts)
     })
+    .catch(error => console.log(error))
 }
 
 // for stylefeed.js (needs to be updated)
@@ -161,6 +162,7 @@ export const getMorePosts = ({ commit }) => {
       commit('ADD_POSTS', posts)
       commit('ADD_ROUND')
     })
+    .catch(error => console.log(error))
 }
 
 // for userprofile.js

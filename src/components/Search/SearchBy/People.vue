@@ -4,7 +4,7 @@
       <div class="search-people-form">
         <input
           type="text"
-          placeholder=" search here..."
+          placeholder="  search here..."
           :style="{width: divsize - 40 + 'px'}"
           v-model="keyword" />
         <!-- <span>
@@ -129,10 +129,6 @@ export default {
 .search-people-form > input:focus {
   border-color: #ff0800;
 }
-.search-people-result {
-  margin-top:110px;
-  margin-left: 45px;
-}
 .no-people-main{
   margin-top: 120px;
   text-align: center;
@@ -140,6 +136,10 @@ export default {
 .no-people-main span {
   font-size: 14px;
   font-weight: 500;
+}
+.search-people-result {
+  margin-top:110px;
+  margin-left: 45px;
 }
 .search-people-result-item{
   margin-top: 25px;

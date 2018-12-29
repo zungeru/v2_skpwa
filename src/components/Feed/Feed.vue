@@ -70,7 +70,7 @@ export default {
     StyleKard
   },
   beforeMount () {
-    this.getInitialPosts()
+      this.getInitialPosts()
   },
   mounted () {
     document.querySelector('.mdl-layout__content').addEventListener('scroll', this.scroll)
@@ -87,7 +87,7 @@ export default {
   },
   beforeRouteEnter (to, from, next) {
     next(vm => {
-      if(from.name !== 'signup' || from.name !== 'login'){
+      if(from.name !== 'signup' && from.name !== 'login'){
         if (vm.posts.length === 0) {
           vm.getInitialPosts()
         }
