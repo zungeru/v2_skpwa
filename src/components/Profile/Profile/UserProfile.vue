@@ -30,21 +30,21 @@
             <router-link
               tag="p"
               :to="{ name: 'editprofile'}"
-              style="color: #ff0800; cursor: pointer; font-size:18px;">edit
+              style="color: #ff0800; cursor: pointer; font-size:18px; width: 45px;">edit
             </router-link>
           </div>
           <div
             v-if="notFollowing"
             style="margin-left: -83px; margin-top: 40px; padding: 0px;">
             <p @click="follow"
-              style="color: #ff0800; cursor: pointer; font-size:18px;">follow
+              style="color: #ff0800; cursor: pointer; font-size:18px; width: 60px;">follow
             </p>
           </div>
           <div
             v-if="following"
             style="margin-left: -90px; margin-top: 40px; padding: 0px;">
             <p @click="unFollow"
-              style="color: #ff0800; cursor: pointer; font-size:18px;">unfollow
+              style="color: #ff0800; cursor: pointer; font-size:18px; width: 75px;">unfollow
             </p>
           </div>
         </div>

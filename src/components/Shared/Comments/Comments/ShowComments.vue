@@ -33,7 +33,7 @@
           <div class="details">
             <span style="font-weight: bold;">{{ comment.username}}  </span>
             {{ comment.comment}} &nbsp;
-            <span style="font-size: 12px; font-weight: 500;"> {{comment.date_created | fromDate }}</span>
+            <span style="font-size: 12px; font-weight: 500;"> {{comment.date_updated | fromDate }}</span>
             <span
               v-if="canEditComment(comment.username)"
               @click="editComment(comment.comment_id)"
@@ -55,7 +55,8 @@ export default {
   data () {
     return {
       post: '',
-      comments: ''
+      comments: [],
+      currentRound: 1
     }
   },
   methods: {
@@ -74,6 +75,24 @@ export default {
           console.log(response.data)
           this.comments = response.data.comments
         })
+    },
+    getMoreComments () {
+      const id = this.$route.params.post_id
+      axios.get('http://localhost:5000/post/' + id + '/comments/' + this.currentRound)
+        .then(response => {
+          console.log(response.data)
+          for (let x of response.data.comments) {
+              this.comments.push(x)
+          }
+          this.currentRound++
+        })
+    },
+    scroll () {
+      let d = document.querySelector('.mdl-layout__content')
+      let bottom = d.scrollHeight - d.scrollTop === d.clientHeight
+      if (bottom) {
+        this.getMoreComments()
+      }
     },
     goBack () {
       window.history.length > 1 ? this.$router.go(-1) : this.$router.push('/')
@@ -96,8 +115,18 @@ export default {
     this.getPost()
     this.getComments()
   },
+  mounted () {
+    document.querySelector('.mdl-layout__content').addEventListener('scroll', this.scroll)
+  },
+  destroyed () {
+    document.querySelector('.mdl-layout__content').removeEventListener('scroll', this.scroll)
+  },
   activated () {
     document.querySelector('.mdl-layout__content').scrollTop = 0
+    document.querySelector('.mdl-layout__content').addEventListener('scroll', this.scroll)
+  },
+  deactivated () {
+    document.querySelector('.mdl-layout__content').removeEventListener('scroll', this.scroll)
   }
 }
 </script>

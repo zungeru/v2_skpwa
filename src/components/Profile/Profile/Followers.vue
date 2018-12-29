@@ -11,13 +11,12 @@
 
     <div class="followers-list">
       <div
-        v-if="followers.length === 0">
-        <div class="no-followers-main">
+        v-if="followers.length === 0"
+        class="no-followers-main" >
           <img src="../../../assets/svg/shop.svg">
           <br>
           <br>
           <span>no followers yet...</span>
-        </div>
       </div>
       <div
         v-else
@@ -29,16 +28,17 @@
         </div>
         <div class="followers-details">
           <span>{{ follower.username}} </span> &nbsp;
-          <button
+          <span
             v-if="(loggedInUser !== follower.username) && (!follower.is_following)"
-            class="mdl-button mdl-button--primary">
-              Follow
-          </button>
-          <button
+            style="color: #ff0800; cursor: pointer; font-weight: 500">
+              follow
+          </span>
+          <span>&nbsp;&nbsp;</span>
+          <span
             v-if="follower.is_following"
-            class="mdl-button mdl-button--primary">
-              UnFollow
-            </button>
+            style="color: #ff0800; cursor: pointer; font-weight: 500">
+              unfollow
+            </span>
         </div>
       </div>
     </div>
@@ -53,7 +53,8 @@ import axios from 'axios'
 export default {
   data () {
     return {
-      followers: []
+      followers: [],
+      currentRound: 1
     }
   },
   computed: {
@@ -73,6 +74,27 @@ export default {
           this.followers = response.data.followers
         })
     },
+    getMoreFollowers () {
+      const token = localStorage.getItem('token')
+      const requesting_user = localStorage.getItem('username')
+      const target_user = this.$route.params.username
+      axios.get('http://localhost:5000/' + requesting_user + '/followers/' + target_user + '/' + this.currentRound,
+        { headers: { 'Authorization': `Bearer ${token}` } })
+        .then(response => {
+          console.log(response.data)
+          for (let x of response.data.followers) {
+              this.followers.push(x)
+          }
+          this.currentRound++
+        })
+    },
+    scroll () {
+      let d = document.querySelector('.mdl-layout__content')
+      let bottom = d.scrollHeight - d.scrollTop === d.clientHeight
+      if (bottom) {
+        this.getMoreFollowers()
+      }
+    },
     goBack () {
       window.history.length > 1 ? this.$router.go(-1) : this.$router.push('/')
     }
@@ -80,8 +102,18 @@ export default {
   beforeMount () {
     this.getFollowers()
   },
+  mounted () {
+    document.querySelector('.mdl-layout__content').addEventListener('scroll', this.scroll)
+  },
+  destroyed () {
+    document.querySelector('.mdl-layout__content').removeEventListener('scroll', this.scroll)
+  },
   activated () {
     document.querySelector('.mdl-layout__content').scrollTop = 0
+    document.querySelector('.mdl-layout__content').addEventListener('scroll', this.scroll)
+  },
+  deactivated () {
+    document.querySelector('.mdl-layout__content').removeEventListener('scroll', this.scroll)
   }
 }
 </script>
@@ -127,6 +159,24 @@ export default {
 .no-followers-main span {
   font-size: 16px;
 }
+/* .no-followers-links {
+  margin-top: 30px;
+}
+.no-followers-links span {
+  font-size: 16px;
+  font-weight: 500;
+} */
+/* .no-followers-main{
+  margin-right: auto;
+  margin-left: auto;
+  margin-top: 100px;
+  max-width: 500px;
+  text-align: center;
+}
+.no-followers-main span {
+  font-size: 16px;
+}
+. */
 .followers {
   padding: 10px 15px 10px 15px;
   margin-right: auto;
@@ -144,10 +194,9 @@ export default {
   margin-left: 5px;
 }
 .followers-details  {
-  font-size: 18px;
-  padding-left: 90px;
+  font-size: 16px;
+  padding-left: 75px;
   padding-right: 10px;
   padding-top: 15px;
-  font-weight: 500;
 }
 </style>

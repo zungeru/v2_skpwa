@@ -85,6 +85,7 @@ export default {
       })
         .then(response => {
           console.log(response.data)
+          this.$router.push({name: 'showcomments'})
         })
         .catch(error => console.log(error))
     },

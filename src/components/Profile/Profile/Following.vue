@@ -11,8 +11,8 @@
 
     <div class="following-list">
       <div
-        v-if="following.length === 0">
-        <div class="no-following-main">
+        v-if="following.length === 0"
+        class="no-following-main">
           <img src="../../../assets/svg/shop.svg">
           <br>
           <br>
@@ -24,8 +24,6 @@
               style="color: #ff0800; cursor: pointer;">find styleKasters &nbsp;
             </router-link>
           </div>
-
-        </div>
       </div>
       <div
         v-else
@@ -38,7 +36,8 @@
         <div class="following-details">
           <span>{{ follow.username}} </span> &nbsp;
           <span
-            v-if="(loggedInUser !== follow.username) && (!follow.is_following)">
+            v-if="(loggedInUser !== follow.username) && (!follow.is_following)"
+            style="color: #ff0800; cursor: pointer; font-weight: 500">
               follow
           </span>
           <span>&nbsp;&nbsp;</span>

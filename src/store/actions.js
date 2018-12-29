@@ -110,7 +110,7 @@ export const storeUser = ({ commit, dispatch }) => {
       localStorage.setItem('expirationDate', expirationDate)
       localStorage.setItem('username', response.data.username)
       dispatch('setLogOutTimer', response.data.life_span)
-      if(router.currentRoute.name === 'singup' || router.currentRoute.name === 'login') {
+      if(router.currentRoute.name === 'signup' || router.currentRoute.name === 'login') {
         router.push({name: 'feed'})
       }
     })
