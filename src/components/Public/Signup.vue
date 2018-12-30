@@ -14,11 +14,12 @@
           id="username"
           maxlength="15"
           placeholder="max 15 chars"
-          @blur="$v.username.$touch()"
-          v-model.lazy="username">
+          @blur="usernameBlur"
+          @input="usernameInput"
+          v-model="username">
           <p v-if="!$v.username.required && $v.username.$dirty"> username required</p>
           <p v-if="!$v.username.maxLen && $v.username.$dirty"> max 15 characters</p>
-          <p v-if="!$v.username.isUnique"> name already taken</p>
+          <p v-if="!$v.username.isUnique && usernameCheck"> name already taken</p>
       </div>
       <br>
       <div class="signup-item">
@@ -26,11 +27,12 @@
         <input
           type="email"
           id="email"
-          @blur="$v.email.$touch()"
-          v-model.lazy="email">
+          @blur="emailBlur"
+          @input="emailInput"
+          v-model="email">
           <p v-if="!$v.email.email"> enter valid email</p>
           <p v-if="!$v.email.required && $v.email.$dirty"> email required</p>
-          <p v-if="!$v.email.isUnique"> email already used</p>
+          <p v-if="!$v.email.isUnique && emailCheck"> email already used</p>
       </div>
       <br>
       <div class="signup-item">
@@ -38,7 +40,7 @@
         <input
           type="password"
           id="password"
-          @input="$v.password.$touch()"
+          @input=""
           v-model="password">
           <p v-if="!$v.password.required && $v.password.$dirty"> password required</p>
           <p v-if="!$v.password.minLen && $v.password.$dirty"> min 6 characters</p>
@@ -70,6 +72,7 @@
 import { required, email, minLength, maxLength, sameAs } from 'vuelidate/lib/validators'
 import axios from 'axios'
 import { mapActions } from 'vuex'
+// import debounce from 'lodash/debounce'
 
 export default {
   data () {
@@ -77,13 +80,30 @@ export default {
       username: '',
       email: '',
       password: '',
-      confirmPassword: ''
+      confirmPassword: '',
+      usernameCheck: false,
+      emailCheck: false
+
     }
   },
   methods: {
     ...mapActions({
       signUp: 'signUp'
     }),
+    usernameBlur () {
+      this.usernameCheck = true
+      this.$v.username.$touch()
+    },
+    usernameInput () {
+      this.usernameCheck = false
+    },
+    emailBlur () {
+      this.emailCheck = true
+      this.$v.email.$touch()
+    },
+    emailInput () {
+      this.emailCheck = false
+    },
     onSubmit () {
       const userData = {
         username: this.username,
@@ -100,39 +120,50 @@ export default {
     this.username = ''
     this.email = ''
     this.password = ''
-    this.confirmPassword = ''
+    this.confirmPassword = 'Hello'
   },
   validations: {
     username: {
       required,
       maxLen: maxLength(15),
-      isUnique (value) {
+      isUnique (value, vm) {
         // standalone validator ideally should not assume a field is required
         if (value === '') return true
-        const fd = new FormData()
-        fd.append('username', value)
-        return axios.post('http://localhost:5001/username/check', fd)
-          .then(res => {
-            // return false if res.data is true
-            // return true if res.data is false
-            return !res.data
-          })
+        if (vm.usernameCheck === false) {
+          return true
+        } else {
+          console.log('Calling Server')
+          const fd = new FormData()
+          fd.append('username', value)
+          return axios.post('http://localhost:5001/username/check', fd)
+            .then(res => {
+              // return false if res.data is true
+              // return true if res.data is false
+              return !res.data
+            })
+        }
       }
     },
     email: {
       required,
       email,
-      isUnique (value) {
+      isUnique (value, vm) {
         // standalone validator ideally should not assume a field is required
         if (value === '') return true
-        const fd = new FormData()
-        fd.append('email', value)
-        return axios.post('http://localhost:5001/email/check', fd)
-          .then(res => {
-            // return false if res.data is true
-            // return true if res.data is false
-            return !res.data
-          })
+        if (vm.emailCheck === false) {
+          return true
+        } else {
+          console.log('Calling Server')
+          const fd = new FormData()
+          fd.append('email', value)
+          return axios.post('http://localhost:5001/email/check', fd)
+            .then(res => {
+              // return false if res.data is true
+              // return true if res.data is false
+              // vm.usernameCheck = true
+              return !res.data
+            })
+        }
       }
     },
     password: {

@@ -111,10 +111,6 @@ export default {
       this.$router.push({ name: 'editcomment', params: { comment_id: comment_id }})
     }
   },
-  beforeMount () {
-    this.getPost()
-    this.getComments()
-  },
   mounted () {
     document.querySelector('.mdl-layout__content').addEventListener('scroll', this.scroll)
   },
@@ -122,6 +118,8 @@ export default {
     document.querySelector('.mdl-layout__content').removeEventListener('scroll', this.scroll)
   },
   activated () {
+    this.getPost()
+    this.getComments()
     document.querySelector('.mdl-layout__content').scrollTop = 0
     document.querySelector('.mdl-layout__content').addEventListener('scroll', this.scroll)
   },

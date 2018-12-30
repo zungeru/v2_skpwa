@@ -12,7 +12,7 @@
         <input
           type="email"
           id="email"
-          @input="$v.email.$touch()"
+          @blur="$v.email.$touch()"
           v-model.lazy="email">
           <p v-if="!$v.email.email"> enter valid email</p>
           <p v-if="!$v.email.required && $v.email.$dirty"> email required</p>
@@ -23,7 +23,7 @@
         <input
           type="password"
           id="password"
-          @input="$v.password.$touch()"
+          @blur="$v.password.$touch()"
           v-model="password">
       </div>
       <br>

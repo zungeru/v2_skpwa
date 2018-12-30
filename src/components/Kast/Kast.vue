@@ -180,9 +180,12 @@ export default {
       fd.append('price', this.price)
       fd.append('place', this.place)
       fd.append('note', this.note)
-      fd.append('pic_1', this.pics[0]['file'], this.pics[0]['file'].name)
-      fd.append('pic_2', (this.pics[1] ? this.pics[1]['file'] : null), (this.pics[1] ? this.pics[1]['file'].name : 'none_1'))
-      fd.append('pic_3', (this.pics[2] ? this.pics[2]['file'] : null), (this.pics[2] ? this.pics[2]['file'].name : 'none_2'))
+      fd.append('pic_1', this.pics[0]['file'])
+      fd.append('pic_2', (this.pics[1] ? this.pics[1]['file'] : null))
+      fd.append('pic_3', (this.pics[2] ? this.pics[2]['file'] : null))
+      // fd.append('pic_1', this.pics[0]['file'], this.pics[0]['file'].name)
+      // fd.append('pic_2', (this.pics[1] ? this.pics[1]['file'] : null), (this.pics[1] ? this.pics[1]['file'].name : 'none_1'))
+      // fd.append('pic_3', (this.pics[2] ? this.pics[2]['file'] : null), (this.pics[2] ? this.pics[2]['file'].name : 'none_2'))
       console.log(fd)
       axios.post('http://localhost:5000/post/create', fd, {
         headers:
