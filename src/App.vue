@@ -1,118 +1,120 @@
 <template>
-  <!-- Start Enclosing Div -->
-  <div id="app" class="sk-layout mdl-layout mdl-js-layout mdl-layout--drawer mdl-layout--fixed-header">
-    <!-- Start Header -->
-      <header class="mdl-layout__header mdl-color--white mdl-color-text--black">
-        <div class="mdl-layout__header-row">
-          <router-link tag="span" class="mdl-layout-title" style="cursor:pointer;" :to="{ name: 'home'}">
-            styleKast
-          </router-link>
-          <div class="mdl-layout-spacer"></div>
-
-          <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon" id="hdrbtn">
-            <img src="./assets/svg/vertical.svg">
-          </button>
-          <ul class="mdl-menu mdl-js-menu mdl-js-ripple-effect mdl-menu--bottom-right" for="hdrbtn">
-            <router-link tag="li" class="mdl-menu__item header_menu" style="color: #ff0800" :to="{ name: 'home'}">Home</router-link>
-            <router-link tag="li" class="mdl-menu__item header_menu" style="color: #ff0800" :to="{ name: 'about'}">About</router-link>
-            <router-link v-if="!auth" tag="li" class="mdl-menu__item header_menu" style="color: #ff0800" :to="{ name: 'login'}">Log In</router-link>
-            <li  v-if="auth" @click="onLogout" class="mdl-menu__item header_menu" style="color: #ff0800">Log Out</li>
-          </ul>
-        </div>
-      </header>
-      <!-- End Header -->
-
-      <!-- Start Drawer -->
-      <div class="sk-drawer mdl-layout__drawer mdl-color--white mdl-color-text--pink-A400">
-        <header>
-          <div class="avatar-container">
-            <div class="image"></div>
-          </div>
-          <div class="mdl-layout-spacer"></div>
-
-          <div class="contact-info">
-            <div class="name">Style Sprinter</div>
+    <!-- Start Enclosing Div -->
+    <div id="app" class="sk-layout mdl-layout mdl-js-layout mdl-layout--drawer mdl-layout--fixed-header">
+      <!-- Start Header -->
+        <header class="mdl-layout__header mdl-color--white mdl-color-text--black">
+          <div class="mdl-layout__header-row">
+            <router-link tag="span" class="mdl-layout-title" style="cursor:pointer;" :to="{ name: 'home'}">
+              styleKast
+            </router-link>
+            <div class="mdl-layout-spacer"></div>
+            <div style="cursor:pointer;" @click="reloadPage">
+              <img src="./assets/svg/refresh.svg">
+            </div>
+            <span>&nbsp;&nbsp;&nbsp;</span>
+            <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon" style="padding-bottom:9px;"id="hdrbtn">
+              <img src="./assets/svg/vertical.svg">
+            </button>
+            <ul class="mdl-menu mdl-js-menu mdl-js-ripple-effect mdl-menu--bottom-right" for="hdrbtn">
+              <router-link tag="li" class="mdl-menu__item header_menu" style="color: #ff0800" :to="{ name: 'home'}">Home</router-link>
+              <router-link tag="li" class="mdl-menu__item header_menu" style="color: #ff0800" :to="{ name: 'about'}">About</router-link>
+              <router-link v-if="!auth" tag="li" class="mdl-menu__item header_menu" style="color: #ff0800" :to="{ name: 'login'}">Log In</router-link>
+              <li  v-if="auth" @click="onLogout" class="mdl-menu__item header_menu" style="color: #ff0800">Log Out</li>
+            </ul>
           </div>
         </header>
+        <!-- End Header -->
 
-        <nav class="sk-navigation mdl-navigation mdl-color--white mdl-color-text--black">
-          <router-link :to="{name: 'feed'}"  class="mdl-navigation__link">
-            <span @click="updateRoute('feed')">
-              <img v-if="currentRoute==='feed'" src="./assets/svg/home_active.svg">
-              <img v-else src="./assets/svg/home.svg">
-              <span>&nbsp;&nbsp;&nbsp;&nbsp;Style Feed</span>
-            </span>
-          </router-link>
+        <!-- Start Drawer -->
+        <div class="sk-drawer mdl-layout__drawer mdl-color--white mdl-color-text--pink-A400">
+          <header>
+            <div class="avatar-container">
+              <div class="image"></div>
+            </div>
+            <div class="mdl-layout-spacer"></div>
 
-          <router-link :to="{name: 'kast'}" class="mdl-navigation__link">
-            <span @click="updateRoute('kast')">
-              <img v-if="currentRoute==='kast'" src="./assets/svg/camera_active.svg">
-              <img v-else src="./assets/svg/camera.svg">
-              <span>&nbsp;&nbsp;&nbsp;&nbsp;Kast</span>
-            </span>
-          </router-link>
+            <div class="contact-info">
+              <div class="name">Style Sprinter</div>
+            </div>
+          </header>
 
-          <router-link :to="{name: 'people'}" class="mdl-navigation__link">
-            <span @click="updateRoute('people')">
-              <img v-if="currentRoute==='people'" src="./assets/svg/search_active.svg">
-              <img v-else src="./assets/svg/search.svg">
-              <span>&nbsp;&nbsp;&nbsp;&nbsp;Search</span>
-            </span>
-          </router-link>
-
-          <router-link :to="{ name: 'userprofile', params: { username: username }}" class="mdl-navigation__link">
-            <span @click="updateRoute('userprofile')">
-              <img v-if="currentRoute==='userprofile'" src="./assets/svg/profile_active.svg">
-              <img v-else src="./assets/svg/profile.svg">
-              <span>&nbsp;&nbsp;&nbsp;&nbsp;Profile</span>
-            </span>
-          </router-link>
-        </nav>
-
-      </div>
-      <!-- End Drawer -->
-
-      <!-- Start Main -->
-      <main class="mdl-layout__content mdl-color--white">
-        <keep-alive>
-          <router-view></router-view>
-        </keep-alive>
-      </main>
-      <!-- End Main -->
-
-      <!-- Start Footer -->
-      <footer class="mdl-mini-footer">
-        <div class="social-icons">
-          <span @click="updateRoute('feed')">
-            <router-link :to="{name: 'feed'}" class="mobnav">
+          <nav class="sk-navigation mdl-navigation mdl-color--white mdl-color-text--black">
+            <router-link :to="{name: 'feed'}"  class="mdl-navigation__link">
+              <span @click="updateRoute('feed')">
                 <img v-if="currentRoute==='feed'" src="./assets/svg/home_active.svg">
-                <img v-else  src="./assets/svg/home.svg">
+                <img v-else src="./assets/svg/home.svg">
+                <span>&nbsp;&nbsp;&nbsp;&nbsp;Style Feed</span>
+              </span>
             </router-link>
-          </span>
-          <span @click="updateRoute('kast')">
-            <router-link :to="{name: 'kast'}" class="mobnav">
+
+            <router-link :to="{name: 'kast'}" class="mdl-navigation__link">
+              <span @click="updateRoute('kast')">
                 <img v-if="currentRoute==='kast'" src="./assets/svg/camera_active.svg">
                 <img v-else src="./assets/svg/camera.svg">
+                <span>&nbsp;&nbsp;&nbsp;&nbsp;Kast</span>
+              </span>
             </router-link>
-          </span>
-          <span @click="updateRoute('people')">
-            <router-link :to="{name: 'people'}" class="mobnav">
+
+            <router-link :to="{name: 'people'}" class="mdl-navigation__link">
+              <span @click="updateRoute('people')">
                 <img v-if="currentRoute==='people'" src="./assets/svg/search_active.svg">
                 <img v-else src="./assets/svg/search.svg">
+                <span>&nbsp;&nbsp;&nbsp;&nbsp;Search</span>
+              </span>
             </router-link>
-          </span>
-          <span @click="updateRoute('userprofile')">
-            <router-link :to="{ name: 'userprofile', params: { username: username }}" class="mobnav">
+
+            <router-link :to="{ name: 'userprofile', params: { username: username }}" class="mdl-navigation__link">
+              <span @click="updateRoute('userprofile')">
                 <img v-if="currentRoute==='userprofile'" src="./assets/svg/profile_active.svg">
                 <img v-else src="./assets/svg/profile.svg">
+                <span>&nbsp;&nbsp;&nbsp;&nbsp;Profile</span>
+              </span>
             </router-link>
-          </span>
-        </div>
-      </footer>
-      <!-- End Footer -->
-  </div>
-  <!-- End Enclosing Div -->
+          </nav>
 
+        </div>
+        <!-- End Drawer -->
+
+        <!-- Start Main -->
+        <main class="mdl-layout__content mdl-color--white">
+            <keep-alive>
+              <router-view></router-view>
+            </keep-alive>
+        </main>
+        <!-- End Main -->
+
+        <!-- Start Footer -->
+        <footer class="mdl-mini-footer">
+          <div class="social-icons">
+            <span @click="updateRoute('feed')">
+              <router-link :to="{name: 'feed'}" class="mobnav">
+                  <img v-if="currentRoute==='feed'" src="./assets/svg/home_active.svg">
+                  <img v-else  src="./assets/svg/home.svg">
+              </router-link>
+            </span>
+            <span @click="updateRoute('kast')">
+              <router-link :to="{name: 'kast'}" class="mobnav">
+                  <img v-if="currentRoute==='kast'" src="./assets/svg/camera_active.svg">
+                  <img v-else src="./assets/svg/camera.svg">
+              </router-link>
+            </span>
+            <span @click="updateRoute('people')">
+              <router-link :to="{name: 'people'}" class="mobnav">
+                  <img v-if="currentRoute==='people'" src="./assets/svg/search_active.svg">
+                  <img v-else src="./assets/svg/search.svg">
+              </router-link>
+            </span>
+            <span @click="updateRoute('userprofile')">
+              <router-link :to="{ name: 'userprofile', params: { username: username }}" class="mobnav">
+                  <img v-if="currentRoute==='userprofile'" src="./assets/svg/profile_active.svg">
+                  <img v-else src="./assets/svg/profile.svg">
+              </router-link>
+            </span>
+          </div>
+        </footer>
+        <!-- End Footer -->
+    </div>
+    <!-- End Enclosing Div -->
 </template>
 
 <script>
@@ -150,6 +152,9 @@ export default {
     },
     updateRoute (route) {
       this.currentRoute = route
+    },
+    reloadPage () {
+      window.location.reload()
     }
   },
   created () {

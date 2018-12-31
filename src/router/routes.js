@@ -2,6 +2,7 @@ import Home from '../components/Public/Home.vue'
 import Signup from '../components/Public/Signup.vue'
 import Login from '../components/Public/Login.vue'
 import About from '../components/Public/About.vue'
+import Error from '../components/Public/Error.vue'
 import Feed from '../components/Feed/Feed.vue'
 import CommentsHome from '../components/Shared/Comments/CommentsHome.vue'
 import ShowComments from '../components/Shared/Comments/Comments/ShowComments.vue'
@@ -24,6 +25,7 @@ export const routes = [
   { path: '/signup', name: 'signup', component: Signup },
   { path: '/login', name: 'login', component: Login },
   { path: '/about', name: 'about', component: About },
+  { path: '/error', name: 'error', component: Error },
   { path: '/feed', name: 'feed', component: Feed },
   { path: '/kast', name: 'kast', component: Kast },
   { path: '/edit/kast/:post_id', name: 'editkast', component: EditKast },

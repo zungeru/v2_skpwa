@@ -23,20 +23,22 @@
         v-for="(follower,index) in followers"
         :key="index"
         class="followers">
-        <div class="avatar">
+        <div class="avatar" @click="goToUser(follower.username)">
             <img :src="follower.url"/>
         </div>
         <div class="followers-details">
-          <span>{{ follower.username}} </span> &nbsp;
+          <span @click="goToUser(follower.username)">{{ follower.username}} </span> &nbsp;
           <span
             v-if="(loggedInUser !== follower.username) && (!follower.is_following)"
-            style="color: #ff0800; cursor: pointer; font-weight: 500">
+            style="color: #ff0800; cursor: pointer; font-weight: 500"
+            @click="follow(follower.username, index)">
               follow
           </span>
           <span>&nbsp;&nbsp;</span>
           <span
             v-if="follower.is_following"
-            style="color: #ff0800; cursor: pointer; font-weight: 500">
+            style="color: #ff0800; cursor: pointer; font-weight: 500"
+            @click="unFollow(follower.username, index)">
               unfollow
             </span>
         </div>
@@ -97,6 +99,37 @@ export default {
     },
     goBack () {
       window.history.length > 1 ? this.$router.go(-1) : this.$router.push('/')
+    },
+    goToUser (follower) {
+      this.$router.push({ name: 'userprofile', params: { username: follower } })
+    },
+    follow (follower, index) {
+      if (!this.loggedInUser) {
+        return
+      }
+      const token = localStorage.getItem('token')
+      axios.get('http://localhost:5000/follow/' + follower,
+        { headers: { 'Authorization': `Bearer ${token}` } })
+        .then(response => {
+          // const user = response.data.user
+          console.log(response.data)
+          this.followers[index].is_following = true
+        })
+    },
+    unFollow (follower, index) {
+      // 12/31 I just added this realizing that it is 'missing'. I'm not sure
+      // if I am breaking anything
+      if (!this.loggedInUser) {
+        return
+      } // not sure why this was missing at first
+      const token = localStorage.getItem('token')
+      axios.get('http://localhost:5000/unfollow/' + follower,
+        { headers: { 'Authorization': `Bearer ${token}` } })
+        .then(response => {
+          // const user = response.data.user
+          console.log(response.data)
+          this.followers[index].is_following = false
+        })
     }
   },
   beforeMount () {
@@ -192,11 +225,15 @@ export default {
   width: 55px;
   padding: 2px;
   margin-left: 5px;
+  cursor: pointer;
 }
 .followers-details  {
   font-size: 16px;
   padding-left: 75px;
   padding-right: 10px;
   padding-top: 15px;
+}
+.followers-details > span {
+  cursor: pointer;
 }
 </style>

@@ -7,7 +7,7 @@
       <div class="avatar" @click="goToUser">
           <img :src="post.url"/>
       </div>
-       <h3 class="mdl-card__title-text" @click="goToUser"> {{post.username}} </h3>
+       <span class="mdl-card__title-text" @click="goToUser"> {{post.username}} </span>
         <div class="mdl-layout-spacer"></div>
         <span v-if="canEditPost" @click="editPost">
           <img src="../../../assets/svg/edit.svg">
@@ -272,7 +272,7 @@ export default {
   margin-left: 5px;
 }
 
-.mdl-card__title > h3 {
+.mdl-card__title > span {
   font-size: 17px;
   margin-left: 5px;
   padding: 15px 0;

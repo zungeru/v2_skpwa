@@ -205,6 +205,11 @@ export default {
         })
     },
     unFollow () {
+      // 12/31 I just added this realizing that it is 'missing'. I'm not sure
+      // if I am breaking anything
+      if (this.loggedInUser === 'guest') {
+        return
+      } // not sure why this was missing at first
       const token = localStorage.getItem('token')
       axios.get('http://localhost:5000/unfollow/' + this.$route.params.username,
         { headers: { 'Authorization': `Bearer ${token}` } })
