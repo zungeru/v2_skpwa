@@ -13,7 +13,7 @@
         </div>
       </div>
       <div class="post-note">
-        <div class="avatar-comments">
+        <div class="avatar-comments" style="cursor: pointer;" @click="goToUser(post.username)">
             <img :src="post.user_url"/>
         </div>
         <div class="details">
@@ -27,7 +27,7 @@
         <div v-for="(comment,index) in comments"
             :key="index"
             class="comments">
-          <div class="avatar-comments">
+          <div class="avatar-comments" style="cursor: pointer;" @click="goToUser(comment.username)">
               <img :src="comment.user_url"/>
           </div>
           <div class="details">
@@ -99,6 +99,9 @@ export default {
     },
     goPost () {
       this.$router.push({ name: 'addcomment' , params: { post_id: this.post.post_id}})
+    },
+    goToUser (user) {
+      this.$router.push({ name: 'userprofile', params: { username: user} })
     },
     canEditComment (username) {
       if ( (!localStorage.getItem('username')) || (localStorage.getItem('username') !== username) ) {

@@ -3,22 +3,22 @@
     <div class="edit-kast-fixed-header">
       <div class="edit-kast-header-item">
         <span @click="goBack">
-          <span>&nbsp;&nbsp;&nbsp;</span>
+          <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
           <img src="../../assets/svg/backarrow.svg">
         </span>
-        <span @click="deletePost">
+        <span @click="deleteCheck">
           <img src="../../assets/svg/delete.svg">
-          <span>&nbsp;&nbsp;&nbsp;</span>
+          <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
         </span>
       </div>
     </div>
     <div class="edit-kast-body">
-      <div class="edit-kast-pics" v-if="!picUploaded">
-        <button
-            class="mdl-button mdl-button--raised mdl-button--colored"
+      <div class="edit-kast-pics" v-if="!picUploaded && !confirmDelete">
+        <span
+            class="edit-kast-button"
             @click="onPickFile">
-          Reupload Photo
-        </button>
+          reupload photo
+        </span>
         <input
           type="file"
           style="display: none;"
@@ -27,20 +27,32 @@
           multiple
           @change="onFilePicked">
       </div>
-      <ul v-if="picUploaded">
-        <draggable v-model="pics">
-          <li v-for="p in pics" :key="p.id">
-              <img v-bind:src="p.url" height="65" />
-          </li>
-        </draggable>
-      </ul>
+      <div v-if="picUploaded && !confirmDelete">
+        <input
+          type="file"
+          style="display: none;"
+          ref="fileUpdate"
+          accept="image/*"
+          multiple
+          @change="onFilePicked">
+        <ul>
+          <draggable v-model="pics">
+            <li v-for="p in pics" :key="p.id">
+                <img v-bind:src="p.url" height="65" />
+            </li>
+          </draggable>
+        </ul>
+      </div>
       <hr>
       <div
         v-if="picsLength > 1"
-        style="color: #595959; font-size: 14px; text-align: center;"
+        style="color: #696969; font-size: 14px; text-align: center;"
         >drag photos to reorder
       </div>
-      <form class="edit-form-main" action="#">
+      <div v-if="picUploaded && !confirmDelete" class="edit-change-photo">
+        <span style="cursor: pointer;" @click="onPickFileChange">change photo<span v-if="picsLength > 1">s</span></span>
+      </div>
+      <form v-if="!confirmDelete" class="edit-form-main" action="#">
         <div class="edit-form-item">
           <label for="piece">piece</label><span>&nbsp;({{pieceCharsLeft()}})</span>
           <input
@@ -98,6 +110,21 @@
         </div>
       </form>
     </div>
+    <div v-if="confirmDelete" class="confirm-delete">
+      <span style="font-size: 18px;">delete post?</span>
+      <br><br>
+      <span
+        @click="deletePost"
+        style="font-size: 18px; color: #ff0800; font-weight:500; cursor:pointer;">
+          delete
+      </span>
+      <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+      <span
+        @click="deleteCancel"
+        style="font-size: 18px; color: #137E8D; font-weight:500; cursor:pointer;">
+          cancel
+      </span>
+    </div>
   </div>
 </template>
 
@@ -115,7 +142,8 @@ export default {
       piece: '',
       price: '',
       place: '',
-      note: ''
+      note: '',
+      confirmDelete: false
     }
   },
   watch: {
@@ -148,6 +176,12 @@ export default {
   methods: {
     onPickFile () {
       this.$refs.fileInput.click()
+    },
+    onPickFileChange () {
+      this.$refs.fileUpdate.value = null
+      this.pics = []
+      this.picsLength = 0
+      this.$refs.fileUpdate.click()
     },
     onFilePicked (event) {
       const files = event.target.files
@@ -223,6 +257,12 @@ export default {
     },
     goBack () {
       window.history.length > 1 ? this.$router.go(-1) : this.$router.push('/')
+    },
+    deleteCheck (){
+      this.confirmDelete = true
+    },
+    deleteCancel () {
+      this.confirmDelete = false
     },
     deletePost () {
       const token = localStorage.getItem('token')
@@ -314,5 +354,29 @@ export default {
   resize: none;
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   font-size: 16px;
+}
+.edit-kast-button {
+  color: #ff0800;
+  font-weight: 500;
+  font-size: 16px;
+  text-align: center;
+  padding-top:10px;
+  padding-bottom: 10px;
+  cursor: pointer;
+}
+.edit-change-photo{
+  color: #ff0800;
+  font-weight: 500;
+  font-size: 14px;
+  text-align: center;
+  padding-top:10px;
+  padding-bottom: 10px;
+}
+.confirm-delete{
+  margin-right: auto;
+  margin-left: auto;
+  margin-top: 50px;
+  max-width: 500px;
+  text-align: center;
 }
 </style>

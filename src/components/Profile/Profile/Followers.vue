@@ -27,7 +27,7 @@
             <img :src="follower.url"/>
         </div>
         <div class="followers-details">
-          <span @click="goToUser(follower.username)">{{ follower.username}} </span> &nbsp;
+          <span style="cursor: pointer;" @click="goToUser(follower.username)">{{ follower.username}} </span> &nbsp;
           <span
             v-if="(loggedInUser !== follower.username) && (!follower.is_following)"
             style="color: #ff0800; cursor: pointer; font-weight: 500"
@@ -100,8 +100,8 @@ export default {
     goBack () {
       window.history.length > 1 ? this.$router.go(-1) : this.$router.push('/')
     },
-    goToUser (follower) {
-      this.$router.push({ name: 'userprofile', params: { username: follower } })
+    goToUser (user) {
+      this.$router.push({ name: 'userprofile', params: { username: user } })
     },
     follow (follower, index) {
       if (!this.loggedInUser) {
@@ -232,8 +232,5 @@ export default {
   padding-left: 75px;
   padding-right: 10px;
   padding-top: 15px;
-}
-.followers-details > span {
-  cursor: pointer;
 }
 </style>

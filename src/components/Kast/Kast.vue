@@ -5,9 +5,6 @@
       <br>
       <br>
       <span @click="onPickFile">kast</span>
-      <!-- <button class="mdl-button mdl-button--raised mdl-button--colored" @click="onPickFile">
-        Kast
-      </button> -->
       <input
         type="file"
         style="display: none;"
@@ -17,6 +14,13 @@
         @change="onFilePicked">
     </div>
     <div class="sk-upload-form" v-if="picUploaded">
+      <input
+        type="file"
+        style="display: none;"
+        ref="fileUpdate"
+        accept="image/*"
+        multiple
+        @change="onFilePicked">
         <ul>
           <draggable v-model="pics">
             <li v-for="p in pics" :key="p.id">
@@ -28,8 +32,11 @@
         <form class="form-main" action="#" >
           <div
             v-if="picsLength > 1"
-            style="color: #595959; font-size: 14px; text-align: center;"
+            style="color: #696969; font-size: 14px; text-align: center;"
             >drag photos to reorder
+          </div>
+          <div class="change-photo">
+            <span style="cursor: pointer;" @click="onPickFileChange">change photo<span v-if="picsLength > 1">s</span></span>
           </div>
           <div class="form-item">
             <label for="piece">piece</label><span>&nbsp;({{pieceCharsLeft()}})</span>
@@ -85,7 +92,7 @@
           <div>
             <button
               class="mdl-button mdl-button--raised mdl-button--colored"
-              :disabled="$v.$invalid"
+              :disabled="$v.$invalid || pics.length === 0"
               @click.prevent="onSubmit">
               submit
             </button>
@@ -135,6 +142,12 @@ export default {
   methods: {
     onPickFile () {
       this.$refs.fileInput.click()
+    },
+    onPickFileChange () {
+      this.$refs.fileUpdate.value = null
+      this.pics = []
+      this.picsLength = 0
+      this.$refs.fileUpdate.click()
     },
     onFilePicked (event) {
       const files = event.target.files
@@ -240,6 +253,14 @@ li {
   margin-left: auto;
   margin-top: 0px;
   max-width: 500px;
+}
+.change-photo{
+  color: #ff0800;
+  font-weight: 500;
+  font-size: 14px;
+  text-align: center;
+  padding-top:10px;
+  padding-bottom: 10px;
 }
 .form-item > label {
   font-size: 16px;
