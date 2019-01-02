@@ -16,7 +16,9 @@
       <img src="../../../assets/svg/search_profile.svg">
       <br/>
       <span v-if="noResults">no results found</span>
-      <span v-else> search #hashtags in recent styleKasts</span>
+      <span v-else> search #hashtags </span>
+      <br>
+      <span>in recent styleKasts</span>
     </div>
     <div class="search-tags-result" v-else>
       <div v-for="(result,index) in results"
@@ -110,7 +112,6 @@ export default {
   margin-right: auto;
   margin-left: auto;
   margin-top: 90px;
-  background-color: yellow;
 }
 .search-tags-fixed-header {
   position: fixed;
@@ -136,7 +137,7 @@ export default {
 }
 .no-tags-main span {
   font-size: 14px;
-  font-weight: 500;
+  color: #696969;
 }
 .search-tags-result{
   margin-top:110px;

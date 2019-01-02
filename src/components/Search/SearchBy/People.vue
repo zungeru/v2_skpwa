@@ -109,7 +109,6 @@ export default {
   margin-right: auto;
   margin-left: auto;
   margin-top: 90px;
-  background-color: yellow;
 }
 .search-people-fixed-header {
   position: fixed;
@@ -135,7 +134,7 @@ export default {
 }
 .no-people-main span {
   font-size: 14px;
-  font-weight: 500;
+  color: #696969;
 }
 .search-people-result {
   margin-top:110px;
