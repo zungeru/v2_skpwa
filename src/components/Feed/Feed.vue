@@ -1,7 +1,6 @@
 <template>
 <div>
-  <div v-if="posts.length === 0">
-    <div class="no-feed-main">
+    <div class="no-feed-main" v-if="posts.length === 0">
       <img src="../../assets/svg/shop.svg">
       <br>
       <span>no posts to view yet...</span>
@@ -24,9 +23,7 @@
           style="color: #ff0800 ; cursor: pointer;">find styleKasters
         </router-link>
       </div>
-
     </div>
-  </div>
   <div v-else>
     <StyleKard
       v-for="(post,index) in posts"
@@ -70,7 +67,7 @@ export default {
     StyleKard
   },
   beforeMount () {
-      this.getInitialPosts()
+    this.getInitialPosts()
   },
   mounted () {
     document.querySelector('.mdl-layout__content').addEventListener('scroll', this.scroll)

@@ -11,7 +11,13 @@ const CLIENT_SECRET = 'bless-styleKast-always'
 // to import it.
 
 // for auth.js
-export const signUp = ({ commit, dispatch }, userData) => {
+export const loadDone = ({ commit }) => {
+  commit('DONE_LOADING')
+}
+
+// for auth.js
+// export const signUp = ({ commit, dispatch }, userData) => {
+export const signUp = ({ dispatch }, userData) => {
   const fd = new FormData()
   fd.append('username', userData.username)
   fd.append('email', userData.email)
@@ -31,7 +37,8 @@ export const signUp = ({ commit, dispatch }, userData) => {
 }
 
 // for auth.js
-export const logIn = ({ commit, dispatch }, userData) => {
+// export const logIn = ({ commit, dispatch }, userData) => {
+export const logIn = ({ dispatch }, userData) => {
   const fd = new FormData()
   fd.append('email', userData.email)
   fd.append('password', userData.password)

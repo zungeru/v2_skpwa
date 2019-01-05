@@ -1,6 +1,9 @@
 <template>
+    <div id="app">
+    <div id="loading" v-if="isLoading" ref="logoDiv">
+    </div>
     <!-- Start Enclosing Div -->
-    <div id="app" class="sk-layout mdl-layout mdl-js-layout mdl-layout--drawer mdl-layout--fixed-header">
+    <div class="sk-layout mdl-layout mdl-js-layout mdl-layout--drawer mdl-layout--fixed-header">
       <!-- Start Header -->
         <header class="mdl-layout__header mdl-color--white mdl-color-text--black">
           <div class="mdl-layout__header-row">
@@ -115,6 +118,7 @@
         <!-- End Footer -->
     </div>
     <!-- End Enclosing Div -->
+    </div>
 </template>
 
 <script>
@@ -134,7 +138,8 @@ export default {
   name: 'App',
   data () {
     return {
-      currentRoute: this.$router.currentRoute.name
+      currentRoute: this.$router.currentRoute.name,
+      logo: 'styleKast'
     }
   },
   computed: {
@@ -143,9 +148,34 @@ export default {
     },
     username () {
       return !this.$store.getters.userData ? 'false' : this.$store.getters.userData.username
+    },
+    isLoading () {
+      return this.$store.getters.loading
     }
   },
   methods: {
+    animate () {
+      for (let i=0; i<this.logo.length; i++) {
+        let wrapText = "<span>" + this.logo.charAt(i) + "</span>"
+        this.appendLogo(i, wrapText)
+      }
+    },
+    appendLogo(interval, text){
+      let vm = this
+      let delay = 250 + (75*interval)
+      setTimeout(function(){
+        vm.$refs.logoDiv.innerHTML += text
+      },delay)
+      if (interval === 8 ){
+        setTimeout(function(){
+          vm.doneLoading()
+          console.log('ALL DONE')
+        },delay+500)
+      }
+    },
+    doneLoading () {
+      this.$store.dispatch('loadDone')
+    },
     onLogout () {
       this.$store.dispatch('logOut')
       this.currentRoute = 'feed'
@@ -156,6 +186,9 @@ export default {
     reloadPage () {
       window.location.reload()
     }
+  },
+  mounted () {
+    this.animate()
   },
   created () {
     this.$store.dispatch('tryAutoLogIn')
@@ -173,7 +206,13 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-
+#loading {
+  color: #137E8D;
+  font-size: 32px;
+  padding-top: 170px;
+  height: 100vh;
+  text-align: center;
+}
 .avatar-container {
   position: relative;
   border: 2px solid black;

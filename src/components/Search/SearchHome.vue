@@ -1,6 +1,6 @@
 <template>
   <div class="search-main">
-    <div class="search-fixed-header">
+    <div class="search-fixed-header" v-if="!isLoading">
       <div class="search-header-items">
         <!-- <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> -->
         <!-- NOTE: I'm overriding the mdl active link class here -->
@@ -21,7 +21,13 @@
 </template>
 
 <script>
-
+export default {
+  computed: {
+    isLoading () {
+      return this.$store.getters.loading
+    }
+  }
+}
 </script>
 
 <style>

@@ -1,6 +1,6 @@
 <template>
   <div class="search-people-main" ref="peoplemain">
-    <div class="search-people-fixed-header" :style="{width: divsize + 'px'}">
+    <div class="search-people-fixed-header" v-if="!isLoading" :style="{width: divsize + 'px'}">
       <div class="search-people-form">
         <input
           type="text"
@@ -53,6 +53,11 @@ export default {
   watch: {
     keyword (newVal, oldval) {
       this.debouncedSearchPeople()
+    }
+  },
+  computed: {
+    isLoading () {
+      return this.$store.getters.loading
     }
   },
   methods: {
@@ -117,6 +122,9 @@ export default {
   padding: 10px 0px 0px 15px;
   background-color: white;
   margin-top: 60px;
+}
+.visbile {
+  visibility: hidden;
 }
 .search-people-form > input {
   outline: 0;

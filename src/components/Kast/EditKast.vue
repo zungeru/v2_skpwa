@@ -43,7 +43,7 @@
           </draggable>
         </ul>
       </div>
-      <hr>
+      <hr v-if="!confirmDelete">
       <div
         v-if="picsLength > 1"
         style="color: #696969; font-size: 14px; text-align: center;"
