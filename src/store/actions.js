@@ -152,7 +152,9 @@ export const getInitialPosts = ({ commit }) => {
     { headers: { 'Authorization': `Bearer ${token}` } })
     .then(response => {
       const posts = response.data.posts
+      commit('CLEAR_FEED_DATA')
       commit('SET_POSTS', posts)
+      console.log('IMMMMM REALLLY TIRED!!!!!')
     })
     .catch(error => console.log(error))
 }
@@ -172,6 +174,11 @@ export const getMorePosts = ({ commit }) => {
     .catch(error => console.log(error))
 }
 
+// for stylefeed.js
+export const hideFeed = ({ commit }) => {
+  commit('HIDE_FEED')
+}
+
 // for userprofile.js
 export const getInitialUserPosts = ({ commit }, target_user) => {
   // const requesting_user = !store.getters.userData ? 'guest' : store.getters.userData.username
@@ -180,6 +187,7 @@ export const getInitialUserPosts = ({ commit }, target_user) => {
     .then(response => {
       const posts = response.data.posts
       console.log(posts)
+      commit('CLEAR_PROFILE_DATA')
       commit('SET_USER_POSTS', posts)
     })
     .catch(error => console.log(error))
@@ -197,4 +205,9 @@ export const getMoreUserPosts = ({ commit }, target_user) => {
       commit('ADD_USER_ROUND')
     })
     .catch(error => console.log(error))
+}
+
+// for userprofile.js
+export const hidePosts = ({ commit }) => {
+  commit('HIDE_POSTS')
 }

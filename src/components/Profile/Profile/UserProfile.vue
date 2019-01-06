@@ -1,82 +1,93 @@
 <template>
   <div class="user-profile-main">
-    <div class="user-profile-top">
-      <div class="user-profile-avatar">
-        <img :src='profiledUser.url'/>
-      </div>
-      <div class="user-profile-stats">
-        <div style="display:flex;justify-content:space-between;width:90%;margin-left:10px;">
-          <div style="text-align: center;">
-            <span style="font-weight: 600"> {{formatCount(profiledUser.posts_count)}} </span><br>
-            <span style="font-weight: normal">posts</span>
-          </div>
-          <router-link
-            :to="{ name: 'followers', params: {username: targetUsername} }"
-             style="text-align: center; color: black; text-decoration: none;">
-              <span style="font-weight: 600">{{formatCount(profiledUser.followers_count)}}</span> <br>
-              <span style="font-weight: normal">followers</span>
-          </router-link>
-          <router-link
-            :to="{ name: 'following', params: {username: targetUsername} }"
-             style="text-align: center; color: black; text-decoration: none;">
-            <span style="font-weight: 600">{{formatCount(profiledUser.following_count)}}</span> <br>
-            <span style="font-weight: normal">following</span>
-          </router-link>
+    <transition-group name="fade" appear mode="in-out">
+      <div class="user-profile-top" key="profileTop">
+        <div class="user-profile-avatar">
+          <img :src='profiledUser.url'/>
         </div>
-        <div>
-          <div
-            v-if="loggedInUser.auth_id === profiledUser.auth_id"
-            style="margin-left: -75px; margin-top: 40px; padding: 0px;">
+        <div class="user-profile-stats">
+          <div style="display:flex;justify-content:space-between;width:90%;margin-left:10px;">
+            <div style="text-align: center;">
+              <span style="font-weight: 600"> {{formatCount(profiledUser.posts_count)}} </span><br>
+              <span style="font-weight: normal">posts</span>
+            </div>
             <router-link
-              tag="p"
-              :to="{ name: 'editprofile'}"
-              style="color: #ff0800; cursor: pointer; font-size:18px; width: 45px;">edit
+              :to="{ name: 'followers', params: {username: targetUsername} }"
+               style="text-align: center; color: black; text-decoration: none;">
+                <span style="font-weight: 600">{{formatCount(profiledUser.followers_count)}}</span> <br>
+                <span style="font-weight: normal">followers</span>
+            </router-link>
+            <router-link
+              :to="{ name: 'following', params: {username: targetUsername} }"
+               style="text-align: center; color: black; text-decoration: none;">
+              <span style="font-weight: 600">{{formatCount(profiledUser.following_count)}}</span> <br>
+              <span style="font-weight: normal">following</span>
             </router-link>
           </div>
-          <div
-            v-if="notFollowing"
-            style="margin-left: -83px; margin-top: 40px; padding: 0px;">
-            <p @click="follow"
-              style="color: #ff0800; cursor: pointer; font-size:18px; width: 60px;">follow
-            </p>
-          </div>
-          <div
-            v-if="following"
-            style="margin-left: -90px; margin-top: 40px; padding: 0px;">
-            <p @click="unFollow"
-              style="color: #ff0800; cursor: pointer; font-size:18px; width: 75px;">unfollow
-            </p>
+          <div>
+            <div
+              v-if="loggedInUser.auth_id === profiledUser.auth_id"
+              style="margin-left: -75px; margin-top: 40px; padding: 0px;">
+              <router-link
+                tag="p"
+                :to="{ name: 'editprofile'}"
+                style="color: #ff0800; cursor: pointer; font-size:18px; width: 45px;">edit
+              </router-link>
+            </div>
+            <div
+              v-if="notFollowing"
+              style="margin-left: -83px; margin-top: 40px; padding: 0px;">
+              <p @click="follow"
+                style="color: #ff0800; cursor: pointer; font-size:18px; width: 60px;">follow
+              </p>
+            </div>
+            <div
+              v-if="following"
+              style="margin-left: -90px; margin-top: 40px; padding: 0px;">
+              <p @click="unFollow"
+                style="color: #ff0800; cursor: pointer; font-size:18px; width: 75px;">unfollow
+              </p>
+            </div>
           </div>
         </div>
+
+        <div class="user-profile-info">
+          <span style="font-weight: 600">{{profiledUser.username}}</span> &nbsp;
+          <span v-if="profiledUser.name">|</span> &nbsp;
+          <span style="font-weight: 600">{{profiledUser.name}}</span>
+          <p>{{profiledUser.about}}</p>
+
+          <router-link
+            tag="span"
+            :to="{ name: 'userprofile', params: { username: 'mido1' }}"
+            style="color: #f50057; cursor: pointer;">Mido1
+          </router-link>
+          <router-link
+            tag="span"
+            :to="{ name: 'userprofile', params: { username: 'mido2' }}"
+            style="color: #f50057; cursor: pointer;">Mido2
+          </router-link>
+          <router-link
+            tag="span"
+            :to="{ name: 'userprofile', params: { username: 'mido3' }}"
+            style="color: #f50057; cursor: pointer;">Mido3
+          </router-link>
+        </div>
+        <hr>
       </div>
+    </transition-group>
 
-      <div class="user-profile-info">
-        <span style="font-weight: 600">{{profiledUser.username}}</span> &nbsp;
-        <span v-if="profiledUser.name">|</span> &nbsp;
-        <span style="font-weight: 600">{{profiledUser.name}}</span>
-        <p>{{profiledUser.about}}</p>
+    <transition-group name="fade" appear mode="in-out" v-if="showPosts">
+      <StyleKard
+        v-for="(post,index) in userPosts"
+        :key="index"
+        :id="post.id"
+        :post="post">
+      </StyleKard>
+    </transition-group>
 
-        <router-link
-          tag="span"
-          :to="{ name: 'userprofile', params: { username: 'mido1' }}"
-          style="color: #f50057; cursor: pointer;">Mido1
-        </router-link>
-        <router-link
-          tag="span"
-          :to="{ name: 'userprofile', params: { username: 'mido2' }}"
-          style="color: #f50057; cursor: pointer;">Mido2
-        </router-link>
-        <router-link
-          tag="span"
-          :to="{ name: 'userprofile', params: { username: 'mido3' }}"
-          style="color: #f50057; cursor: pointer;">Mido3
-        </router-link>
-      </div>
-      <hr>
-    </div>
-
-    <div v-if="userPosts.length === 0">
-      <div class="no-userPosts-main">
+    <transition-group name="fade" appear mode="out-in" v-else>
+      <div class="no-userPosts-main" key="noPosts">
         <img src="../../../assets/svg/shop.svg">
         <br>
         <span>no posts to view yet...</span>
@@ -91,15 +102,8 @@
           </router-link>
         </div>
       </div>
-    </div>
-    <div v-else>
-      <StyleKard
-        v-for="(post,index) in userPosts"
-        :key="index"
-        :id="post.id"
-        :post="post">
-      </StyleKard>
-    </div>
+    </transition-group>
+
   </div>
 </template>
 
@@ -120,7 +124,8 @@ export default {
   computed: {
     ...mapGetters({
       userPosts: 'userPosts',
-      userRound: 'userRound'
+      // userRound: 'userRound',
+      showPosts: 'showPosts'
     }),
     loggedInUser () {
       // I'm adding this property instead of using userData from the store
@@ -171,7 +176,9 @@ export default {
   methods: {
     ...mapActions({
       getInitialUserPosts: 'getInitialUserPosts',
-      getMoreUserPosts: 'getMoreUserPosts'
+      getMoreUserPosts: 'getMoreUserPosts',
+      getInitialPosts: 'getInitialPosts', // Needed to update Feed.vue when user follows and unfollows
+      hidePosts: 'hidePosts'
     }),
     getUser () {
       const requestingUser = !localStorage.getItem('username') ? 'guest' : localStorage.getItem('username')
@@ -202,6 +209,8 @@ export default {
           // const user = response.data.user
           console.log(response.data)
           this.getUser()
+          // this call update the feed
+          this.getInitialPosts()
         })
     },
     unFollow () {
@@ -217,6 +226,8 @@ export default {
           // const user = response.data.user
           console.log(response.data)
           this.getUser()
+          // this call update the feed
+          this.getInitialPosts()
         })
     }
   },
@@ -259,6 +270,19 @@ export default {
 </script>
 
 <style>
+.fade-enter{
+  opacity: 0;
+}
+.fade-enter-active{
+  transition: opacity 1s;
+}
+.fade-leave{
+  /* opacity: 1; */
+}
+.fade-leave-active{
+  transition: opacity 1s;
+  opacity: 0;
+}
 .user-profile-main{
   margin-right: auto;
   margin-left: auto;

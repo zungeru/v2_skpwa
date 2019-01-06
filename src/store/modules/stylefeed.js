@@ -1,11 +1,17 @@
 const state = {
   loadRound: 1,
-  posts: []
+  posts: [],
+  showFeed: true
 }
 
 const mutations = {
   'SET_POSTS' (state, posts) {
     state.posts = posts
+    if(state.posts.length === 0){
+      state.showFeed = false
+    } else {
+      state.showFeed = true
+    }
   },
   'ADD_POSTS' (state, posts) {
     for (let x of posts) {
@@ -18,6 +24,9 @@ const mutations = {
   'CLEAR_FEED_DATA' (state) {
     state.loadRound = 1
     state.posts = []
+  },
+  'HIDE_FEED' (state) {
+    state.showFeed = false
   }
 }
 
@@ -31,6 +40,9 @@ const getters = {
   },
   loadRound (state) {
     return state.loadRound
+  },
+  showFeed (state) {
+    return state.showFeed
   }
 }
 
