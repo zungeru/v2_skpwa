@@ -30,7 +30,7 @@
             <Slide
                 v-for="(pic, index) in post.pics"
                 :key="index"
-                v-bind:style="{ width: singleWidth + 'px' }"
+                v-bind:style="{ width: kardSize + 'px' }"
                 v-bind:slide="pic">
             </Slide>
         </div>
@@ -39,6 +39,7 @@
         <!-- Slide Navigation -->
         <div class="navigation">
             <span
+              v-if="post.pics.length > 1"
               class="nav-number"
               v-for="(pic, index) in post.pics"
               :key="index"
@@ -132,11 +133,8 @@ export default {
   data () {
     return {
       kardSize: 0,
-      innerWidth: 0,
-      singleWidth: 0,
       currentIndex: 0,
       currentDir: 'forward',
-      pics_count: this.post.pics.length,
       notes: false,
       place: false
     }
@@ -146,8 +144,11 @@ export default {
     post: [Object]
   },
   computed: {
+    innerWidth () {
+      return this.kardSize * this.post.pics.length
+    },
     slidesInnerMarginLeft () {
-      return this.currentIndex * this.singleWidth
+      return this.currentIndex * this.kardSize
     },
     placeUrl () {
       let substring1 = this.post.place.substring(0, 7)
@@ -166,10 +167,21 @@ export default {
       }
     }
   },
+  watch: {
+    '$route' (to, from) {
+      this.currentIndex = 0
+      this.currentDir = 'forward'
+      this.notes = false
+      this.place =false
+    }
+  },
   methods: {
     nextPicture () {
+      if (this.post.pics.length === 1){
+        return
+      }
       if (this.currentDir === 'forward') {
-        if (this.currentIndex + 1 === this.pics_count) {
+        if (this.currentIndex + 1 === this.post.pics.length) {
           this.currentDir = 'backward'
           this.currentIndex--
           console.log(this.currentIndex)
@@ -238,8 +250,6 @@ export default {
   },
   mounted () {
     this.kardSize = Math.min(window.innerWidth - 15, 400)
-    this.singleWidth = this.kardSize
-    this.innerWidth = this.singleWidth * this.pics_count
   }
 }
 </script>

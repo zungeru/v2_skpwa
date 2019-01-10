@@ -185,9 +185,9 @@ export const getInitialUserPosts = ({ commit }, target_user) => {
   const requesting_user = !localStorage.getItem('username') ? 'guest' : localStorage.getItem('username')
   axios.get('http://localhost:5000/' + requesting_user + '/posts/' + target_user)
     .then(response => {
+      commit('CLEAR_PROFILE_DATA')
       const posts = response.data.posts
       console.log(posts)
-      commit('CLEAR_PROFILE_DATA')
       commit('SET_USER_POSTS', posts)
     })
     .catch(error => console.log(error))
