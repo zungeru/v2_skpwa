@@ -113,6 +113,9 @@ export const storeUser = ({ commit, dispatch }) => {
     .then(response => {
       console.log(response.data)
       commit('SET_USER_DATA', response.data)
+      if(router.currentRoute.name === 'signup' || router.currentRoute.name === 'login') {
+        dispatch('getInitialPosts')
+      }
       const expirationDate = new Date(response.data.exp * 1000)
       localStorage.setItem('expirationDate', expirationDate)
       localStorage.setItem('username', response.data.username)
@@ -151,6 +154,7 @@ export const getInitialPosts = ({ commit }) => {
   axios.get('http://localhost:5000/feed',
     { headers: { 'Authorization': `Bearer ${token}` } })
     .then(response => {
+      console.log(response.data)
       const posts = response.data.posts
       commit('CLEAR_FEED_DATA')
       commit('SET_POSTS', posts)
