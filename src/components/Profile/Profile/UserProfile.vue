@@ -1,5 +1,6 @@
 <template>
   <div class="user-profile-main">
+    <!-- BEGIN PROFILE TOP -->
     <transition-group name="fade" appear mode="in-out">
       <div class="user-profile-top" key="profileTop">
         <div class="user-profile-avatar">
@@ -76,6 +77,9 @@
         <hr>
       </div>
     </transition-group>
+    <!-- END PROFILE TOP -->
+
+    <span id="startpost"></span>
 
     <transition-group name="fade" appear mode="in-out" v-if="showPosts">
       <StyleKard

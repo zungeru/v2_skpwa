@@ -1,6 +1,6 @@
 <template>
   <div class="search-tags-main" ref="tagsmain">
-    <div class="search-tags-fixed-header" :style="{width: divsize + 'px'}">
+    <div class="search-tags-fixed-header" v-if="!isLoading" :style="{width: divsize + 'px'}">
       <div class="search-tags-form">
         <input
           type="text"
@@ -55,6 +55,11 @@ export default {
   watch: {
     keyword (newVal, oldval) {
       this.debouncedSearchTags()
+    }
+  },
+  computed: {
+    isLoading () {
+      return this.$store.getters.loading
     }
   },
   methods: {

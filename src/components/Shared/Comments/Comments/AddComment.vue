@@ -1,6 +1,6 @@
 <template>
     <div class="add-comment-main">
-      <div class="add-comment-fixed-header">
+      <div class="add-comment-fixed-header" v-if="!isLoading" >
         <div class="add-comment-header-item">
           <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
           <span @click="goBack">
@@ -48,6 +48,11 @@ export default {
     comment: {
       required,
       maxLen: maxLength(200)
+    }
+  },
+  computed: {
+    isLoading () {
+      return this.$store.getters.loading
     }
   },
   methods: {

@@ -1,6 +1,6 @@
 <template>
-  <div class="">
-    <div class="post-fixed-header">
+  <div>
+    <div class="post-fixed-header" v-if="!isLoading">
       <div class="post-header-item">
         <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
         <span span @click="goBack">
@@ -39,6 +39,11 @@ export default {
       if(to.params.post_id) {
         this.getPost()
       }
+    }
+  },
+  computed: {
+    isLoading () {
+      return this.$store.getters.loading
     }
   },
   methods: {

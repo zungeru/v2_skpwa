@@ -1,6 +1,6 @@
 <template>
   <div class="edit-profile-main">
-    <div class="edit-fixed-header">
+    <div class="edit-fixed-header" v-if="!isLoading">
       <div class="edit-header-items">
         <span>&nbsp;&nbsp;</span>
         <span @click="goBack">
@@ -315,7 +315,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      userData: 'userData'
+      userData: 'userData',
+      isLoading: 'loading'
     }),
     profileFormInvalid () {
       return ((this.about === '') && (this.name === '') && (this.photo === ''))

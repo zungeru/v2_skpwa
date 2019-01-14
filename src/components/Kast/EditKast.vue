@@ -1,6 +1,6 @@
 <template>
   <div class="edit-kast-main">
-    <div class="edit-kast-fixed-header">
+    <div class="edit-kast-fixed-header" v-if="!isLoading">
       <div class="edit-kast-header-item">
         <span @click="goBack">
           <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
@@ -171,6 +171,11 @@ export default {
     },
     place: {
       required
+    }
+  },
+  computed: {
+    isLoading () {
+      return this.$store.getters.loading
     }
   },
   methods: {

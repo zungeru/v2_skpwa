@@ -1,15 +1,17 @@
 <template>
     <div class="comments-main">
-      <div class="comments-fixed-header">
+      <div class="comments-fixed-header" v-if="!isLoading">
         <div class="comments-header-items">
-          <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+
           <span @click="goBack">
+            <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
             <img src="../../../../assets/svg/backarrow.svg">
           </span>
           <span @click="goPost">
             <img src="../../../../assets/svg/add.svg">
+            <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
           </span>
-          <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+
         </div>
       </div>
       <div class="post-note">
@@ -57,6 +59,11 @@ export default {
       post: '',
       comments: [],
       currentRound: 1
+    }
+  },
+  computed: {
+    isLoading () {
+      return this.$store.getters.loading
     }
   },
   methods: {

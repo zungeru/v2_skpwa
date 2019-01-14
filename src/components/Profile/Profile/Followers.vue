@@ -1,6 +1,6 @@
 <template>
   <div class="followers-main">
-    <div class="followers-fixed-header">
+    <div class="followers-fixed-header" v-if="!isLoading">
       <div class="followers-header-item">
         <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
         <span @click="goBack">
@@ -62,6 +62,9 @@ export default {
   computed: {
     loggedInUser () {
       return localStorage.getItem('username')
+    },
+    isLoading () {
+      return this.$store.getters.loading
     }
   },
   methods: {
