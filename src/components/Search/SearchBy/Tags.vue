@@ -7,18 +7,17 @@
           placeholder="  search here..."
           :style="{width: divsize - 40 + 'px'}"
           v-model="keyword" />
-        <!-- <span>
-          <img src="../../../assets/svg/search.svg">
-        </span> -->
       </div>
     </div>
     <div class="no-tags-main" v-if="results.length === 0">
-      <img src="../../../assets/svg/search_profile.svg">
+      <img v-if="!searching" src="../../../assets/svg/hashtag.svg" class="hash">
+      <div v-else class="tags-loader"></div>
+
       <br/>
+      <br/>
+
       <span v-if="noResults">no results found</span>
-      <span v-else> search #hashtags </span>
-      <br>
-      <span>in recent styleKasts</span>
+      <span v-else>search hashtags <br/>in recent styleKasts</span>
     </div>
     <div class="search-tags-result" v-else>
       <div v-for="(result,index) in results"
@@ -49,7 +48,8 @@ export default {
       divsize: 0,
       keyword: null,
       results: [],
-      noResults: false
+      noResults: false,
+      searching: false
     }
   },
   watch: {
@@ -72,11 +72,11 @@ export default {
         return
       }
       this.noResults = false
+      this.searching = true
       const token = localStorage.getItem('token')
       const fd = new FormData()
       fd.append('keyword', this.keyword)
       let vm = this
-      console.log(this.keyword)
       axios.post('http://localhost:5000/tags/search', fd, {
         headers: { 'Authorization': `Bearer ${token}` } })
         .then(response => {
@@ -89,6 +89,7 @@ export default {
           }
         })
         .catch(error => console.log(error))
+        this.searching = false
     },
     goToPost (id) {
       this.$router.push({ name: 'post', params: { post_id: id } })
@@ -111,6 +112,15 @@ export default {
 </script>
 
 <style>
+.hash {
+  border: 2px solid #137E8D;
+  border-radius: 50%;
+  height: 40px;
+  width: 40px;
+  padding: 5px;
+  background: #137E8D;
+  margin-top: 3px;
+}
 .search-tags-main {
   /* top right bottom left */
   max-width: 500px;
@@ -128,6 +138,7 @@ export default {
 }
 .search-tags-form > input {
   outline: 0;
+  margin-top: 10px;
   border-width: 0 0 2px;
   border-color: black;
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
@@ -168,5 +179,27 @@ export default {
   font-size: 15px;
   margin-left: 55px;
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
+}
+.tags-loader {
+  margin-right: auto;
+  margin-left: auto;
+  border: 7px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 7px solid #137E8D;
+  width: 40px;
+  height: 40px;
+  -webkit-animation: spin 2s linear infinite; /* Safari */
+  animation: spin 2s linear infinite;
+}
+
+/* Safari */
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 </style>

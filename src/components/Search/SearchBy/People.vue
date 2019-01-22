@@ -7,14 +7,15 @@
           placeholder="  search here..."
           :style="{width: divsize - 40 + 'px'}"
           v-model="keyword" />
-        <!-- <span>
-          <img src="../../../assets/svg/search.svg">
-        </span> -->
       </div>
     </div>
     <div class="no-people-main" v-if="results.length === 0">
-        <img src="../../../assets/svg/search_profile.svg">
-        <br>
+        <img v-if="!searching" src="../../../assets/svg/search_profile.svg">
+        <div v-else class="people-loader"></div>
+
+        <br/>
+        <br/>
+
         <span v-if="noResults">no results found</span>
         <span v-else> find a styleKaster</span>
     </div>
@@ -47,7 +48,8 @@ export default {
       divsize: 0,
       keyword: null,
       results: [],
-      noResults: false
+      noResults: false,
+      searching: false
     }
   },
   watch: {
@@ -70,6 +72,7 @@ export default {
         return
       }
       this.noResults = false
+      this.searching = true
       const token = localStorage.getItem('token')
       const fd = new FormData()
       fd.append('keyword', this.keyword)
@@ -86,6 +89,7 @@ export default {
           }
         })
         .catch(error => console.log(error))
+        this.searching = false
     },
     goToUser (username) {
       this.$router.push({ name: 'userprofile', params: { username: username }})
@@ -123,11 +127,12 @@ export default {
   background-color: white;
   margin-top: 60px;
 }
-.visbile {
+/* .visbile {
   visibility: hidden;
-}
+} */
 .search-people-form > input {
   outline: 0;
+  margin-top: 10px;
   border-width: 0 0 2px;
   border-color: black;
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
@@ -168,5 +173,27 @@ export default {
   font-size: 15px;
   margin-left: 55px;
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
+}
+.people-loader {
+  margin-right: auto;
+  margin-left: auto;
+  border: 7px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 7px solid #137E8D;
+  width: 40px;
+  height: 40px;
+  -webkit-animation: spin 2s linear infinite; /* Safari */
+  animation: spin 2s linear infinite;
+}
+
+/* Safari */
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 </style>

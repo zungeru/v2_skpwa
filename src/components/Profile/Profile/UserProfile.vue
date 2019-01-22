@@ -8,7 +8,7 @@
         </div>
         <div class="user-profile-stats">
           <div style="display:flex;justify-content:space-between;width:90%;margin-left:10px;">
-            <div style="text-align: center;">
+            <div style="text-align: center; cursor: pointer;" @click="scrollToPosts">
               <span style="font-weight: 600"> {{formatCount(profiledUser.posts_count)}} </span><br>
               <span style="font-weight: normal">posts</span>
             </div>
@@ -79,7 +79,7 @@
     </transition-group>
     <!-- END PROFILE TOP -->
 
-    <span id="startpost"></span>
+    <span ref="postsScrollPos"></span>
 
     <transition-group name="fade" appear mode="in-out" v-if="showPosts">
       <StyleKard
@@ -184,6 +184,9 @@ export default {
       getInitialPosts: 'getInitialPosts', // Needed to update Feed.vue when user follows and unfollows
       hidePosts: 'hidePosts'
     }),
+    scrollToPosts () {
+      document.querySelector('.mdl-layout__content').scrollTop = this.$refs.postsScrollPos.offsetTop
+    },
     getUser () {
       const requestingUser = !localStorage.getItem('username') ? 'guest' : localStorage.getItem('username')
       const targetUser = this.$route.params.username
