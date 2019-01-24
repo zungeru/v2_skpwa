@@ -125,6 +125,27 @@
 // require('material-design-lite')
 import 'material-design-lite'
 
+(function () {
+  var IDLE_TIMEOUT = 45; // 45 minute in this example
+  var idleCounter = 0;
+  var reloadPage = false;
+
+  document.onmousemove = document.onkeydown = function () {
+    if (reloadPage) {
+		    reloadPage = false
+        window.location.reload();
+    } else {
+      idleCounter = 0;
+    }
+  };
+
+window.setInterval(function () {
+    if (++idleCounter >= IDLE_TIMEOUT) {
+        reloadPage = true;
+      }
+    }, 60000);
+ }());
+
 function close () {
   let d = document.querySelector('.mdl-layout')
   d.MaterialLayout.toggleDrawer()
