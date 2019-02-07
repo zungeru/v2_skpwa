@@ -35,9 +35,7 @@
           @change="onPhotoPicked">
       </div>
 
-      <br>
-      <br>
-      <br>
+      <br/><br/><br/>
 
       <form>
           <div class="edit-item">
@@ -104,13 +102,16 @@
         class="update-button"
         v-if="!updateEmail"
         @click.prevent="showEmail">
-        update email
+        email
+        <img src="../../../assets/svg/toggle_off.svg">
+
       </p>
       <p
         class="update-button"
         v-if="updateEmail"
         @click.prevent="hideEmail">
-        cancel email update
+        email
+        <img src="../../../assets/svg/toggle_on.svg">
       </p>
 
       <div v-if="updateEmail">
@@ -141,13 +142,15 @@
         v-if="!updatePassword"
         class="update-button"
         @click.prevent="showPassword">
-        update password
+        password
+        <img src="../../../assets/svg/toggle_off.svg">
       </p>
       <p
         v-if="updatePassword"
         class="update-button"
         @click.prevent="hidePassword">
-        cancel password update
+        password
+        <img src="../../../assets/svg/toggle_on.svg">
       </p>
 
       <div v-if="updatePassword">
@@ -215,7 +218,7 @@ export default {
       confirmPassword: '',
       currentPassword: '',
       photo: '',
-      profileURL:'https://res.cloudinary.com/zungeru/image/upload/v1542857696/userphotos/defaultProfile2.jpg',
+      profileURL: '',
       confirmDelete: false,
       deletePasswordInput: ''
     }
@@ -225,6 +228,20 @@ export default {
       updateUser: 'updateUser',
       deleteUser: 'deleteUser'
     }),
+    getProfileInfo () {
+      // the api call 'http://localhost:5000/' + requestingUser + '/user/' + targetUser
+      // in this case the requestingUser is always the targetUser
+      //b/c a user can only edit her own profile page so i'm just gonna name both parties 'user'
+      const user = localStorage.getItem('username')
+      axios.get('http://localhost:5000/' + user + '/user/' + user)
+        .then(response => {
+          console.log(response.data)
+          console.log('Im BAAAACCCK')
+          this.profileURL = response.data.user.url
+          this.name = response.data.user.name
+          this.about = response.data.user.about
+        })
+    },
     onPickPhoto () {
       this.$refs.photoInput.click()
     },
@@ -359,6 +376,9 @@ export default {
     currentPassword: {
       required
     }
+  },
+  beforeMount () {
+    this.getProfileInfo()
   },
   activated () {
     document.querySelector('.mdl-layout__content').scrollTop = 0
