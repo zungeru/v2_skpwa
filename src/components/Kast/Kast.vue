@@ -1,103 +1,106 @@
 <template>
   <div class="sk-upload-main">
-    <div class="sk-upload-input" v-if="!picUploaded">
-      <img src="../../assets/svg/share.svg" style="cursor: pointer;" @click="onPickFile">
-      <br>
-      <br>
-      <span @click="onPickFile">kast</span>
-      <input
-        type="file"
-        style="display: none;"
-        ref="fileInput"
-        accept="image/*"
-        multiple
-        @change="onFilePicked">
-    </div>
-    <div class="sk-upload-form" v-if="picUploaded">
-      <input
-        type="file"
-        style="display: none;"
-        ref="fileUpdate"
-        accept="image/*"
-        multiple
-        @change="onFilePicked">
-        <ul>
-          <draggable v-model="pics">
-            <li v-for="p in pics" :key="p.id">
-                <img v-bind:src="p.url" height="65" />
-            </li>
-          </draggable>
-        </ul>
-        <hr>
-        <form class="form-main" action="#" >
-          <div
-            v-if="picsLength > 1"
-            style="color: #696969; font-size: 14px; text-align: center;"
-            >drag photos to reorder
-          </div>
-          <div class="change-photo">
-            <span style="cursor: pointer;" @click="onPickFileChange">change photo<span v-if="picsLength > 1">s</span></span>
-          </div>
-          <div class="form-item">
-            <label for="piece">piece</label><span>&nbsp;({{pieceCharsLeft()}})</span>
-            <input
-              type="text"
-              name="piece"
-              id="piece"
-              maxlength="40"
-              placeholder="max 40 chars"
-              @input="$v.piece.$touch()"
-              v-model="piece">
-              <p v-if="!$v.piece.required && $v.piece.$dirty"> field required</p>
-          </div>
-          <br>
-          <div class="form-item">
-            <label for="price">price</label>
-            <input
-              name="price"
-              id="price"
-              placeholder="(ex: 99.00)"
-              @input="$v.price.$touch()"
-              v-model="price">
-              <p v-if="!$v.price.required && $v.price.$dirty"> field required</p>
-              <p v-if="!$v.price.decimal && $v.price.$dirty"> enter a dollar amount</p>
-          </div>
-          <br>
-          <div class="form-item">
-            <label for="place">place</label>
-            <input
-              type="text"
-              name="place"
-              placeholder="link (url) or address (irl)"
-              id="place"
-              @input="$v.place.$touch()"
-              v-model="place">
-              <p v-if="!$v.place.required && $v.place.$dirty"> field required</p>
-          </div>
-          <br>
-          <div class="form-item">
-            <label for="style-note">style note </label><span>&nbsp;({{noteCharsLeft()}})</span>
-            <textarea
-              type="text"
-              name="style-note"
-              id="style-note"
-              maxlength="200"
-              placeholder="max 200 chars"
-              @input="$v.note.$touch()"
-              v-model="note">
-            </textarea>
-            <p v-if="!$v.note.required && $v.note.$dirty"> field required</p>
-          </div>
-          <br>
-          <div>
-            <button
-              class="mdl-button mdl-button--raised mdl-button--colored"
-              :disabled="$v.$invalid || pics.length === 0"
-              @click.prevent="onSubmit">
-              submit
-            </button>
-          </div>
-        </form>
+    <div v-if="loading" class="kast-loader"></div>
+    <div v-else>
+      <div class="sk-upload-input" v-if="!picUploaded">
+        <img src="../../assets/svg/share.svg" style="cursor: pointer;" @click="onPickFile">
+        <br>
+        <br>
+        <span @click="onPickFile">kast</span>
+        <input
+          type="file"
+          style="display: none;"
+          ref="fileInput"
+          accept="image/*"
+          multiple
+          @change="onFilePicked">
+      </div>
+      <div class="sk-upload-form" v-if="picUploaded">
+        <input
+          type="file"
+          style="display: none;"
+          ref="fileUpdate"
+          accept="image/*"
+          multiple
+          @change="onFilePicked">
+          <ul>
+            <draggable v-model="pics">
+              <li v-for="p in pics" :key="p.id">
+                  <img v-bind:src="p.url" height="65" />
+              </li>
+            </draggable>
+          </ul>
+          <hr>
+          <form class="form-main" action="#" ref="formInput">
+            <div
+              v-if="picsLength > 1"
+              style="color: #696969; font-size: 14px; text-align: center;"
+              >drag photos to reorder
+            </div>
+            <div class="change-photo">
+              <span style="cursor: pointer;" @click="onPickFileChange">change photo<span v-if="picsLength > 1">s</span></span>
+            </div>
+            <div class="form-item">
+              <label for="piece">piece</label><span>&nbsp;({{pieceCharsLeft()}})</span>
+              <input
+                type="text"
+                name="piece"
+                id="piece"
+                maxlength="40"
+                placeholder="max 40 chars"
+                @input="$v.piece.$touch()"
+                v-model="piece">
+                <p v-if="!$v.piece.required && $v.piece.$dirty"> field required</p>
+            </div>
+            <br>
+            <div class="form-item">
+              <label for="price">price</label>
+              <input
+                name="price"
+                id="price"
+                placeholder="(ex: 99.00)"
+                @input="$v.price.$touch()"
+                v-model="price">
+                <p v-if="!$v.price.required && $v.price.$dirty"> field required</p>
+                <p v-if="!$v.price.decimal && $v.price.$dirty"> enter a dollar amount</p>
+            </div>
+            <br>
+            <div class="form-item">
+              <label for="place">place</label>
+              <input
+                type="text"
+                name="place"
+                placeholder="link (url) or address (irl)"
+                id="place"
+                @input="$v.place.$touch()"
+                v-model="place">
+                <p v-if="!$v.place.required && $v.place.$dirty"> field required</p>
+            </div>
+            <br>
+            <div class="form-item">
+              <label for="style-note">style note </label><span>&nbsp;({{noteCharsLeft()}})</span>
+              <textarea
+                type="text"
+                name="style-note"
+                id="style-note"
+                maxlength="200"
+                placeholder="max 200 chars"
+                @input="$v.note.$touch()"
+                v-model="note">
+              </textarea>
+              <p v-if="!$v.note.required && $v.note.$dirty"> field required</p>
+            </div>
+            <br>
+            <div>
+              <button
+                class="mdl-button mdl-button--raised mdl-button--colored"
+                :disabled="$v.$invalid || pics.length === 0"
+                @click.prevent="onSubmit">
+                submit
+              </button>
+            </div>
+          </form>
+      </div>
     </div>
   </div>
 </template>
@@ -116,7 +119,8 @@ export default {
       piece: '',
       price: '',
       place: '',
-      note: ''
+      note: '',
+      loading: false
     }
   },
   components: {
@@ -186,7 +190,17 @@ export default {
     noteCharsLeft() {
       return this.$v.note.$params.maxLen.max - this.note.length
     },
+    clearForms(){
+      this.$refs.fileUpdate.value = null
+      this.$refs.fileInput.value = null
+      this.$refs.formInput.reset()
+      this.pics = []
+      this.picsLength = 0
+      this.picUploaded = false
+      this.loading = false
+    },
     onSubmit () {
+      this.loading = true
       const token = localStorage.getItem('token')
       const fd = new FormData()
       fd.append('piece', this.piece)
@@ -200,17 +214,20 @@ export default {
       // fd.append('pic_2', (this.pics[1] ? this.pics[1]['file'] : null), (this.pics[1] ? this.pics[1]['file'].name : 'none_1'))
       // fd.append('pic_3', (this.pics[2] ? this.pics[2]['file'] : null), (this.pics[2] ? this.pics[2]['file'].name : 'none_2'))
       console.log(fd)
+      let vm = this
       axios.post('http://localhost:5000/post/create', fd, {
         headers:
           {'Content-Type': 'multipart/form-data', 'Authorization': `Bearer ${token}` }
         })
         .then(res => {
           console.log(res)
+          vm.$router.push({ name: 'post', params: { post_id: res.data.post_id } })
         })
         .catch(error => console.log(error))
     }
   },
   activated () {
+    this.clearForms()
     document.querySelector('.mdl-layout__content').scrollTop = 0
   }
 }
@@ -294,5 +311,27 @@ li {
   resize: none;
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   font-size: 16px;
+}
+.kast-loader {
+  margin-right: auto;
+  margin-left: auto;
+  border: 7px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 7px solid #137E8D;
+  width: 40px;
+  height: 40px;
+  -webkit-animation: spin 2s linear infinite; /* Safari */
+  animation: spin 2s linear infinite;
+}
+
+/* Safari */
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 </style>

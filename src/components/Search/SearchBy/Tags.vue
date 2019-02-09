@@ -16,7 +16,7 @@
       <br/>
       <br/>
 
-      <span v-if="noResults">no results found</span>
+      <span style="color: #ff0800" v-if="noResults">no results found</span>
       <span v-else>search hashtags <br/>in recent styleKasts</span>
     </div>
     <div class="search-tags-result" v-else>
