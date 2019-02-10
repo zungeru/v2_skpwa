@@ -1,5 +1,9 @@
 <template>
+  <!-- The Main Div -->
   <div class="edit-kast-main">
+
+    <!-- The Header Div -->
+    <!-- isLoading is vuex variable used for page reload -->
     <div class="edit-kast-fixed-header" v-if="!isLoading">
       <div class="edit-kast-header-item">
         <span @click="goBack">
@@ -12,119 +16,132 @@
         </span>
       </div>
     </div>
-    <div class="edit-kast-body">
-      <div class="edit-kast-pics" v-if="!picUploaded && !confirmDelete">
+
+
+    <!-- The Loading Div -->
+    <!-- loading variable => For the updating the kast -->
+    <!-- kast-loader class from kast component -->
+    <div v-if="loading" class="kast-loader"></div>
+
+    <!-- The v-else to the Loading Div Above -->
+    <div v-else>
+
+      <div class="edit-kast-body">
+        <div class="edit-kast-pics" v-if="!picUploaded && !confirmDelete">
+          <span
+              class="edit-kast-button"
+              @click="onPickFile">
+            reupload photo
+          </span>
+          <input
+            type="file"
+            style="display: none;"
+            ref="fileInput"
+            accept="image/*"
+            multiple
+            @change="onFilePicked">
+        </div>
+        <div v-if="picUploaded && !confirmDelete">
+          <input
+            type="file"
+            style="display: none;"
+            ref="fileUpdate"
+            accept="image/*"
+            multiple
+            @change="onFilePicked">
+          <ul>
+            <draggable v-model="pics">
+              <li v-for="p in pics" :key="p.id">
+                  <img v-bind:src="p.url" height="65" />
+              </li>
+            </draggable>
+          </ul>
+        </div>
+        <hr v-if="!confirmDelete">
+        <div
+          v-if="picsLength > 1"
+          style="color: #696969; font-size: 14px; text-align: center;"
+          >drag photos to reorder
+        </div>
+        <div v-if="picUploaded && !confirmDelete" class="edit-change-photo">
+          <span style="cursor: pointer;" @click="onPickFileChange">change photo<span v-if="picsLength > 1">s</span></span>
+        </div>
+        <form v-if="!confirmDelete" class="edit-form-main" action="#">
+          <div class="edit-form-item">
+            <label for="piece">piece</label><span>&nbsp;({{pieceCharsLeft()}})</span>
+            <input
+              type="text"
+              name="piece"
+              id="piece"
+              maxlength="40"
+              @input="$v.piece.$touch()"
+              v-model="piece">
+              <p v-if="!$v.piece.required && $v.piece.$dirty"> field required</p>
+          </div>
+          <br>
+          <div class="edit-form-item">
+            <label for="price">price</label>
+            <input
+              name="price"
+              id="price"
+              @input="$v.price.$touch()"
+              v-model="price">
+              <p v-if="!$v.price.required && $v.price.$dirty"> field required</p>
+              <p v-if="!$v.price.decimal && $v.price.$dirty"> enter a dollar amount</p>
+          </div>
+          <br>
+          <div class="edit-form-item">
+            <label for="place">place</label>
+            <input
+              type="text"
+              name="place"
+              id="place"
+              @input="$v.place.$touch()"
+              v-model="place">
+              <p v-if="!$v.place.required && $v.place.$dirty"> field required</p>
+          </div>
+          <br>
+          <div class="edit-form-item">
+            <label for="style-note">style note </label><span>&nbsp;({{noteCharsLeft()}})</span>
+            <textarea
+              type="text"
+              name="style-note"
+              id="style-note"
+              maxlength="200"
+              @input="$v.note.$touch()"
+              v-model="note">
+            </textarea>
+            <p v-if="!$v.note.required && $v.note.$dirty"> field required</p>
+          </div>
+          <br>
+          <div>
+            <button
+              class="mdl-button mdl-button--raised mdl-button--colored"
+              :disabled="$v.$invalid"
+              @click.prevent="onSubmit">
+              submit
+            </button>
+          </div>
+        </form>
+      </div>
+      <div v-if="confirmDelete" class="confirm-delete">
+        <span style="font-size: 18px;">delete post?</span>
+        <br><br>
         <span
-            class="edit-kast-button"
-            @click="onPickFile">
-          reupload photo
+          @click="deletePost"
+          style="font-size: 18px; color: #ff0800; font-weight:500; cursor:pointer;">
+            delete
         </span>
-        <input
-          type="file"
-          style="display: none;"
-          ref="fileInput"
-          accept="image/*"
-          multiple
-          @change="onFilePicked">
+        <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+        <span
+          @click="deleteCancel"
+          style="font-size: 18px; color: #137E8D; font-weight:500; cursor:pointer;">
+            cancel
+        </span>
       </div>
-      <div v-if="picUploaded && !confirmDelete">
-        <input
-          type="file"
-          style="display: none;"
-          ref="fileUpdate"
-          accept="image/*"
-          multiple
-          @change="onFilePicked">
-        <ul>
-          <draggable v-model="pics">
-            <li v-for="p in pics" :key="p.id">
-                <img v-bind:src="p.url" height="65" />
-            </li>
-          </draggable>
-        </ul>
-      </div>
-      <hr v-if="!confirmDelete">
-      <div
-        v-if="picsLength > 1"
-        style="color: #696969; font-size: 14px; text-align: center;"
-        >drag photos to reorder
-      </div>
-      <div v-if="picUploaded && !confirmDelete" class="edit-change-photo">
-        <span style="cursor: pointer;" @click="onPickFileChange">change photo<span v-if="picsLength > 1">s</span></span>
-      </div>
-      <form v-if="!confirmDelete" class="edit-form-main" action="#">
-        <div class="edit-form-item">
-          <label for="piece">piece</label><span>&nbsp;({{pieceCharsLeft()}})</span>
-          <input
-            type="text"
-            name="piece"
-            id="piece"
-            maxlength="40"
-            @input="$v.piece.$touch()"
-            v-model="piece">
-            <p v-if="!$v.piece.required && $v.piece.$dirty"> field required</p>
-        </div>
-        <br>
-        <div class="edit-form-item">
-          <label for="price">price</label>
-          <input
-            name="price"
-            id="price"
-            @input="$v.price.$touch()"
-            v-model="price">
-            <p v-if="!$v.price.required && $v.price.$dirty"> field required</p>
-            <p v-if="!$v.price.decimal && $v.price.$dirty"> enter a dollar amount</p>
-        </div>
-        <br>
-        <div class="edit-form-item">
-          <label for="place">place</label>
-          <input
-            type="text"
-            name="place"
-            id="place"
-            @input="$v.place.$touch()"
-            v-model="place">
-            <p v-if="!$v.place.required && $v.place.$dirty"> field required</p>
-        </div>
-        <br>
-        <div class="edit-form-item">
-          <label for="style-note">style note </label><span>&nbsp;({{noteCharsLeft()}})</span>
-          <textarea
-            type="text"
-            name="style-note"
-            id="style-note"
-            maxlength="200"
-            @input="$v.note.$touch()"
-            v-model="note">
-          </textarea>
-          <p v-if="!$v.note.required && $v.note.$dirty"> field required</p>
-        </div>
-        <br>
-        <div>
-          <button
-            class="mdl-button mdl-button--raised mdl-button--colored"
-            :disabled="$v.$invalid"
-            @click.prevent="onSubmit">
-            submit
-          </button>
-        </div>
-      </form>
     </div>
-    <div v-if="confirmDelete" class="confirm-delete">
-      <span style="font-size: 18px;">delete post?</span>
-      <br><br>
-      <span
-        @click="deletePost"
-        style="font-size: 18px; color: #ff0800; font-weight:500; cursor:pointer;">
-          delete
-      </span>
-      <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-      <span
-        @click="deleteCancel"
-        style="font-size: 18px; color: #137E8D; font-weight:500; cursor:pointer;">
-          cancel
-      </span>
-    </div>
+    <!-- Here -->
+
   </div>
 </template>
 
@@ -143,6 +160,7 @@ export default {
       price: '',
       place: '',
       note: '',
+      loading: false,
       confirmDelete: false
     }
   },
@@ -240,6 +258,7 @@ export default {
       return this.$v.note.$params.maxLen.max - this.note.length
     },
     onSubmit () {
+      this.loading = true
       const token = localStorage.getItem('token')
       const fd = new FormData()
       fd.append('post_id', this.$route.params.post_id)
@@ -251,12 +270,15 @@ export default {
       fd.append('pic_2', (this.pics[1] ? this.pics[1]['file'] : null))
       fd.append('pic_3', (this.pics[2] ? this.pics[2]['file'] : null))
       console.log(fd)
+      let vm = this
       axios.post('http://localhost:5000/post/update', fd, {
         headers:
           {'Content-Type': 'multipart/form-data', 'Authorization': `Bearer ${token}` }
         })
         .then(res => {
           console.log(res)
+          vm.loading = false
+          vm.$router.push({ name: 'post', params: { post_id: res.data.post_id } })
         })
         .catch(error => console.log(error))
     },

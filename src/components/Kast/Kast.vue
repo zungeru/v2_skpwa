@@ -1,11 +1,17 @@
 <template>
+  <!-- The Main Div -->
   <div class="sk-upload-main">
+
+    <!-- The Loading Div -->
     <div v-if="loading" class="kast-loader"></div>
+
+    <!-- The v-else to the Loading Div Above -->
     <div v-else>
+
+      <!-- Div if Photo(s) Has Not Been Uploaded -->
       <div class="sk-upload-input" v-if="!picUploaded">
         <img src="../../assets/svg/share.svg" style="cursor: pointer;" @click="onPickFile">
-        <br>
-        <br>
+        <br/><br/>
         <span @click="onPickFile">kast</span>
         <input
           type="file"
@@ -15,6 +21,8 @@
           multiple
           @change="onFilePicked">
       </div>
+
+      <!-- Div if Photo(s) Has Been Uploaded -->
       <div class="sk-upload-form" v-if="picUploaded">
         <input
           type="file"
@@ -23,6 +31,7 @@
           accept="image/*"
           multiple
           @change="onFilePicked">
+
           <ul>
             <draggable v-model="pics">
               <li v-for="p in pics" :key="p.id">
@@ -30,8 +39,10 @@
               </li>
             </draggable>
           </ul>
+
           <hr>
-          <form class="form-main" action="#" ref="formInput">
+
+          <form class="form-main" action="#">
             <div
               v-if="picsLength > 1"
               style="color: #696969; font-size: 14px; text-align: center;"
@@ -52,7 +63,7 @@
                 v-model="piece">
                 <p v-if="!$v.piece.required && $v.piece.$dirty"> field required</p>
             </div>
-            <br>
+            <br/>
             <div class="form-item">
               <label for="price">price</label>
               <input
@@ -64,7 +75,7 @@
                 <p v-if="!$v.price.required && $v.price.$dirty"> field required</p>
                 <p v-if="!$v.price.decimal && $v.price.$dirty"> enter a dollar amount</p>
             </div>
-            <br>
+            <br/>
             <div class="form-item">
               <label for="place">place</label>
               <input
@@ -76,7 +87,7 @@
                 v-model="place">
                 <p v-if="!$v.place.required && $v.place.$dirty"> field required</p>
             </div>
-            <br>
+            <br/>
             <div class="form-item">
               <label for="style-note">style note </label><span>&nbsp;({{noteCharsLeft()}})</span>
               <textarea
@@ -90,7 +101,7 @@
               </textarea>
               <p v-if="!$v.note.required && $v.note.$dirty"> field required</p>
             </div>
-            <br>
+            <br/>
             <div>
               <button
                 class="mdl-button mdl-button--raised mdl-button--colored"
@@ -148,6 +159,7 @@ export default {
       this.$refs.fileInput.click()
     },
     onPickFileChange () {
+      // sometimes '' instead of null works in IE11, need to check this
       this.$refs.fileUpdate.value = null
       this.pics = []
       this.picsLength = 0
@@ -190,15 +202,6 @@ export default {
     noteCharsLeft() {
       return this.$v.note.$params.maxLen.max - this.note.length
     },
-    clearForms(){
-      this.$refs.fileUpdate.value = null
-      this.$refs.fileInput.value = null
-      this.$refs.formInput.reset()
-      this.pics = []
-      this.picsLength = 0
-      this.picUploaded = false
-      this.loading = false
-    },
     onSubmit () {
       this.loading = true
       const token = localStorage.getItem('token')
@@ -221,13 +224,21 @@ export default {
         })
         .then(res => {
           console.log(res)
+          vm.pics = []
+          vm.picsLength = 0
+          vm.picUploaded = false
+          vm.piece = ''
+          vm.price = ''
+          vm.place = ''
+          vm.note = ''
+          vm.$v.$reset();
+          vm.loading = false
           vm.$router.push({ name: 'post', params: { post_id: res.data.post_id } })
         })
         .catch(error => console.log(error))
     }
   },
   activated () {
-    this.clearForms()
     document.querySelector('.mdl-layout__content').scrollTop = 0
   }
 }
@@ -315,6 +326,7 @@ li {
 .kast-loader {
   margin-right: auto;
   margin-left: auto;
+  margin-top: 55px;
   border: 7px solid #f3f3f3;
   border-radius: 50%;
   border-top: 7px solid #137E8D;
