@@ -326,7 +326,7 @@ li {
 .kast-loader {
   margin-right: auto;
   margin-left: auto;
-  margin-top: 55px;
+  margin-top: 75px;
   border: 7px solid #f3f3f3;
   border-radius: 50%;
   border-top: 7px solid #137E8D;

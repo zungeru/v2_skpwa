@@ -1,5 +1,9 @@
 <template>
+  <!-- The Main Div -->
   <div class="edit-profile-main">
+
+    <!-- The Header Div -->
+    <!-- isLoading is vuex variable used for page reload -->
     <div class="edit-fixed-header" v-if="!isLoading">
       <div class="edit-header-items">
         <span>&nbsp;&nbsp;</span>
@@ -20,182 +24,193 @@
       </div>
     </div>
 
-    <div v-if="profileView" class="edit-form">
-      <div class="avatar-form">
-          <img :src="profileURL"/>
-      </div>
+    <!-- The Loading Div -->
+    <!-- loading variable => For the updating the kast -->
+    <!-- kast-loader class from kast component -->
+    <div v-if="loading" class="kast-loader"></div>
 
-      <div class="upload">
-        <p class="upload-button" @click="onPickPhoto">upload photo</p>
-        <input
-          type="file"
-          style="display: none;"
-          ref="photoInput"
-          accept="image/*"
-          @change="onPhotoPicked">
-      </div>
+    <!-- The v-else to the Loading Div Above -->
+    <div>
+      <div v-if="profileView" class="edit-form">
+        <div class="avatar-form">
+            <img :src="profileURL"/>
+        </div>
 
-      <br/><br/><br/>
+        <div class="upload">
+          <p class="upload-button" @click="onPickPhoto">upload photo</p>
+          <input
+            type="file"
+            style="display: none;"
+            ref="photoInput"
+            accept="image/*"
+            @change="onPhotoPicked">
+        </div>
 
-      <form>
-          <div class="edit-item">
-            <label for="name">name</label><span>&nbsp;({{nameCharsLeft()}})</span>
+        <br/><br/><br/>
+
+        <form>
+            <div class="edit-item">
+              <label for="name">name</label><span>&nbsp;({{nameCharsLeft()}})</span>
+              <input
+                type="text"
+                id="name"
+                maxlength="25"
+                placeholder="your display name, max 25 chars"
+                @input="$v.name.$touch()"
+                v-model="name">
+            </div>
+            <br>
+            <div class="edit-item">
+              <label for="about">about you</label><span>&nbsp;({{aboutCharsLeft()}})</span>
+              <textarea
+                type="text"
+                name="about"
+                id="about"
+                maxlength="200"
+                placeholder="tell us about your style, max 200 chars"
+                @input="$v.about.$touch()"
+                v-model="about">
+              </textarea>
+            </div>
+            <br>
+            <button
+              class="mdl-button mdl-button--raised mdl-button--colored"
+              :disabled="profileFormInvalid"
+              @click.prevent="submitProfile">
+              update
+            </button>
+        </form>
+        <hr>
+        <div>
+          <span @click="confirmDelete=!confirmDelete" style="cursor: pointer;">
+            <img style="padding-bottom: 5px;" src="../../../assets/svg/delete.svg">
+          </span>
+          <span
+            style="cursor: pointer;font-weight:500;font-size:15px;"
+            @click.prevent="confirmDelete=!confirmDelete">
+            delete account
+          </span>
+          <div class="edit-item" v-if="confirmDelete">
+            <p>Sure you want to delete your account? There is no going back after this. Enter your password below to confirm delete.</p>
+            <br/>
+            <label for="confirmdelete">password</label>
             <input
-              type="text"
-              id="name"
-              maxlength="25"
-              placeholder="your display name, max 25 chars"
-              @input="$v.name.$touch()"
-              v-model="name">
+              type="password"
+              id="confirmdelete"
+              v-model="deletePasswordInput">
+            <br/><br/>
+            <button
+              class="mdl-button mdl-button--raised mdl-button--colored"
+              :disabled="deleteFormInvalid"
+              @click.prevent="submitDelete">
+              delete
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <form v-if="!profileView" class="edit-form">
+        <p
+          class="update-button"
+          v-if="!updateEmail"
+          @click.prevent="showEmail">
+          email
+          <img src="../../../assets/svg/toggle_off.svg">
+
+        </p>
+        <p
+          class="update-button"
+          v-if="updateEmail"
+          @click.prevent="hideEmail">
+          email
+          <img src="../../../assets/svg/toggle_on.svg">
+        </p>
+
+        <div v-if="updateEmail">
+          <div class="edit-item">
+            <label for="currentemail">current email</label>
+            <input
+              type="email"
+              :placeholder="userData ? userData.email : '' "
+              disabled
+              id="currentemail">
+          </div>
+          <br/>
+          <div class="edit-item">
+            <label for="newemail">new email</label>
+            <input
+              type="email"
+              id="newemail"
+              @blur="$v.newEmail.$touch()"
+              v-model.lazy="newEmail">
+              <p v-if="!$v.newEmail.email"> enter valid email</p>
+              <p v-if="!$v.newEmail.isUnique"> email already used</p>
+          </div>
+        </div>
+
+        <br/>
+
+        <p
+          v-if="!updatePassword"
+          class="update-button"
+          @click.prevent="showPassword">
+          password
+          <img src="../../../assets/svg/toggle_off.svg">
+        </p>
+        <p
+          v-if="updatePassword"
+          class="update-button"
+          @click.prevent="hidePassword">
+          password
+          <img src="../../../assets/svg/toggle_on.svg">
+        </p>
+
+        <div v-if="updatePassword">
+          <div class="edit-item">
+            <label for="newpassword">new password</label>
+            <input
+              type="password"
+              id="newpassword"
+              @input="$v.newPassword.$touch()"
+              v-model="newPassword">
+              <p v-if="!$v.newPassword.minLen && $v.newPassword.$dirty"> min 6 characters</p>
           </div>
           <br>
           <div class="edit-item">
-            <label for="about">about you</label><span>&nbsp;({{aboutCharsLeft()}})</span>
-            <textarea
-              type="text"
-              name="about"
-              id="about"
-              maxlength="200"
-              placeholder="tell us about your style, max 200 chars"
-              @input="$v.about.$touch()"
-              v-model="about">
-            </textarea>
+            <label for="confirmpassword">confirm new password</label>
+            <input
+              type="password"
+              id="confirmpassword"
+              @input="$v.confirmPassword.$touch()"
+              v-model="confirmPassword">
+              <p v-if="!$v.confirmPassword.sameAs && $v.confirmPassword.$dirty"> passwords don&#39;t match </p>
           </div>
-          <br>
+        </div>
+
+        <br/><hr/><br/>
+
+        <div class="edit-item">
+          <label for="currentpassword">enter current password to confirm updates</label>
+          <input
+            type="password"
+            id="currentpassword"
+            @input="$v.currentPassword.$touch()"
+            v-model="currentPassword">
+            <p v-if="!$v.currentPassword.required && $v.currentPassword.$dirty"> current password required</p>
+        </div>
+        <br/>
           <button
             class="mdl-button mdl-button--raised mdl-button--colored"
-            :disabled="profileFormInvalid"
-            @click.prevent="submitProfile">
+            :disabled="loginFormInvalid"
+            @click.prevent="submitLogin">
             update
           </button>
       </form>
-      <hr>
-      <div>
-        <span @click="confirmDelete=!confirmDelete" style="cursor: pointer;">
-          <img style="padding-bottom: 5px;" src="../../../assets/svg/delete.svg">
-        </span>
-        <span
-          style="cursor: pointer;font-weight:500;font-size:15px;"
-          @click.prevent="confirmDelete=!confirmDelete">
-          delete account
-        </span>
-        <div class="edit-item" v-if="confirmDelete">
-          <br>
-          <label for="confirmdelete">enter current password to confirm delete</label>
-          <input
-            type="password"
-            id="confirmdelete"
-            v-model="deletePasswordInput">
-          <br><br>
-          <button
-            class="mdl-button mdl-button--raised mdl-button--colored"
-            :disabled="deleteFormInvalid"
-            @click.prevent="submitDelete">
-            delete
-          </button>
-        </div>
-      </div>
     </div>
 
-    <form v-if="!profileView" class="edit-form">
-      <p
-        class="update-button"
-        v-if="!updateEmail"
-        @click.prevent="showEmail">
-        email
-        <img src="../../../assets/svg/toggle_off.svg">
+    <!-- HERE -->
 
-      </p>
-      <p
-        class="update-button"
-        v-if="updateEmail"
-        @click.prevent="hideEmail">
-        email
-        <img src="../../../assets/svg/toggle_on.svg">
-      </p>
-
-      <div v-if="updateEmail">
-        <div class="edit-item">
-          <label for="currentemail">current email</label>
-          <input
-            type="email"
-            :placeholder="userData ? userData.email : '' "
-            disabled
-            id="currentemail">
-        </div>
-        <br>
-        <div class="edit-item">
-          <label for="newemail">new email</label>
-          <input
-            type="email"
-            id="newemail"
-            @blur="$v.newEmail.$touch()"
-            v-model.lazy="newEmail">
-            <p v-if="!$v.newEmail.email"> enter valid email</p>
-            <p v-if="!$v.newEmail.isUnique"> email already used</p>
-        </div>
-      </div>
-
-      <br>
-
-      <p
-        v-if="!updatePassword"
-        class="update-button"
-        @click.prevent="showPassword">
-        password
-        <img src="../../../assets/svg/toggle_off.svg">
-      </p>
-      <p
-        v-if="updatePassword"
-        class="update-button"
-        @click.prevent="hidePassword">
-        password
-        <img src="../../../assets/svg/toggle_on.svg">
-      </p>
-
-      <div v-if="updatePassword">
-        <div class="edit-item">
-          <label for="newpassword">new password</label>
-          <input
-            type="password"
-            id="newpassword"
-            @input="$v.newPassword.$touch()"
-            v-model="newPassword">
-            <p v-if="!$v.newPassword.minLen && $v.newPassword.$dirty"> min 6 characters</p>
-        </div>
-        <br>
-        <div class="edit-item">
-          <label for="confirmpassword">confirm new password</label>
-          <input
-            type="password"
-            id="confirmpassword"
-            @input="$v.confirmPassword.$touch()"
-            v-model="confirmPassword">
-            <p v-if="!$v.confirmPassword.sameAs && $v.confirmPassword.$dirty"> passwords don&#39;t match </p>
-        </div>
-      </div>
-
-      <br><hr><br>
-
-      <div class="edit-item">
-        <label for="currentpassword">enter current password to confirm updates</label>
-        <input
-          type="password"
-          id="currentpassword"
-          @input="$v.currentPassword.$touch()"
-          v-model="currentPassword">
-          <p v-if="!$v.currentPassword.required && $v.currentPassword.$dirty"> current password required</p>
-      </div>
-      <br>
-        <button
-          class="mdl-button mdl-button--raised mdl-button--colored"
-          :disabled="loginFormInvalid"
-          @click.prevent="submitLogin">
-          update
-        </button>
-    </form>
-
-    <br>
+    <br/>
 
   </div>
 </template>
@@ -220,7 +235,8 @@ export default {
       photo: '',
       profileURL: '',
       confirmDelete: false,
-      deletePasswordInput: ''
+      deletePasswordInput: '',
+      loading: false,
     }
   },
   methods: {
@@ -238,8 +254,8 @@ export default {
           console.log(response.data)
           console.log('Im BAAAACCCK')
           this.profileURL = response.data.user.url
-          this.name = response.data.user.name
-          this.about = response.data.user.about
+          this.name = response.data.user.name ? response.data.user.name : ''
+          this.about = response.data.user.about ? response.data.user.about : ''
         })
     },
     onPickPhoto () {
@@ -281,22 +297,27 @@ export default {
       // NOTEE! I am not sending this via Vuex because this upload
       // Does not impact the state...If I ever need to store any of
       // The below items in the state...then I may need to use Vuex
+      this.loading = true
       const token = localStorage.getItem('token')
       const fd = new FormData()
       fd.append('photo', this.photo)
       fd.append('name', this.name)
       fd.append('about', this.about)
       console.log(fd)
+      let vm = this
       axios.post('http://localhost:5000/user/profile/update', fd, {
         headers:
           { 'Content-Type': 'multipart/form-data', 'Authorization': `Bearer ${token}` }
       })
         .then(res => {
+          vm.$router.push({ name: 'updates' })
+          // vm.$router.push({ name: 'userprofile', params: { username: vm.$store.getters.userData.username } })
           console.log(res)
         })
         .catch(error => console.log(error))
     },
     submitLogin () {
+      this.loading = true
       const userData = {
         auth_id: this.userData.auth_id,
         currentEmail: this.userData.email,
@@ -310,8 +331,9 @@ export default {
     },
     submitDelete () {
       // NOTEE! I am  sending this via Vuex although I'm not changing the
-      // the state because I want to leverage the client id and client secrete
+      // the state because I want to leverage the client id and client secret
       // already referenced in the action.js file
+      this.loading = true
       const userData = {
         auth_id: this.userData.auth_id,
         email: this.userData.email,
@@ -381,6 +403,7 @@ export default {
     this.getProfileInfo()
   },
   activated () {
+    this.loading = false
     document.querySelector('.mdl-layout__content').scrollTop = 0
   }
 }

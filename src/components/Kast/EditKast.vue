@@ -17,7 +17,6 @@
       </div>
     </div>
 
-
     <!-- The Loading Div -->
     <!-- loading variable => For the updating the kast -->
     <!-- kast-loader class from kast component -->
@@ -140,7 +139,6 @@
         </span>
       </div>
     </div>
-    <!-- Here -->
 
   </div>
 </template>

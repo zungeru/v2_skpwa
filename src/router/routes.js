@@ -3,6 +3,8 @@ import Signup from '../components/Public/Signup.vue'
 import Login from '../components/Public/Login.vue'
 import About from '../components/Public/About.vue'
 import Error from '../components/Public/Error.vue'
+import Updates from '../components/Public/Updates.vue'
+import Deleted from '../components/Public/Deleted.vue'
 import Feed from '../components/Feed/Feed.vue'
 import CommentsHome from '../components/Shared/Comments/CommentsHome.vue'
 import ShowComments from '../components/Shared/Comments/Comments/ShowComments.vue'
@@ -26,6 +28,8 @@ export const routes = [
   { path: '/login', name: 'login', component: Login },
   { path: '/about', name: 'about', component: About },
   { path: '/error', name: 'error', component: Error },
+  { path: '/updates', name: 'updates', component: Updates },
+  { path: '/goodbye', name: 'deleted', component: Deleted },
   { path: '/feed', name: 'feed', component: Feed },
   { path: '/kast', name: 'kast', component: Kast },
   { path: '/edit/kast/:post_id', name: 'editkast', component: EditKast },

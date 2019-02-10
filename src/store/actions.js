@@ -76,6 +76,7 @@ export const updateUser = ({ commit, dispatch }, userData) => {
       }
     })
     .catch(error => console.log(error))
+  router.push({ name: 'updates' })
 }
 
 // for auth.js
@@ -92,6 +93,7 @@ export const deleteUser = ({ dispatch }, userData) => {
       dispatch('logOut')
     })
     .catch(error => console.log(error))
+  router.push({ name: 'home'})
 }
 
 // for auth.js
