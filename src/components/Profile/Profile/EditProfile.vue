@@ -91,7 +91,7 @@
             delete account
           </span>
           <div class="edit-item" v-if="confirmDelete">
-            <p>Sure you want to delete your account? There is no going back after this. Enter your password below to confirm delete.</p>
+            <p>Delete your account? There is no going back. Enter your password below to confirm delete.</p>
             <br/>
             <label for="confirmdelete">password</label>
             <input

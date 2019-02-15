@@ -213,30 +213,48 @@ export default {
       }
     },
     likePost () {
+      //check if user is trying to like own posts
+      if(localStorage.getItem('username') === this.post.username) {
+        return
+      }
       const token = localStorage.getItem('token')
       const id = this.post.post_id
       axios.get('http://localhost:5000/post/like/' + id,
         { headers: { 'Authorization': `Bearer ${token}` } })
-        .then(response => {
-          console.log(response.data)
+        .then(res => {
+          if (res.data.skStatus === 'Fail') {
+            return
+          }
           // I'm updating the likes count here to keep it in sync with
           // The Backend without having to make another API Call
-          this.post.likes_count++
-          this.post.user_liked = !this.post.user_liked
+          if(res.data.skStatus === 'Pass') {
+            this.post.likes_count++
+            this.post.user_liked = !this.post.user_liked
+          }
         })
+        .catch(err => this.$router.push({name: 'error'}))
     },
     unlikePost () {
+      //check if user is trying to unlike own posts
+      if(localStorage.getItem('username') === this.post.username) {
+        return
+      }
       const token = localStorage.getItem('token')
       const id = this.post.post_id
       axios.get('http://localhost:5000/post/unlike/' + id,
         { headers: { 'Authorization': `Bearer ${token}` } })
-        .then(response => {
-          console.log(response.data)
+        .then(res => {
+          if (res.data.skStatus === 'Fail'){
+            return
+          }
           // I'm updating the likes count here to keep it in sync with
           // The Backend without having to make another API Call
-          this.post.likes_count--
-          this.post.user_liked = !this.post.user_liked
+          if (res.data.skStatus === 'Pass') {
+            this.post.likes_count--
+            this.post.user_liked = !this.post.user_liked
+          }
         })
+        .catch(err => this.$router.push({name: 'error'}))
     },
     goToUser () {
       this.$router.push({ name: 'userprofile', params: { username: this.post.username } })

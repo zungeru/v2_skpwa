@@ -90,10 +90,10 @@ export const deleteUser = ({ dispatch }, userData) => {
   axios.post('http://localhost:5001/user/delete', fd)
     .then(response => {
       console.log(response.data)
-      dispatch('logOut')
+      dispatch('setLogOutTimer', 5)
     })
     .catch(error => console.log(error))
-  router.push({ name: 'home'})
+  router.push({ name: 'deleted'})
 }
 
 // for auth.js

@@ -1,8 +1,10 @@
 <template>
     <div class="comments-main">
-      <div class="comments-fixed-header" v-if="!isLoading">
-        <div class="comments-header-items">
 
+      <!-- Header -->
+      <div class="comments-fixed-header" v-if="!isLoading">
+
+        <div class="comments-header-items">
           <span @click="goBack">
             <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
             <img src="../../../../assets/svg/backarrow.svg">
@@ -11,9 +13,12 @@
             <img src="../../../../assets/svg/add.svg">
             <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
           </span>
-
         </div>
+
       </div>
+      <!-- End Header -->
+
+      <!-- Post Note -->
       <div class="post-note">
         <div class="avatar-comments" style="cursor: pointer;" @click="goToUser(post.username)">
             <img :src="post.user_url"/>
@@ -25,7 +30,17 @@
         </div>
         <hr>
       </div>
+      <!-- End Post Note -->
 
+      <!-- Main Comments Area -->
+
+      <!-- when there are no comments -->
+      <div class="no-comments" v-if="comments.length === 0">
+        <span>no comments to view yet...</span>
+      </div>
+
+      <!-- when there are comments -->
+      <div v-else>
         <div v-for="(comment,index) in comments"
             :key="index"
             class="comments">
@@ -41,12 +56,14 @@
               @click="editComment(comment.comment_id)"
               style="cursor: pointer;">
               &nbsp;
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                <path fill="none" d="M0 0h24v24H0V0z"/><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM21.41 6.34l-3.75-3.75-2.53 2.54 3.75 3.75 2.53-2.54z"/>
-              </svg>
+              <img src="../../../../assets/svg/edit.svg">
             </span>
           </div>
         </div>
+      </div>
+
+    <!-- End Main comments Area   -->
+
     </div>
 </template>
 
@@ -70,34 +87,50 @@ export default {
     getPost () {
       const id = this.$route.params.post_id
       axios.get('http://localhost:5000/postnote/' + id)
-        .then(response => {
-          console.log(response.data)
-          this.post = response.data.post
+        .then(res => {
+          if (res.data.skStatus === 'Fail') {
+            this.$router.push({name: 'error'})
+          }
+          if (res.data.skStatus === 'Pass') {
+            this.post = res.data.post
+          }
         })
+        .catch(err => this.$router.push({name: 'error'}))
     },
     getComments () {
       const id = this.$route.params.post_id
       axios.get('http://localhost:5000/post/' + id + '/comments')
-        .then(response => {
-          console.log(response.data)
-          this.comments = response.data.comments
+        .then(res => {
+          if(res.data.skStatus === 'Fail'){
+            this.$router.push({name: 'error'})
+          }
+          if(res.data.skStatus === 'Pass'){
+            this.comments = res.data.comments
+          }
         })
+        .catch(err => this.$router.push({name: 'error'}))
     },
     getMoreComments () {
       const id = this.$route.params.post_id
       axios.get('http://localhost:5000/post/' + id + '/comments/' + this.currentRound)
-        .then(response => {
-          console.log(response.data)
-          for (let x of response.data.comments) {
-              this.comments.push(x)
+        .then(res => {
+          if(res.data.skStatus === 'Fail'){
+            this.$router.push({name: 'error'})
           }
-          this.currentRound++
+          if(res.data.skStatus === 'Pass'){
+            for (let x of res.data.comments) {
+                this.comments.push(x)
+            }
+            this.currentRound++
+          }
         })
+        .catch(err => this.$router.push({name: 'error'}))
     },
     scroll () {
       let d = document.querySelector('.mdl-layout__content')
       let bottom = d.scrollHeight - d.scrollTop === d.clientHeight
-      if (bottom) {
+      // I am having trouble with this being called based on the scroll position of the feeds prior
+      if (this.comments.length >= 10 && bottom) {
         this.getMoreComments()
       }
     },
@@ -169,6 +202,17 @@ export default {
   margin-left: auto;
   margin-top: 45px;
   max-width: 500px;
+}
+.no-comments {
+  margin-right: auto;
+  margin-left: auto;
+  margin-top: 70px;
+  max-width: 500px;
+  text-align: center;
+}
+.no-comments span {
+  font-size: 18px;
+  color: #137E8D;
 }
 .comments {
   padding: 10px 15px 10px 15px;

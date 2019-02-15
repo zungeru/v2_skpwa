@@ -1,5 +1,7 @@
 <template>
     <div class="add-comment-main">
+
+      <!-- Fixed Header -->
       <div class="add-comment-fixed-header" v-if="!isLoading" >
         <div class="add-comment-header-item">
           <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
@@ -8,6 +10,10 @@
           </span>
         </div>
       </div>
+      <!-- End Fixed Header -->
+
+
+      <!-- Add Comment Form -->
       <form class="add-comment-form" action="#">
             <label for="comment">add a comment...({{commentCharsLeft()}})</label>
             <hr>
@@ -31,6 +37,8 @@
             </button>
           </div>
      </form>
+     <!-- End Add Comment Form -->
+
     </div>
 </template>
 
@@ -61,7 +69,6 @@ export default {
     },
     onSubmit () {
       const token = localStorage.getItem('token')
-      // const requesting_user = localStorage.getItem('username')
       const id = this.$route.params.post_id
       const fd = new FormData()
       fd.append('comment', this.comment)
@@ -69,11 +76,17 @@ export default {
         headers:
           {'Content-Type': 'multipart/form-data', 'Authorization': `Bearer ${token}` }
       })
-      .then(response => {
-        console.log(response.data)
-        this.$router.push({name: 'showcomments'})
+      .then(res => {
+        if(res.data.skStatus === 'Fail') {
+          this.$router.push({name: 'error'})
+        }
+        if (res.data.skStatus === 'Pass') {
+          console.log(res.data)
+          this.comment = ''
+          window.history.length > 1 ? this.$router.go(-1) : this.$router.push('/')
+        }
       })
-      .catch(error => console.log(error))
+      .catch(err => this.$router.push({name: 'error'}))
     },
     commentCharsLeft () {
       return this.$v.comment.$params.maxLen.max - this.comment.length

@@ -1,9 +1,12 @@
 <template>
     <div id="app">
-    <div id="loading" v-if="isLoading" ref="logoDiv">
-    </div>
+
+    <!-- Splash Screen   -->
+    <div id="loading" v-if="isLoading" ref="logoDiv"></div>
+
     <!-- Start Enclosing Div -->
     <div class="sk-layout mdl-layout mdl-js-layout mdl-layout--drawer mdl-layout--fixed-header">
+
       <!-- Start Header -->
         <header class="mdl-layout__header mdl-color--white mdl-color-text--black">
           <div class="mdl-layout__header-row">
@@ -74,7 +77,6 @@
               </span>
             </router-link>
           </nav>
-
         </div>
         <!-- End Drawer -->
 
@@ -116,8 +118,10 @@
           </div>
         </footer>
         <!-- End Footer -->
+
     </div>
     <!-- End Enclosing Div -->
+
     </div>
 </template>
 
@@ -183,15 +187,15 @@ export default {
     },
     appendLogo(interval, text){
       let vm = this
-      let delay = 250 + (75*interval)
+      let delay = 250 + (75 * interval)
       setTimeout(function(){
         vm.$refs.logoDiv.innerHTML += text
-      },delay)
+      }, delay )
       if (interval === 8 ){
         setTimeout(function(){
           vm.doneLoading()
           console.log('ALL DONE')
-        },delay+500)
+        }, delay + 500)
       }
     },
     doneLoading () {
