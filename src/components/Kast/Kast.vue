@@ -213,29 +213,30 @@ export default {
       fd.append('pic_1', this.pics[0]['file'])
       fd.append('pic_2', (this.pics[1] ? this.pics[1]['file'] : null))
       fd.append('pic_3', (this.pics[2] ? this.pics[2]['file'] : null))
-      // fd.append('pic_1', this.pics[0]['file'], this.pics[0]['file'].name)
-      // fd.append('pic_2', (this.pics[1] ? this.pics[1]['file'] : null), (this.pics[1] ? this.pics[1]['file'].name : 'none_1'))
-      // fd.append('pic_3', (this.pics[2] ? this.pics[2]['file'] : null), (this.pics[2] ? this.pics[2]['file'].name : 'none_2'))
-      console.log(fd)
-      let vm = this
+
+      // let vm = this
       axios.post('http://localhost:5000/post/create', fd, {
         headers:
           {'Content-Type': 'multipart/form-data', 'Authorization': `Bearer ${token}` }
         })
         .then(res => {
-          console.log(res)
-          vm.pics = []
-          vm.picsLength = 0
-          vm.picUploaded = false
-          vm.piece = ''
-          vm.price = ''
-          vm.place = ''
-          vm.note = ''
-          vm.$v.$reset();
-          vm.loading = false
-          vm.$router.push({ name: 'post', params: { post_id: res.data.post_id } })
+          this.pics = []
+          this.picsLength = 0
+          this.picUploaded = false
+          this.piece = ''
+          this.price = ''
+          this.place = ''
+          this.note = ''
+          this.$v.$reset()
+          this.loading = false
+          if(res.data.skStatus === 'Fail') {
+            this.$router.push({name: 'error'})
+          }
+          if(res.data.skStatus === 'Pass') {
+            this.$router.push({ name: 'post', params: { post_id: res.data.post_id } })
+          }
         })
-        .catch(error => console.log(error))
+        .catch(err => this.$router.push({name: 'error'}))
     }
   },
   activated () {

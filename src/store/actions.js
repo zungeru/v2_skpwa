@@ -155,14 +155,17 @@ export const getInitialPosts = ({ commit }) => {
   const token = localStorage.getItem('token')
   axios.get('http://localhost:5000/feed',
     { headers: { 'Authorization': `Bearer ${token}` } })
-    .then(response => {
-      console.log(response.data)
-      const posts = response.data.posts
-      commit('CLEAR_FEED_DATA')
-      commit('SET_POSTS', posts)
-      console.log('IMMMMM REALLLY TIRED!!!!!')
+    .then(res => {
+      if(res.data.skStatus === 'Fail') {
+        this.$router.push({name: 'error'})
+      }
+      if(res.data.skStatus === 'Pass') {
+        const posts = res.data.posts
+        commit('CLEAR_FEED_DATA')
+        commit('SET_POSTS', posts)
+      }
     })
-    .catch(error => console.log(error))
+    .catch(err => this.$router.push({name: 'error'}))
 }
 
 // for stylefeed.js (needs to be updated)
@@ -171,13 +174,17 @@ export const getMorePosts = ({ commit }) => {
   const currentRound = store.getters.loadRound
   axios.get('http://localhost:5000/feed/' + currentRound,
     { headers: { 'Authorization': `Bearer ${token}` } })
-    .then(response => {
-      const posts = response.data.posts
-      console.log(currentRound)
-      commit('ADD_POSTS', posts)
-      commit('ADD_ROUND')
+    .then(res => {
+      if(res.data.skStatus === 'Fail') {
+        this.$router.push({name: 'error'})
+      }
+      if(res.data.skStatus === 'Pass') {
+        const posts = res.data.posts
+        commit('ADD_POSTS', posts)
+        commit('ADD_ROUND')
+      }
     })
-    .catch(error => console.log(error))
+    .catch(err => this.$router.push({name: 'error'}))
 }
 
 // for stylefeed.js

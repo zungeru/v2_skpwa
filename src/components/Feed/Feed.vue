@@ -51,7 +51,6 @@ export default {
   computed: {
     ...mapGetters({
       posts: 'posts',
-      // round: 'loadRound',
       showFeed: 'showFeed'
     })
   },

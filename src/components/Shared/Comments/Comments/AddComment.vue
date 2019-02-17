@@ -81,7 +81,6 @@ export default {
           this.$router.push({name: 'error'})
         }
         if (res.data.skStatus === 'Pass') {
-          console.log(res.data)
           this.comment = ''
           window.history.length > 1 ? this.$router.go(-1) : this.$router.push('/')
         }

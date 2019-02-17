@@ -1,5 +1,7 @@
 <template>
     <div class="edit-comment-main">
+
+      <!-- Edit Comment Header -->
       <div class="edit-comment-fixed-header" v-if="!isLoading">
         <div class="edit-comment-header-item">
 
@@ -10,7 +12,7 @@
                 <path d="M21 11H6.83l3.58-3.59L9 6l-6 6 6 6 1.41-1.41L6.83 13H21z"/>
             </svg>
           </span>
-          <span @click="deleteComment">
+          <span @click="deleteCheck">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
               <path fill="none" d="M0 0h24v24H0V0z"/><path d="M6 21h12V7H6v14zm2.46-9.12l1.41-1.41L12 12.59l2.12-2.12 1.41 1.41L13.41 14l2.12 2.12-1.41 1.41L12 15.41l-2.12 2.12-1.41-1.41L10.59 14l-2.13-2.12zM15.5 4l-1-1h-5l-1 1H5v2h14V4h-3.5z"/>
             </svg>
@@ -18,29 +20,50 @@
           </span>
         </div>
       </div>
-      <form class="edit-comment-form" action="#">
-            <label for="comment">edit your comment...({{commentCharsLeft()}})</label>
-            <hr>
-            <textarea
-              type="text"
-              name="comment"
-              id="comment"
-              maxlength="200"
-              placeholder="max 200 chars"
-              @input="$v.comment.$touch()"
-              v-model="comment">
-            </textarea>
-            <p v-if="!$v.comment.required && $v.comment.$dirty"> required</p>
-          <div>
-            <br>
-            <button
-              class="mdl-button mdl-button--raised mdl-button--colored"
-              :disabled="$v.$invalid"
-              @click.prevent="onSubmit">
-              edit
-            </button>
-          </div>
-     </form>
+      <!-- End Edit Comment Header -->
+
+      <div v-if="confirmDelete" class="confirm-comment-delete">
+        <span style="font-size: 18px;">delete comment?</span>
+        <br><br>
+        <span
+          @click="deleteComment"
+          style="font-size: 18px; color: #ff0800; font-weight:500; cursor:pointer;">
+            delete
+        </span>
+        <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+        <span
+          @click="deleteCancel"
+          style="font-size: 18px; color: #137E8D; font-weight:500; cursor:pointer;">
+            cancel
+        </span>
+      </div>
+
+      <div v-else>
+        <form class="edit-comment-form" action="#">
+              <label for="comment">edit your comment...({{commentCharsLeft()}})</label>
+              <hr>
+              <textarea
+                type="text"
+                name="comment"
+                id="comment"
+                maxlength="200"
+                placeholder="max 200 chars"
+                @input="$v.comment.$touch()"
+                v-model="comment">
+              </textarea>
+              <p v-if="!$v.comment.required && $v.comment.$dirty"> required</p>
+            <div>
+              <br>
+              <button
+                class="mdl-button mdl-button--raised mdl-button--colored"
+                :disabled="$v.$invalid"
+                @click.prevent="onSubmit">
+                edit
+              </button>
+            </div>
+       </form>
+      </div>
+
     </div>
 </template>
 
@@ -51,7 +74,8 @@ import axios from 'axios'
 export default {
   data () {
     return {
-      comment: ''
+      comment: '',
+      confirmDelete: false
     }
   },
   validations: {
@@ -71,11 +95,16 @@ export default {
       const commentId = this.$route.params.comment_id
       axios.get('http://localhost:5000/comment/' + commentId,
         { headers: { 'Authorization': `Bearer ${token}` } })
-        .then(response => {
-          console.log(response.data)
-          this.comment = response.data.comment.comment
+        .then(res => {
+          console.log(res.data)
+          if(res.data.skStatus === 'Fail') {
+            this.$router.push({name: 'error'})
+          }
+          if(res.data.skStatus === 'Pass') {
+            this.comment = res.data.comment.comment
+          }
         })
-        .catch(error => console.log(error))
+        .catch(err => this.$router.push({name: 'error'}))
     },
     goBack () {
       window.history.length > 1 ? this.$router.go(-1) : this.$router.push('/')
@@ -87,31 +116,41 @@ export default {
       fd.append('comment', this.comment)
       axios.post('http://localhost:5000/comment/update', fd, {
         headers:
-          { 'Content-Type': 'multipart/form-data', 'Authorization': `Bearer ${token}` }
-      })
-        .then(response => {
-          console.log(response.data)
-          window.history.length > 1 ? this.$router.go(-1) : this.$router.push('/')
+        { 'Content-Type': 'multipart/form-data', 'Authorization': `Bearer ${token}` } })
+        .then(res => {
+          if(res.data.skStatus === 'Fail') {
+            this.$router.push({name: 'error'})
+          }
+          if(res.data.skStatus === 'Pass') {
+            this.goBack()
+          }
         })
-        .catch(error => console.log(error))
+        .catch(err => this.$router.push({name: 'error'}))
     },
     commentCharsLeft () {
       return this.$v.comment.$params.maxLen.max - this.comment.length
+    },
+    deleteCheck (){
+      this.confirmDelete = true
+    },
+    deleteCancel () {
+      this.confirmDelete = false
     },
     deleteComment () {
       const token = localStorage.getItem('token')
       const commentId = this.$route.params.comment_id
       axios.get('http://localhost:5000/comment/delete/' + commentId,
         { headers: { 'Authorization': `Bearer ${token}` } })
-        .then(response => {
-          console.log(response.data)
-          this.goBack()
+        .then(res => {
+          if(res.data.skStatus === 'Fail') {
+            this.$router.push({name: 'error'})
+          }
+          if(res.data.skStatus === 'Pass') {
+            this.goBack()
+          }
         })
-        .catch(error => console.log(error))
+        .catch(err => this.$router.push({name: 'error'}))
     }
-  },
-  beforeMount () {
-    this.getComment()
   },
   activated () {
     document.querySelector('.mdl-layout__content').scrollTop = 0
@@ -162,5 +201,12 @@ textarea {
     font-family: 'Avenir', Helvetica, Arial, sans-serif;
     font-size: 14px;
 
+}
+.confirm-comment-delete{
+  margin-right: auto;
+  margin-left: auto;
+  margin-top: 100px;
+  max-width: 500px;
+  text-align: center;
 }
 </style>
