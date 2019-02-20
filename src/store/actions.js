@@ -67,16 +67,18 @@ export const updateUser = ({ commit, dispatch }, userData) => {
   fd.append('client_id', CLIENT_ID)
   fd.append('client_secret', CLIENT_SECRET)
   axios.post('http://localhost:5001/user/update', fd)
-    .then(response => {
-      console.log(response.data)
+    .then(res => {
+      if (res.data.authStatus === 'Fail') {
+        this.$router.push({name: 'error'})
+      }
       // commit('SET_TOKEN', response.data.token)
-      if (response.data.token) {
-        localStorage.setItem('token', response.data.token)
+      if (res.data.token) {
+        localStorage.setItem('token', res.data.token)
         dispatch('storeUser')
       }
+      router.push({ name: 'updates' })
     })
-    .catch(error => console.log(error))
-  router.push({ name: 'updates' })
+    .catch(err => router.push({name: 'error'}))
 }
 
 // for auth.js
@@ -88,12 +90,18 @@ export const deleteUser = ({ dispatch }, userData) => {
   fd.append('client_id', CLIENT_ID)
   fd.append('client_secret', CLIENT_SECRET)
   axios.post('http://localhost:5001/user/delete', fd)
-    .then(response => {
-      console.log(response.data)
-      dispatch('setLogOutTimer', 5)
+    .then(res => {
+      if (res.data.authStatus === 'Fail') {
+        router.push({name: 'error'})
+      }
+      if (res.data.authStatus === 'Pass') {
+        console.log(res.data)
+        dispatch('setLogOutTimer', 5)
+        router.push({ name: 'deleted'})
+      }
     })
     .catch(error => console.log(error))
-  router.push({ name: 'deleted'})
+
 }
 
 // for auth.js
@@ -156,16 +164,16 @@ export const getInitialPosts = ({ commit }) => {
   axios.get('http://localhost:5000/feed',
     { headers: { 'Authorization': `Bearer ${token}` } })
     .then(res => {
-      if(res.data.skStatus === 'Fail') {
-        this.$router.push({name: 'error'})
+      if (res.data.skStatus === 'Fail') {
+        router.push({name: 'error'})
       }
-      if(res.data.skStatus === 'Pass') {
+      if (res.data.skStatus === 'Pass') {
         const posts = res.data.posts
         commit('CLEAR_FEED_DATA')
         commit('SET_POSTS', posts)
       }
     })
-    .catch(err => this.$router.push({name: 'error'}))
+    .catch(err => router.push({name: 'error'}))
 }
 
 // for stylefeed.js (needs to be updated)
@@ -175,16 +183,16 @@ export const getMorePosts = ({ commit }) => {
   axios.get('http://localhost:5000/feed/' + currentRound,
     { headers: { 'Authorization': `Bearer ${token}` } })
     .then(res => {
-      if(res.data.skStatus === 'Fail') {
-        this.$router.push({name: 'error'})
+      if (res.data.skStatus === 'Fail') {
+        router.push({name: 'error'})
       }
-      if(res.data.skStatus === 'Pass') {
+      if (res.data.skStatus === 'Pass') {
         const posts = res.data.posts
         commit('ADD_POSTS', posts)
         commit('ADD_ROUND')
       }
     })
-    .catch(err => this.$router.push({name: 'error'}))
+    .catch(err => router.push({name: 'error'}))
 }
 
 // for stylefeed.js
@@ -197,27 +205,36 @@ export const getInitialUserPosts = ({ commit }, target_user) => {
   // const requesting_user = !store.getters.userData ? 'guest' : store.getters.userData.username
   const requesting_user = !localStorage.getItem('username') ? 'guest' : localStorage.getItem('username')
   axios.get('http://localhost:5000/' + requesting_user + '/posts/' + target_user)
-    .then(response => {
-      commit('CLEAR_PROFILE_DATA')
-      const posts = response.data.posts
-      console.log(posts)
-      commit('SET_USER_POSTS', posts)
+    .then(res => {
+      if (res.data.skStatus === 'Fail') {
+        router.push({name: 'error'})
+      }
+      if (res.data.skStatus === 'Pass') {
+        commit('CLEAR_PROFILE_DATA')
+        const posts = res.data.posts
+        commit('SET_USER_POSTS', posts)
+      }
     })
-    .catch(error => console.log(error))
+    .catch(err => router.push({name: 'error'}))
 }
 
 // for userprofile.js
 export const getMoreUserPosts = ({ commit }, target_user) => {
   const currentRound = store.getters.userRound
-  const requesting_user = !store.getters.userData ? 'guest' : store.getters.userData.username
+  // const requesting_user = !store.getters.userData ? 'guest' : store.getters.userData.username
+  const requesting_user = !localStorage.getItem('username') ? 'guest' : localStorage.getItem('username')
   axios.get('http://localhost:5000/' + requesting_user + '/posts/' + target_user + '/' + currentRound)
-    .then(response => {
-      const posts = response.data.posts
-      console.log(currentRound)
-      commit('ADD_USER_POSTS', posts)
-      commit('ADD_USER_ROUND')
+    .then(res => {
+      if (res.data.skStatus === 'Fail') {
+        router.push({name: 'error'})
+      }
+      if (res.data.skStatus === 'Pass') {
+        const posts = res.data.posts
+        commit('ADD_USER_POSTS', posts)
+        commit('ADD_USER_ROUND')
+      }
     })
-    .catch(error => console.log(error))
+    .catch(err => router.push({name: 'error'}))
 }
 
 // for userprofile.js

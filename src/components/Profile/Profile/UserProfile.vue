@@ -175,6 +175,12 @@ export default {
           this.getUser()
         }
       }
+      // Case where we are coming from edit post reloadPage
+      if(from.name === 'editkast'){
+        this.getInitialUserPosts(this.$route.params.username)
+        console.log('EDITKASST')
+      }
+
     }
   },
   methods: {
@@ -191,17 +197,20 @@ export default {
       const requestingUser = !localStorage.getItem('username') ? 'guest' : localStorage.getItem('username')
       const targetUser = this.$route.params.username
       axios.get('http://localhost:5000/' + requestingUser + '/user/' + targetUser)
-        .then(response => {
-          console.log(response.data)
-          this.profiledUser = response.data.user
+        .then(res => {
+          if (res.data.skStatus === 'Fail') {
+            this.$router.push({name: 'error'})
+          }
+          if (res.data.skStatus === 'Pass') {
+            this.profiledUser = res.data.user
+          }
         })
+        .catch(err => this.$router.push({name: 'error'}))
     },
     scroll () {
       let d = document.querySelector('.mdl-layout__content')
       let bottom = d.scrollHeight - d.scrollTop === d.clientHeight
       if (bottom) {
-        console.log('SCROLL')
-        console.log(d.scrollTop)
         this.getMoreUserPosts(this.$route.params.username)
       }
     },
@@ -212,30 +221,36 @@ export default {
       const token = localStorage.getItem('token')
       axios.get('http://localhost:5000/follow/' + this.$route.params.username,
         { headers: { 'Authorization': `Bearer ${token}` } })
-        .then(response => {
-          // const user = response.data.user
-          console.log(response.data)
-          this.getUser()
-          // this call update the feed
-          this.getInitialPosts()
+        .then(res => {
+          if (res.data.skStatus === 'Fail') {
+            this.$router.push({name: 'error'})
+          }
+          if (res.data.skStatus === 'Pass') {
+            this.getUser()
+            // this call update the feed
+            this.getInitialPosts()
+          }
         })
+        .catch(err => this.$router.push({name: 'error'}))
     },
     unFollow () {
-      // 12/31 I just added this realizing that it is 'missing'. I'm not sure
-      // if I am breaking anything
       if (this.loggedInUser === 'guest') {
         return
-      } // not sure why this was missing at first
+      }
       const token = localStorage.getItem('token')
       axios.get('http://localhost:5000/unfollow/' + this.$route.params.username,
         { headers: { 'Authorization': `Bearer ${token}` } })
-        .then(response => {
-          // const user = response.data.user
-          console.log(response.data)
-          this.getUser()
-          // this call update the feed
-          this.getInitialPosts()
+        .then(res => {
+          if (res.data.skStatus === 'Fail') {
+            this.$router.push({name: 'error'})
+          }
+          if (res.data.skStatus === 'Pass') {
+            this.getUser()
+            // this call update the feed
+            this.getInitialPosts()
+          }
         })
+        .catch(err => this.$router.push({name: 'error'}))
     }
   },
   components: {
@@ -256,17 +271,14 @@ export default {
   },
   activated () {
     if(this.$route.params.username != this.profiledUser.username){
-      console.log("HelloTonight!")
       document.querySelector('.mdl-layout__content').scrollTop = 0
     } else {
       document.querySelector('.mdl-layout__content').scrollTop = this.profileScrollPos
     }
     document.querySelector('.mdl-layout__content').addEventListener('scroll', this.scroll)
-    console.log('Profile View: Activated')
   },
   deactivated () {
     document.querySelector('.mdl-layout__content').removeEventListener('scroll', this.scroll)
-    console.log('Profile View: Deactivated')
   },
   beforeRouteLeave (to, from, next) {
     this.profileScrollPos = document.querySelector('.mdl-layout__content').scrollTop

@@ -206,7 +206,6 @@ export default {
     },
     onFilePicked (event) {
       const files = event.target.files
-      // this.picsLength = event.target.files.length
       if (files[0]) {
         this.pics.push({'id': 0, 'file': files[0], url: ''})
         this.picsLength++
@@ -240,14 +239,19 @@ export default {
       const post_id = this.$route.params.post_id
       axios.get('http://localhost:5000/post/' + post_id,
         { headers: { 'Authorization': `Bearer ${token}` } })
-        .then(response => {
-          console.log(response.data)
-          this.piece = response.data.post.piece
-          this.price = response.data.post.price
-          this.place = response.data.post.place
-          this.note =  response.data.post.note
+        .then(res => {
+          if (res.data.skStatus === 'Fail') {
+            this.$router.push({name: 'error'})
+          }
+          if (res.data.skStatus === 'Pass') {
+            console.log(res.data)
+            this.piece = res.data.post.piece
+            this.price = res.data.post.price
+            this.place = res.data.post.place
+            this.note =  res.data.post.note
+          }
         })
-        .catch(error => console.log(error))
+        .catch(err => this.$router.push({name: 'error'}))
     },
     pieceCharsLeft () {
       return this.$v.piece.$params.maxLen.max - this.piece.length
@@ -258,6 +262,7 @@ export default {
     onSubmit () {
       this.loading = true
       const token = localStorage.getItem('token')
+      const username = localStorage.getItem('username')
       const fd = new FormData()
       fd.append('post_id', this.$route.params.post_id)
       fd.append('piece', this.piece)
@@ -268,17 +273,20 @@ export default {
       fd.append('pic_2', (this.pics[1] ? this.pics[1]['file'] : null))
       fd.append('pic_3', (this.pics[2] ? this.pics[2]['file'] : null))
       console.log(fd)
-      let vm = this
       axios.post('http://localhost:5000/post/update', fd, {
         headers:
           {'Content-Type': 'multipart/form-data', 'Authorization': `Bearer ${token}` }
         })
         .then(res => {
-          console.log(res)
-          vm.loading = false
-          vm.$router.push({ name: 'post', params: { post_id: res.data.post_id } })
+          if (res.data.skStatus === 'Fail') {
+            this.$router.push({name: 'error'})
+          }
+          if (res.data.skStatus === 'Pass') {
+            this.loading = false
+            this.$router.push({ name: 'userprofile', params: { username: username }})
+          }
         })
-        .catch(error => console.log(error))
+        .catch(err => this.$router.push({name: 'error'}))
     },
     goBack () {
       window.history.length > 1 ? this.$router.go(-1) : this.$router.push('/')
@@ -295,11 +303,15 @@ export default {
       const post_id = this.$route.params.post_id
       axios.get('http://localhost:5000/post/delete/' + post_id,
         { headers: { 'Authorization': `Bearer ${token}` } })
-        .then(response => {
-          console.log(response.data)
-          this.$router.replace({ name: 'userprofile', params: { username: username }})
+        .then(res => {
+          if (res.data.skStatus === 'Fail') {
+            this.$router.push({name: 'error'})
+          }
+          if (res.data.skStatus === 'Pass') {
+            this.$router.push({ name: 'userprofile', params: { username: username }})
+          }
         })
-        .catch(error => console.log(error))
+        .catch(err => this.$router.push({name: 'error'}))
     }
   },
   beforeMount () {
@@ -307,6 +319,8 @@ export default {
   },
   activated () {
     document.querySelector('.mdl-layout__content').scrollTop = 0
+    this.confirmDelete = false
+    this.loading = false
   }
 }
 </script>

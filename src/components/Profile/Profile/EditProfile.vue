@@ -250,13 +250,18 @@ export default {
       //b/c a user can only edit her own profile page so i'm just gonna name both parties 'user'
       const user = localStorage.getItem('username')
       axios.get('http://localhost:5000/' + user + '/user/' + user)
-        .then(response => {
-          console.log(response.data)
-          console.log('Im BAAAACCCK')
-          this.profileURL = response.data.user.url
-          this.name = response.data.user.name ? response.data.user.name : ''
-          this.about = response.data.user.about ? response.data.user.about : ''
+        .then(res => {
+          if (res.data.skStatus === 'Fail') {
+            this.$router.push({name: 'error'})
+          }
+          if (res.data.skStatus === 'Pass') {
+            console.log(res.data)
+            this.profileURL = res.data.user.url
+            this.name = res.data.user.name ? res.data.user.name : ''
+            this.about = res.data.user.about ? res.data.user.about : ''
+          }
         })
+        .catch(err => this.$router.push({name: 'error'}))
     },
     onPickPhoto () {
       this.$refs.photoInput.click()
@@ -304,17 +309,22 @@ export default {
       fd.append('name', this.name)
       fd.append('about', this.about)
       console.log(fd)
-      let vm = this
+      // let vm = this
       axios.post('http://localhost:5000/user/profile/update', fd, {
         headers:
           { 'Content-Type': 'multipart/form-data', 'Authorization': `Bearer ${token}` }
       })
         .then(res => {
-          vm.$router.push({ name: 'updates' })
-          // vm.$router.push({ name: 'userprofile', params: { username: vm.$store.getters.userData.username } })
-          console.log(res)
+          if (res.data.skStatus === 'Fail') {
+            this.$router.push({name: 'error'})
+          }
+          if (res.data.skStatus === 'Pass') {
+            this.$router.push({ name: 'updates' })
+            // vm.$router.push({ name: 'userprofile', params: { username: vm.$store.getters.userData.username } })
+            console.log(res)
+          }
         })
-        .catch(error => console.log(error))
+        .catch(err => this.$router.push({name: 'error'}))
     },
     submitLogin () {
       this.loading = true
