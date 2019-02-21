@@ -74,10 +74,15 @@ export default {
       const target_user = this.$route.params.username
       axios.get('http://localhost:5000/' + requesting_user + '/followers/' + target_user,
         { headers: { 'Authorization': `Bearer ${token}` } } )
-        .then(response => {
-          console.log(response.data)
-          this.followers = response.data.followers
+        .then(res => {
+          if (res.data.skStatus === 'Fail') {
+            this.$router.push({name: 'error'})
+          }
+          if (res.data.skStatus === 'Pass') {
+            this.followers = res.data.followers
+          }
         })
+        .catch(err => this.$router.push({name: 'error'}))
     },
     getMoreFollowers () {
       const token = localStorage.getItem('token')
@@ -85,13 +90,18 @@ export default {
       const target_user = this.$route.params.username
       axios.get('http://localhost:5000/' + requesting_user + '/followers/' + target_user + '/' + this.currentRound,
         { headers: { 'Authorization': `Bearer ${token}` } })
-        .then(response => {
-          console.log(response.data)
-          for (let x of response.data.followers) {
-              this.followers.push(x)
+        .then(res => {
+          if (res.data.skStatus === 'Fail') {
+            this.$router.push({name: 'error'})
           }
-          this.currentRound++
+          if (res.data.skStatus === 'Pass') {
+            for (let x of res.data.followers) {
+                this.followers.push(x)
+            }
+            this.currentRound++
+          }
         })
+        .catch(err => this.$router.push({name: 'error'}))
     },
     scroll () {
       let d = document.querySelector('.mdl-layout__content')

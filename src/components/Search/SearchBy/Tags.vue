@@ -76,20 +76,20 @@ export default {
       const token = localStorage.getItem('token')
       const fd = new FormData()
       fd.append('keyword', this.keyword)
-      let vm = this
       axios.post('http://localhost:5000/tags/search', fd, {
         headers: { 'Authorization': `Bearer ${token}` } })
-        .then(response => {
-          console.log(response.data)
-          if(response.data.results.length === 0) {
-            vm.results = []
-            vm.noResults = true
+        .then(res => {
+          console.log(res.data)
+          if(res.data.results.length === 0) {
+            this.results = []
+            this.noResults = true
+            this.searching = false
           } else {
-            vm.results = response.data.results
+            this.results = res.data.results
+            this.searching = false
           }
         })
-        .catch(error => console.log(error))
-        this.searching = false
+        .catch(err => this.$router.push({name: 'error'}))
     },
     goToPost (id) {
       this.$router.push({ name: 'post', params: { post_id: id } })
@@ -102,11 +102,10 @@ export default {
     document.querySelector('.mdl-layout__content').scrollTop = 0
     this.divsize = this.$refs.tagsmain.offsetWidth - 35
     window.addEventListener('resize', this.getDivSize)
-    console.log('Search Tags View: Activated')
+    this.searching = false
   },
   deactivated () {
     window.removeEventListener('resize', this.getDivSize)
-    console.log('Search Tags View: Deactivated')
   }
 }
 </script>

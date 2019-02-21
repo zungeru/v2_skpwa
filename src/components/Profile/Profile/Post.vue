@@ -53,11 +53,16 @@ export default {
       const post_id = this.$route.params.post_id
       axios.get('http://localhost:5000/post/' + post_id,
         { headers: { 'Authorization': `Bearer ${token}` } })
-        .then(response => {
-          console.log(response.data)
-          this.posts.push(response.data.post)
+        .then(res => {
+          if (res.data.skStatus === 'Fail') {
+            this.$router.push({name: 'error'})
+          }
+          if (res.data.skStatus === 'Pass') {
+            console.log(res.data)
+            this.posts.push(res.data.post)
+          }
         })
-        .catch(error => console.log(error))
+        .catch(err => this.$router.push({name: 'error'}))
     },
     goBack () {
       window.history.length > 1 ? this.$router.go(-1) : this.$router.push('/')

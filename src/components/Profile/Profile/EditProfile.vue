@@ -309,7 +309,6 @@ export default {
       fd.append('name', this.name)
       fd.append('about', this.about)
       console.log(fd)
-      // let vm = this
       axios.post('http://localhost:5000/user/profile/update', fd, {
         headers:
           { 'Content-Type': 'multipart/form-data', 'Authorization': `Bearer ${token}` }
@@ -320,7 +319,6 @@ export default {
           }
           if (res.data.skStatus === 'Pass') {
             this.$router.push({ name: 'updates' })
-            // vm.$router.push({ name: 'userprofile', params: { username: vm.$store.getters.userData.username } })
             console.log(res)
           }
         })
@@ -336,7 +334,6 @@ export default {
         newPassword: this.newPassword !== '' ? this.newPassword : this.currentPassword
       }
       console.log(userData)
-      // this.signUp(updateData)
       this.updateUser(userData)
     },
     submitDelete () {

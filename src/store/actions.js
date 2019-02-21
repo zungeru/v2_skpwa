@@ -68,15 +68,16 @@ export const updateUser = ({ commit, dispatch }, userData) => {
   fd.append('client_secret', CLIENT_SECRET)
   axios.post('http://localhost:5001/user/update', fd)
     .then(res => {
+      console.log(res.data)
       if (res.data.authStatus === 'Fail') {
-        this.$router.push({name: 'error'})
+        router.push({name: 'error'})
       }
       // commit('SET_TOKEN', response.data.token)
       if (res.data.token) {
         localStorage.setItem('token', res.data.token)
         dispatch('storeUser')
+        router.push({ name: 'updates' })
       }
-      router.push({ name: 'updates' })
     })
     .catch(err => router.push({name: 'error'}))
 }
@@ -95,13 +96,11 @@ export const deleteUser = ({ dispatch }, userData) => {
         router.push({name: 'error'})
       }
       if (res.data.authStatus === 'Pass') {
-        console.log(res.data)
         dispatch('setLogOutTimer', 5)
         router.push({ name: 'deleted'})
       }
     })
     .catch(error => console.log(error))
-
 }
 
 // for auth.js

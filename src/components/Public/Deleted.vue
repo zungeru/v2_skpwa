@@ -2,11 +2,6 @@
 <div class="deleted-main">
   <h4>sorry to see you go</h4>
   <h4>:-(</h4>
-  <br/>
-  <router-link
-    tag="span"
-    :to="{ name: 'home'}"> Home Page
-  </router-link>
 </div>
 </template>
 
