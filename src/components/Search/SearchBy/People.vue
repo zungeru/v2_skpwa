@@ -79,7 +79,6 @@ export default {
       axios.post('http://localhost:5000/people/search', fd, {
         headers: { 'Authorization': `Bearer ${token}` } })
         .then(res => {
-          console.log(res.data)
           if(res.data.results.length === 0) {
             this.results = []
             this.noResults = true

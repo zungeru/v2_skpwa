@@ -6,7 +6,11 @@ const state = {
   // Showing up with the splash screen, so I need to
   // Add this to the global store so I can access
   // It from other components and not just App.vue
-  loading: true
+  loading: true,
+  // This variable is for the Login component
+  // If a user logs in with bad credentials,
+  // The error message shows up
+  logInIss: false
 }
 
 const mutations = {
@@ -18,6 +22,12 @@ const mutations = {
   },
   'DONE_LOADING' (state) {
     state.loading = false
+  },
+  'LOGIN_ISSUE' (state) {
+    state.logInIss = true
+  },
+  'NO_LOGIN_ISSUE' (state) {
+    state.logInIss = false
   }
 }
 
@@ -34,6 +44,9 @@ const getters = {
   },
   loading (state) {
     return state.loading
+  },
+  logInIss (state) {
+    return state.logInIss
   }
 }
 

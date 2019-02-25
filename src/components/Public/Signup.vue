@@ -1,9 +1,9 @@
 <template>
   <div class="sk-signup-main">
     <div class="signup-heading">
-      <h4>Signup</h4>
+      <h4>signup</h4>
       <span>already have an account?</span>
-      <router-link tag="span" :to="{ name: 'login'}" style="color: #ff0800; cursor: pointer;">&nbsp;Login</router-link>
+      <router-link tag="span" :to="{ name: 'login'}" style="color: #ff0800; cursor: pointer;">&nbsp;login</router-link>
     </div>
     <br>
     <form class="signup-form" action="#" >

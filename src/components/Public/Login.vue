@@ -1,11 +1,15 @@
 <template>
   <div class="sk-login-main">
     <div class="login-heading">
-      <h4>Login</h4>
+      <h4>login</h4>
       <span>don't have an account?</span>
-      <router-link tag="span" :to="{ name: 'signup'}" style="color: #ff0800; cursor: pointer;">&nbsp;Signup</router-link>
+      <router-link tag="span" :to="{ name: 'signup'}" style="color: #ff0800; cursor: pointer;">&nbsp;signup</router-link>
     </div>
-    <br>
+    <br/>
+    <div v-if="logInIss" class="login-error">
+      <span>invalid username or password</span>
+    </div>
+    <br/>
     <form class="login-form" action="#" >
       <div class="login-item">
         <label for="email">email</label>
@@ -41,7 +45,7 @@
 
 <script>
 import { required, email } from 'vuelidate/lib/validators'
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
   data () {
@@ -52,7 +56,8 @@ export default {
   },
   methods: {
     ...mapActions({
-      logIn: 'logIn'
+      logIn: 'logIn',
+      logInIssue: 'logInIssue'
     }),
     onSubmit () {
       const userData = {
@@ -61,6 +66,11 @@ export default {
       }
       this.logIn(userData)
     }
+  },
+  computed: {
+    ...mapGetters({
+      logInIss: 'logInIss'
+    })
   },
   activated () {
     document.querySelector('.mdl-layout__content').scrollTop = 0
@@ -98,6 +108,14 @@ export default {
 }
 .login-heading > span {
   font-size: 15px;
+}
+.login-error {
+  text-align: center;
+  margin-right: auto;
+  margin-left: auto;
+  background-color: #f4cccc;
+  border-radius: 5px;
+  width: 250px;
 }
 .login-form{
   padding: 0px 15px 10px 15px;

@@ -16,7 +16,6 @@ export const loadDone = ({ commit }) => {
 }
 
 // for auth.js
-// export const signUp = ({ commit, dispatch }, userData) => {
 export const signUp = ({ dispatch }, userData) => {
   const fd = new FormData()
   fd.append('username', userData.username)
@@ -25,19 +24,20 @@ export const signUp = ({ dispatch }, userData) => {
   fd.append('client_id', CLIENT_ID)
   fd.append('client_secret', CLIENT_SECRET)
   axios.post('http://localhost:5001/user/create', fd)
-    .then(response => {
-      console.log(response.data)
-      // commit('SET_TOKEN', response.data.token)
-      if (response.data.token) {
-        localStorage.setItem('token', response.data.token)
+    .then(res => {
+      if (res.data.authStatus === 'Fail') {
+        router.push({name: 'error'})
+      }
+      if (res.data.token) {
+        console.log(res.data)
+        localStorage.setItem('token', res.data.token)
         dispatch('storeUser')
       }
     })
-    .catch(error => console.log(error))
+    .catch(err => router.push({name: 'error'}))
 }
 
 // for auth.js
-// export const logIn = ({ commit, dispatch }, userData) => {
 export const logIn = ({ dispatch }, userData) => {
   const fd = new FormData()
   fd.append('email', userData.email)
@@ -45,19 +45,23 @@ export const logIn = ({ dispatch }, userData) => {
   fd.append('client_id', CLIENT_ID)
   fd.append('client_secret', CLIENT_SECRET)
   axios.post('http://localhost:5001/user/login', fd)
-    .then(response => {
-      console.log(response.data)
-      // commit('SET_TOKEN', response.data.token)
-      if (response.data.token) {
-        localStorage.setItem('token', response.data.token)
+    .then(res => {
+      console.log(res.data)
+      if (res.data.token) {
+        localStorage.setItem('token', res.data.token)
         dispatch('storeUser')
       }
     })
-    .catch(error => console.log(error))
+    .catch(err => router.push({name: 'error'}))
 }
 
 // for auth.js
-export const updateUser = ({ commit, dispatch }, userData) => {
+export const logInIssue = ({ commit }) => {
+  commit('LOGIN_ISSUE')
+}
+
+// for auth.js
+export const updateUser = ({ dispatch }, userData) => {
   const fd = new FormData()
   fd.append('auth_id', userData.auth_id)
   fd.append('old_email', userData.currentEmail)
@@ -68,11 +72,9 @@ export const updateUser = ({ commit, dispatch }, userData) => {
   fd.append('client_secret', CLIENT_SECRET)
   axios.post('http://localhost:5001/user/update', fd)
     .then(res => {
-      console.log(res.data)
       if (res.data.authStatus === 'Fail') {
         router.push({name: 'error'})
       }
-      // commit('SET_TOKEN', response.data.token)
       if (res.data.token) {
         localStorage.setItem('token', res.data.token)
         dispatch('storeUser')
