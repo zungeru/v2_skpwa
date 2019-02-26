@@ -29,7 +29,6 @@ export const signUp = ({ dispatch }, userData) => {
         router.push({name: 'error'})
       }
       if (res.data.token) {
-        console.log(res.data)
         localStorage.setItem('token', res.data.token)
         dispatch('storeUser')
       }
@@ -38,7 +37,7 @@ export const signUp = ({ dispatch }, userData) => {
 }
 
 // for auth.js
-export const logIn = ({ dispatch }, userData) => {
+export const logIn = ({ commit, dispatch }, userData) => {
   const fd = new FormData()
   fd.append('email', userData.email)
   fd.append('password', userData.password)
@@ -46,18 +45,21 @@ export const logIn = ({ dispatch }, userData) => {
   fd.append('client_secret', CLIENT_SECRET)
   axios.post('http://localhost:5001/user/login', fd)
     .then(res => {
-      console.log(res.data)
+      if (res.data.authStatus === 'Fail') {
+        if (res.data.msg === 'Access denied') {
+          commit('LOGIN_ISSUE')
+        }
+        if (res.data.msg === 'Invalid client') {
+          router.push({name: 'error'})
+        }
+      }
       if (res.data.token) {
         localStorage.setItem('token', res.data.token)
+        commit('NO_LOGIN_ISSUE')
         dispatch('storeUser')
       }
     })
     .catch(err => router.push({name: 'error'}))
-}
-
-// for auth.js
-export const logInIssue = ({ commit }) => {
-  commit('LOGIN_ISSUE')
 }
 
 // for auth.js
@@ -102,7 +104,7 @@ export const deleteUser = ({ dispatch }, userData) => {
         router.push({ name: 'deleted'})
       }
     })
-    .catch(error => console.log(error))
+    .catch(err => router.push({name: 'error'}))
 }
 
 // for auth.js
@@ -121,21 +123,24 @@ export const storeUser = ({ commit, dispatch }) => {
   const token = localStorage.getItem('token')
   axios.get('http://localhost:5000/yo',
     { headers: { 'Authorization': `Bearer ${token}` } })
-    .then(response => {
-      console.log(response.data)
-      commit('SET_USER_DATA', response.data)
-      if(router.currentRoute.name === 'signup' || router.currentRoute.name === 'login') {
-        dispatch('getInitialPosts')
+    .then(res => {
+      if (res.data.skStatus === 'Fail') {
+        router.push({name: 'error'})
       }
-      const expirationDate = new Date(response.data.exp * 1000)
-      localStorage.setItem('expirationDate', expirationDate)
-      localStorage.setItem('username', response.data.username)
-      dispatch('setLogOutTimer', response.data.life_span)
-      if(router.currentRoute.name === 'signup' || router.currentRoute.name === 'login') {
-        router.push({name: 'feed'})
+      if (res.data.skStatus === 'Pass') {
+        console.log(res.data)
+        commit('SET_USER_DATA', res.data)
+        const expirationDate = new Date(res.data.exp * 1000)
+        localStorage.setItem('expirationDate', expirationDate)
+        localStorage.setItem('username', res.data.username)
+        dispatch('setLogOutTimer', res.data.life_span)
+        if(router.currentRoute.name === 'signup' || router.currentRoute.name === 'login') {
+          dispatch('getInitialPosts')
+          router.push({name: 'feed'})
+        }
       }
     })
-    .catch(error => console.log(error))
+    .catch(err => router.push({name: 'error'}))
 }
 
 // for auth.js

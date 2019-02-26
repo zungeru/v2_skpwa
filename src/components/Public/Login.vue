@@ -56,8 +56,7 @@ export default {
   },
   methods: {
     ...mapActions({
-      logIn: 'logIn',
-      logInIssue: 'logInIssue'
+      logIn: 'logIn'
     }),
     onSubmit () {
       const userData = {
