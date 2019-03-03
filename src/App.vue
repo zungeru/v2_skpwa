@@ -172,7 +172,7 @@ export default {
       return this.$store.getters.isAuthenticated
     },
     username () {
-      return !this.$store.getters.userData ? 'false' : this.$store.getters.userData.username
+      return !this.$store.getters.userData ? 'mido1' : this.$store.getters.userData.username
     },
     isLoading () {
       return this.$store.getters.loading
@@ -194,7 +194,6 @@ export default {
       if (interval === 8 ){
         setTimeout(function(){
           vm.doneLoading()
-          console.log('ALL DONE')
         }, delay + 500)
       }
     },
@@ -222,7 +221,7 @@ export default {
 </script>
 
 <style>
-@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+/* @import url('https://fonts.googleapis.com/icon?family=Material+Icons'); */
 @import url('https://code.getmdl.io/1.3.0/material.pink-blue.min.css');
 /* @import url('https://fonts.googleapis.com/css?family=Lato'); */
 

@@ -149,9 +149,9 @@ export const tryAutoLogIn = ({ dispatch }) => {
   if (!token) {
     return
   }
-  const expirationDate = localStorage.getItem('expirationDate')
-  const now = new Date()
-  if (now >= expirationDate) {
+  const now = (new Date()).getTime()
+  const expDate = (new Date(localStorage.getItem('expirationDate'))).getTime()
+  if (now >= expDate) {
     return
   }
   dispatch('storeUser')
@@ -170,13 +170,17 @@ export const getInitialPosts = ({ commit }) => {
   axios.get('http://localhost:5000/feed',
     { headers: { 'Authorization': `Bearer ${token}` } })
     .then(res => {
-      if (res.data.skStatus === 'Fail') {
-        router.push({name: 'error'})
-      }
+      // if (res.data.skStatus === 'NoAccess') {
+      //   router.push({name: 'login'})
+      // }
       if (res.data.skStatus === 'Pass') {
         const posts = res.data.posts
         commit('CLEAR_FEED_DATA')
         commit('SET_POSTS', posts)
+      }
+      if (res.data.skStatus === 'Fail') {
+        console.log(res.data)
+        router.push({name: 'error'})
       }
     })
     .catch(err => router.push({name: 'error'}))

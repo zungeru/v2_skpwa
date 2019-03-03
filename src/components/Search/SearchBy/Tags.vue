@@ -105,6 +105,16 @@ export default {
   },
   deactivated () {
     window.removeEventListener('resize', this.getDivSize)
+  },
+  beforeRouteEnter (to, from, next) {
+    const now = (new Date()).getTime()
+    const expDate = (new Date(localStorage.getItem('expirationDate'))).getTime()
+    const noToken = !localStorage.getItem('token')
+    if ( (noToken) || (now >= expDate) ) {
+      next('/login')
+    } else {
+      next()
+    }
   }
 }
 </script>

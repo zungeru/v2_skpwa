@@ -58,5 +58,6 @@ export const routes = [
       { path: 'following/:username', name: 'following', component: Following },
       { path: 'post/:post_id', name: 'post', component: Post }
     ]
-  }
+  },
+  {path: '*', redirect:'/' }
 ]

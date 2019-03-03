@@ -214,7 +214,7 @@ export default {
     },
     likePost () {
       //check if user is trying to like own posts
-      if(localStorage.getItem('username') === this.post.username) {
+      if(!localStorage.getItem('token') || localStorage.getItem('username') === this.post.username) {
         return
       }
       const token = localStorage.getItem('token')

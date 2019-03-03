@@ -155,6 +155,16 @@ export default {
   activated () {
     document.querySelector('.mdl-layout__content').scrollTop = 0
     this.getComment()
+  },
+  beforeRouteEnter (to, from, next) {
+    const now = (new Date()).getTime()
+    const expDate = (new Date(localStorage.getItem('expirationDate'))).getTime()
+    const noToken = !localStorage.getItem('token')
+    if ( (noToken) || (now >= expDate) ) {
+      next('/login')
+    } else {
+      next()
+    }
   }
 }
 </script>

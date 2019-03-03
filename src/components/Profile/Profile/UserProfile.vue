@@ -216,7 +216,7 @@ export default {
     },
     follow () {
       if (this.loggedInUser === 'guest') {
-        return
+        this.$router.push('/login')
       }
       const token = localStorage.getItem('token')
       axios.get('http://localhost:5000/follow/' + this.$route.params.username,
@@ -263,11 +263,9 @@ export default {
   mounted () {
     document.querySelector('.mdl-layout__content').scrollTop = 0
     document.querySelector('.mdl-layout__content').addEventListener('scroll', this.scroll)
-    console.log('Profile View: Mounted')
   },
   destroyed () {
     document.querySelector('.mdl-layout__content').removeEventListener('scroll', this.scroll)
-    console.log('Profile View: Destroyed')
   },
   activated () {
     if(this.$route.params.username != this.profiledUser.username){

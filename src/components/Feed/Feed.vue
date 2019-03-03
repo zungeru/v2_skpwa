@@ -88,14 +88,21 @@ export default {
     document.querySelector('.mdl-layout__content').removeEventListener('scroll', this.scroll)
   },
   beforeRouteEnter (to, from, next) {
-    next(vm => {
-      if(from.name !== 'signup' && from.name !== 'login'){
-        if (vm.posts.length === 0) {
-          console.log('Holla')
-          vm.getInitialPosts()
+    const now = (new Date()).getTime()
+    const expDate = (new Date(localStorage.getItem('expirationDate'))).getTime()
+    const noToken = !localStorage.getItem('token')
+    if ( (noToken) || (now >= expDate) ) {
+      next('/home')
+    } else {
+      next(vm => {
+        const now = new Date()
+        if(from.name !== 'signup' && from.name !== 'login'){
+          if (vm.posts.length === 0) {
+            vm.getInitialPosts()
+          }
         }
-      }
-    })
+      })
+    }
   },
   beforeRouteLeave (to, from, next) {
     this.feedScrollPos = document.querySelector('.mdl-layout__content').scrollTop
