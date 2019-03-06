@@ -1,12 +1,12 @@
 <template>
-  <div>
-    <h3>About View</h3>
-    <h3>Spheell About Style Kast...Blah,Blah</h3>
-    <h3>Sign Up</h3>
-    <h3>Log In</h3>
-    <div v-for="x in 15">
-      <h3>Content {{x}}</h3>
-    </div>
+  <div class="about-main">
+    <!-- Note using home-subtitle and home-tile class form the home component -->
+    <h5 class="home-subtitle">about</h5>
+    <h3 class="home-title">styleKast</h3>
+    <br>
+
+    <p class="about-info"><span class="first-word">styleKast</span> is a crowd powered platform that allows users to track recent
+    purchases of those they follow and base purchasing decisions on personally curated style feeds. </p>
   </div>
 </template>
 
@@ -18,6 +18,22 @@ export default {
 }
 </script>
 
-<style>
 
+<style>
+.about-main {
+  margin-right: auto;
+  margin-left: auto;
+  margin-top: 50px;
+  max-width: 500px;
+}
+.about-info {
+  margin: 10px;
+  padding: 10px;
+  font-size: 15px;
+  text-align: justify;
+}
+.first-word {
+  color: #137E8D;
+  font-size: 20px;
+}
 </style>

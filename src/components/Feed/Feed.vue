@@ -92,7 +92,7 @@ export default {
     const expDate = (new Date(localStorage.getItem('expirationDate'))).getTime()
     const noToken = !localStorage.getItem('token')
     if ( (noToken) || (now >= expDate) ) {
-      next('/home')
+      next('/')
     } else {
       next(vm => {
         const now = new Date()
