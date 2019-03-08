@@ -1,13 +1,9 @@
 <template>
   <div class="sk-login-main">
     <div class="login-heading">
-      <h4>login</h4>
+      <h4>forgot password</h4>
       <span>don't have an account?</span>
       <router-link tag="span" :to="{ name: 'signup'}" style="color: #ff0800; cursor: pointer;">&nbsp;signup</router-link>
-    </div>
-    <br/>
-    <div v-if="logInIss" class="login-error">
-      <span>invalid username or password</span>
     </div>
     <br/>
     <form class="login-form" action="#" >
@@ -22,41 +18,26 @@
           <p v-if="!$v.email.required && $v.email.$dirty"> email required</p>
       </div>
       <br>
-      <div class="login-item">
-        <label for="password">password</label>
-        <input
-          type="password"
-          id="password"
-          @blur="$v.password.$touch()"
-          v-model="password">
-      </div>
-      <br>
       <div>
         <button
           class="mdl-button mdl-button--raised mdl-button--colored"
           :disabled="$v.$invalid"
           @click.prevent="onSubmit">
-          login
+          send
         </button>
       </div>
     </form>
-    <hr>
-    <div class="login-heading">
-      <router-link tag="span" :to="{ name: 'forgot'}" style="color: #137E8D; cursor: pointer;">&nbsp;forgot password</router-link>
-    </div>
-
   </div>
 </template>
 
 <script>
 import { required, email } from 'vuelidate/lib/validators'
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions } from 'vuex'
 
 export default {
   data () {
     return {
-      email: '',
-      password: ''
+      email: ''
     }
   },
   methods: {
@@ -71,25 +52,16 @@ export default {
       this.logIn(userData)
     }
   },
-  computed: {
-    ...mapGetters({
-      logInIss: 'logInIss'
-    })
-  },
   activated () {
     document.querySelector('.mdl-layout__content').scrollTop = 0
   },
   deactivated () {
     this.email = ''
-    this.password = ''
   },
   validations: {
     email: {
       required,
       email
-    },
-    password: {
-      required
     }
   }
 }

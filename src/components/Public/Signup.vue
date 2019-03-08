@@ -120,7 +120,7 @@ export default {
     this.username = ''
     this.email = ''
     this.password = ''
-    this.confirmPassword = 'Hello'
+    this.confirmPassword = ''
   },
   validations: {
     username: {
