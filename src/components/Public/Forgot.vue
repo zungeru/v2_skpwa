@@ -1,13 +1,18 @@
 <template>
-  <div class="sk-login-main">
-    <div class="login-heading">
+  <div class="sk-forgot-main">
+    <div class="forgot-heading">
       <h4>forgot password</h4>
-      <span>don't have an account?</span>
-      <router-link tag="span" :to="{ name: 'signup'}" style="color: #ff0800; cursor: pointer;">&nbsp;signup</router-link>
+      <span>enter email for password reset link</span>
     </div>
     <br/>
-    <form class="login-form" action="#" >
-      <div class="login-item">
+    <transition v-if="emailSent" name="fade" appear mode="in-out">
+      <div class="email-msg">
+        <span>sent you a link if the email is on file</span>
+      </div>
+    </transition>
+    <br/>
+    <form class="forgot-form" action="#" >
+      <div class="forgot-item">
         <label for="email">email</label>
         <input
           type="email"
@@ -32,24 +37,27 @@
 
 <script>
 import { required, email } from 'vuelidate/lib/validators'
-import { mapActions } from 'vuex'
+import axios from 'axios'
 
 export default {
   data () {
     return {
-      email: ''
+      email: '',
+      emailSent: false,
     }
   },
   methods: {
-    ...mapActions({
-      logIn: 'logIn'
-    }),
     onSubmit () {
-      const userData = {
-        email: this.email,
-        password: this.password
-      }
-      this.logIn(userData)
+      this.emailSent = false
+      const fd = new FormData()
+      fd.append('email', this.email)
+      axios.post('http://localhost:5001/password/reset', fd)
+        .then(res => {
+          if (res.data.authStatus) {
+            this.emailSent = true
+          }
+        })
+        .catch(err => router.push({name: 'error'}))
     }
   },
   activated () {
@@ -69,46 +77,60 @@ export default {
 </script>
 
 <style>
-.sk-login-main{
+.fade-enter{
+  opacity: 0;
+}
+.fade-enter-active{
+  transition: opacity 3s;
+}
+.fade-leave{
+  opacity: 0;
+}
+.fade-leave-active{
+  transition: opacity 0s;
+  opacity: 0;
+}
+.sk-forgot-main{
   padding: 20px 15px 10px 15px;
   margin-right: auto;
   margin-left: auto;
   max-width: 500px;
 }
-.login-heading{
+.forgot-heading{
   text-align: center;
 }
-.login-heading > h4{
+.forgot-heading > h4{
   padding-top: 0px;
   margin-top: 0px;
 }
-.login-heading > span {
+.forgot-heading > span {
   font-size: 15px;
+  color: #ff0800;
 }
-.login-error {
+.email-msg {
   text-align: center;
   margin-right: auto;
   margin-left: auto;
-  background-color: #f4cccc;
+  background-color: #B9D3D8;
   border-radius: 5px;
   width: 250px;
 }
-.login-form{
+.forgot-form{
   padding: 0px 15px 10px 15px;
   margin-right: auto;
   margin-left: auto;
   margin-top: 0px;
   max-width: 500px;
 }
-.login-item > label {
+.forgot-item > label {
   font-size: 16px;
 }
-.login-item > p {
+.forgot-item > p {
   margin: 0px;
   padding: 0px;
   color: #ff0800;
 }
-.login-item > input  {
+.forgot-item > input  {
   width:100%;
   height: 40px;
   padding: 10px 15px;
