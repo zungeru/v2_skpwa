@@ -4,6 +4,7 @@ import Login from '../components/Public/Login.vue'
 import About from '../components/Public/About.vue'
 import Error from '../components/Public/Error.vue'
 import Forgot from '../components/Public/Forgot.vue'
+import Reset from '../components/Public/Reset.vue'
 import Updates from '../components/Public/Updates.vue'
 import Deleted from '../components/Public/Deleted.vue'
 import Feed from '../components/Feed/Feed.vue'
@@ -30,6 +31,7 @@ export const routes = [
   { path: '/about', name: 'about', component: About },
   { path: '/error', name: 'error', component: Error },
   { path: '/forgot', name: 'forgot', component: Forgot },
+  { path: '/reset', name: 'reset', component: Reset },
   { path: '/updates', name: 'updates', component: Updates },
   { path: '/goodbye', name: 'deleted', component: Deleted },
   { path: '/feed', name: 'feed', component: Feed },

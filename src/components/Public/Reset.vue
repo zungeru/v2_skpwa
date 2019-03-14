@@ -1,18 +1,12 @@
 <template>
-  <div class="sk-forgot-main">
-    <div class="forgot-heading">
-      <h4>forgot password</h4>
-      <span>enter email for password reset link</span>
+  <div class="sk-reset-main">
+    <div class="reset-heading">
+      <h4>reset password</h4>
     </div>
     <br/>
-    <transition v-if="emailSent" name="fade" appear mode="in-out">
-      <div class="email-msg">
-        <span>sent you a link if the email is on file</span>
-      </div>
-    </transition>
-    <br/>
-    <form class="forgot-form" action="#" >
-      <div class="forgot-item">
+
+    <form class="reset-form" action="#" >
+      <div class="reset-item">
         <label for="email">email</label>
         <input
           type="email"
@@ -21,6 +15,27 @@
           v-model.lazy="email">
           <p v-if="!$v.email.email"> enter valid email</p>
           <p v-if="!$v.email.required && $v.email.$dirty"> email required</p>
+      </div>
+      <br>
+      <div class="reset-item">
+        <label for="password">password</label>
+        <input
+          type="password"
+          id="password"
+          @input=""
+          v-model="password">
+          <p v-if="!$v.password.required && $v.password.$dirty"> password required</p>
+          <p v-if="!$v.password.minLen && $v.password.$dirty"> min 6 characters</p>
+      </div>
+      <br>
+      <div class="reset-item">
+        <label for="confirm-password">confirm password</label>
+        <input
+          type="password"
+          id="confirm-passord"
+          @input="$v.confirmPassword.$touch()"
+          v-model="confirmPassword">
+          <p v-if="!$v.confirmPassword.sameAs && $v.confirmPassword.$dirty"> passwords don&#39;t match </p>
       </div>
       <br>
       <div>
@@ -36,26 +51,25 @@
 </template>
 
 <script>
-import { required, email } from 'vuelidate/lib/validators'
+import { required, email, minLength, sameAs } from 'vuelidate/lib/validators'
 import axios from 'axios'
 
 export default {
   data () {
     return {
       email: '',
-      emailSent: false,
+      password: '',
+      confirmPassword: ''
     }
   },
   methods: {
     onSubmit () {
-      this.emailSent = false
       const fd = new FormData()
       fd.append('email', this.email)
-      axios.post('http://localhost:5001/password/reset/request', fd)
+      axios.post('http://localhost:5001/password/reset', fd)
         .then(res => {
           if (res.data.authStatus) {
             console.log(res.data)
-            this.emailSent = true
           }
         })
         .catch(err => router.push({name: 'error'}))
@@ -71,6 +85,13 @@ export default {
     email: {
       required,
       email
+    },
+    password: {
+      required,
+      minLen: minLength(6)
+    },
+    confirmPassword: {
+      sameAs: sameAs('password')
     }
   }
 }
@@ -91,22 +112,18 @@ export default {
   transition: opacity 0s;
   opacity: 0;
 }
-.sk-forgot-main{
+.sk-reset-main{
   padding: 20px 15px 10px 15px;
   margin-right: auto;
   margin-left: auto;
   max-width: 500px;
 }
-.forgot-heading{
+.reset-heading{
   text-align: center;
 }
-.forgot-heading > h4{
+.reset-heading > h4{
   padding-top: 0px;
   margin-top: 0px;
-}
-.forgot-heading > span {
-  font-size: 15px;
-  color: #ff0800;
 }
 .email-msg {
   text-align: center;
@@ -116,22 +133,22 @@ export default {
   border-radius: 5px;
   width: 250px;
 }
-.forgot-form{
+.reset-form{
   padding: 0px 15px 10px 15px;
   margin-right: auto;
   margin-left: auto;
   margin-top: 0px;
   max-width: 500px;
 }
-.forgot-item > label {
+.reset-item > label {
   font-size: 16px;
 }
-.forgot-item > p {
+.reset-item > p {
   margin: 0px;
   padding: 0px;
   color: #ff0800;
 }
-.forgot-item > input  {
+.reset-item > input  {
   width:100%;
   height: 40px;
   padding: 10px 15px;
