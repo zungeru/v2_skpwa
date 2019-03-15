@@ -5,11 +5,10 @@
       <span>enter email for password reset link</span>
     </div>
     <br/>
-    <transition v-if="emailSent" name="fade" appear mode="in-out">
-      <div class="email-msg">
-        <span>sent you a link if the email is on file</span>
-      </div>
-    </transition>
+    <div v-if="emailSent" class="email-msg">
+      <span>sent you a link if the email is registered</span>
+    </div>
+    <div v-if="inProgress" class="tags-loader"></div>
     <br/>
     <form class="forgot-form" action="#" >
       <div class="forgot-item">
@@ -18,7 +17,7 @@
           type="email"
           id="email"
           @blur="$v.email.$touch()"
-          v-model.lazy="email">
+          v-model="email">
           <p v-if="!$v.email.email"> enter valid email</p>
           <p v-if="!$v.email.required && $v.email.$dirty"> email required</p>
       </div>
@@ -44,21 +43,27 @@ export default {
     return {
       email: '',
       emailSent: false,
+      inProgress: false,
     }
   },
   methods: {
     onSubmit () {
+      this.inProgress = true
       this.emailSent = false
       const fd = new FormData()
       fd.append('email', this.email)
       axios.post('http://localhost:5001/password/reset/request', fd)
         .then(res => {
-          if (res.data.authStatus) {
+          if (res.data.authStatus === 'Fail') {
+            this.$router.push({name: 'error'})
+          }
+          if (res.data.authStatus === 'Pass') {
             console.log(res.data)
             this.emailSent = true
+            this.inProgress = false
           }
         })
-        .catch(err => router.push({name: 'error'}))
+        .catch(err => this.$router.push({name: 'error'}))
     }
   },
   activated () {
@@ -66,6 +71,7 @@ export default {
   },
   deactivated () {
     this.email = ''
+    this.inProgress = false
   },
   validations: {
     email: {
@@ -78,19 +84,6 @@ export default {
 </script>
 
 <style>
-.fade-enter{
-  opacity: 0;
-}
-.fade-enter-active{
-  transition: opacity 3s;
-}
-.fade-leave{
-  opacity: 0;
-}
-.fade-leave-active{
-  transition: opacity 0s;
-  opacity: 0;
-}
 .sk-forgot-main{
   padding: 20px 15px 10px 15px;
   margin-right: auto;
@@ -114,7 +107,7 @@ export default {
   margin-left: auto;
   background-color: #B9D3D8;
   border-radius: 5px;
-  width: 250px;
+  width: 350px;
 }
 .forgot-form{
   padding: 0px 15px 10px 15px;

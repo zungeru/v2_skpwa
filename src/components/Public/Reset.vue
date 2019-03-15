@@ -3,9 +3,13 @@
     <div class="reset-heading">
       <h4>reset password</h4>
     </div>
+    <div v-if="showError" class="login-error">
+      <span>link expired or incorrect email entered</span>
+    </div>
+    <div v-if="inProgress" class="tags-loader"></div>
     <br/>
 
-    <form class="reset-form" action="#" >
+    <form v-if="!passwordReset" class="reset-form" action="#" >
       <div class="reset-item">
         <label for="email">email</label>
         <input
@@ -18,7 +22,7 @@
       </div>
       <br>
       <div class="reset-item">
-        <label for="password">password</label>
+        <label for="password">new password</label>
         <input
           type="password"
           id="password"
@@ -47,6 +51,10 @@
         </button>
       </div>
     </form>
+    <div v-if="passwordReset" class="reset-heading">
+      <h6>password reset complete</h6>
+      <router-link tag="span" :to="{ name: 'login'}" style="color: #137E8D; cursor: pointer;">&nbsp;login page</router-link>
+    </div>
   </div>
 </template>
 
@@ -59,27 +67,44 @@ export default {
     return {
       email: '',
       password: '',
-      confirmPassword: ''
+      confirmPassword: '',
+      passwordReset: false,
+      inProgress: false,
+      showError: false,
     }
   },
   methods: {
     onSubmit () {
+      this.inProgress = true
+      this.passwordReset = false
       const fd = new FormData()
       fd.append('email', this.email)
+      fd.append('password', this.password)
+      fd.append('token', this.$route.query.makuli)
       axios.post('http://localhost:5001/password/reset', fd)
         .then(res => {
-          if (res.data.authStatus) {
+          if (res.data.authStatus === 'Fail') {
+            this.showError = true
+            this.inProgress = false
+          }
+          if (res.data.authStatus === 'Pass') {
             console.log(res.data)
+            this.passwordReset = true
+            this.inProgress = false
           }
         })
-        .catch(err => router.push({name: 'error'}))
+        .catch(err => this.$router.push({name: 'error'}))
     }
   },
   activated () {
     document.querySelector('.mdl-layout__content').scrollTop = 0
   },
   deactivated () {
-    this.email = ''
+    this.email = '',
+    this.password = '',
+    this.confirmPassword = '',
+    this.showError = false,
+    this.inProgress = false
   },
   validations: {
     email: {
@@ -99,19 +124,6 @@ export default {
 </script>
 
 <style>
-.fade-enter{
-  opacity: 0;
-}
-.fade-enter-active{
-  transition: opacity 3s;
-}
-.fade-leave{
-  opacity: 0;
-}
-.fade-leave-active{
-  transition: opacity 0s;
-  opacity: 0;
-}
 .sk-reset-main{
   padding: 20px 15px 10px 15px;
   margin-right: auto;

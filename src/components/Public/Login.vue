@@ -17,7 +17,7 @@
           type="email"
           id="email"
           @blur="$v.email.$touch()"
-          v-model.lazy="email">
+          v-model="email">
           <p v-if="!$v.email.email"> enter valid email</p>
           <p v-if="!$v.email.required && $v.email.$dirty"> email required</p>
       </div>
