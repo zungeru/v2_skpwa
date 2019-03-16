@@ -1,13 +1,13 @@
 <template>
-  <div class="sk-signup-main">
-    <div class="signup-heading">
+  <div class="sk-main-padding auto-side-margin">
+    <div class="auth-heading">
       <h4>signup</h4>
       <span>already have an account?</span>
       <router-link tag="span" :to="{ name: 'login'}" style="color: #ff0800; cursor: pointer;">&nbsp;login</router-link>
     </div>
     <br>
-    <form class="signup-form" action="#" >
-      <div class="signup-item">
+    <form class="sk-form" action="#" >
+      <div class="sk-form-item">
         <label for="username">username</label>
         <input
           type="text"
@@ -22,7 +22,7 @@
           <p v-if="!$v.username.isUnique && usernameCheck"> name already taken</p>
       </div>
       <br>
-      <div class="signup-item">
+      <div class="sk-form-item">
         <label for="email">email</label>
         <input
           type="email"
@@ -35,7 +35,7 @@
           <p v-if="!$v.email.isUnique && emailCheck"> email already used</p>
       </div>
       <br>
-      <div class="signup-item">
+      <div class="sk-form-item">
         <label for="password">password</label>
         <input
           type="password"
@@ -46,7 +46,7 @@
           <p v-if="!$v.password.minLen && $v.password.$dirty"> min 6 characters</p>
       </div>
       <br>
-      <div class="signup-item">
+      <div class="sk-form-item">
         <label for="confirm-password">confirm password</label>
         <input
           type="password"
@@ -176,49 +176,3 @@ export default {
   }
 }
 </script>
-
-<style>
-.sk-signup-main{
-  padding: 20px 15px 10px 15px;
-  margin-right: auto;
-  margin-left: auto;
-  max-width: 500px;
-}
-.signup-heading{
-  text-align: center;
-}
-.signup-heading > h4{
-  padding-top: 0px;
-  margin-top: 0px;
-}
-.signup-heading > span {
-  font-size: 15px;
-}
-.signup-form{
-  padding: 0px 15px 10px 15px;
-  margin-right: auto;
-  margin-left: auto;
-  margin-top: 0px;
-  max-width: 500px;
-}
-.signup-item > label {
-  font-size: 16px;
-}
-.signup-item > p {
-  margin: 0px;
-  padding: 0px;
-  color: #ff0800;
-}
-.signup-item > input  {
-  width:100%;
-  height: 40px;
-  padding: 10px 15px;
-  box-sizing: border-box;
-  /* border: 2px solid rgb(245,0,87, .15); */
-  border: 2px solid rgb(176,176,176, .35);
-  border-radius: 5px;
-  background-color: rgb(237,237,237, .4);
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  font-size: 16px;
-}
-</style>

@@ -1,17 +1,17 @@
 <template>
-  <div class="sk-login-main">
-    <div class="login-heading">
+  <div class="sk-main-padding auto-side-margin">
+    <div class="auth-heading">
       <h4>login</h4>
       <span>don't have an account?</span>
       <router-link tag="span" :to="{ name: 'signup'}" style="color: #ff0800; cursor: pointer;">&nbsp;signup</router-link>
     </div>
     <br/>
-    <div v-if="logInIss" class="login-error">
+    <div v-if="logInIss" class="error-msg">
       <span>invalid username or password</span>
     </div>
     <br/>
-    <form class="login-form" action="#" >
-      <div class="login-item">
+    <form class="sk-form" action="#" >
+      <div class="sk-form-item">
         <label for="email">email</label>
         <input
           type="email"
@@ -22,7 +22,7 @@
           <p v-if="!$v.email.required && $v.email.$dirty"> email required</p>
       </div>
       <br>
-      <div class="login-item">
+      <div class="sk-form-item">
         <label for="password">password</label>
         <input
           type="password"
@@ -41,7 +41,7 @@
       </div>
     </form>
     <hr>
-    <div class="login-heading">
+    <div class="auth-heading">
       <router-link tag="span" :to="{ name: 'forgot'}" style="color: #137E8D; cursor: pointer;">&nbsp;forgot password</router-link>
     </div>
 
@@ -93,59 +93,4 @@ export default {
     }
   }
 }
-
 </script>
-
-<style>
-.sk-login-main{
-  padding: 20px 15px 10px 15px;
-  margin-right: auto;
-  margin-left: auto;
-  max-width: 500px;
-}
-.login-heading{
-  text-align: center;
-}
-.login-heading > h4{
-  padding-top: 0px;
-  margin-top: 0px;
-}
-.login-heading > span {
-  font-size: 15px;
-}
-.login-error {
-  text-align: center;
-  margin-right: auto;
-  margin-left: auto;
-  background-color: #f4cccc;
-  border-radius: 5px;
-  width: 250px;
-}
-.login-form{
-  padding: 0px 15px 10px 15px;
-  margin-right: auto;
-  margin-left: auto;
-  margin-top: 0px;
-  max-width: 500px;
-}
-.login-item > label {
-  font-size: 16px;
-}
-.login-item > p {
-  margin: 0px;
-  padding: 0px;
-  color: #ff0800;
-}
-.login-item > input  {
-  width:100%;
-  height: 40px;
-  padding: 10px 15px;
-  box-sizing: border-box;
-  /* border: 2px solid rgb(245,0,87, .15); */
-  border: 2px solid rgb(176,176,176, .35);
-  border-radius: 5px;
-  background-color: rgb(237,237,237, .4);
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  font-size: 16px;
-}
-</style>

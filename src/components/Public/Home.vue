@@ -1,7 +1,7 @@
 <template>
-  <div class="home-main">
-    <h3 class="home-title">styleKast</h3>
-    <h5 class="home-subtitle">crowdsourced style</h5>
+  <div class="auto-side-margin" style="margin-top: 50px;">
+    <h3 class="sk-intro-title">styleKast</h3>
+    <h5 class="sk-intro-subtitle">crowdsourced style</h5>
     <br/>
     <transition-group name="fade" appear mode="in-out">
       <StyleKard
@@ -65,11 +65,6 @@ export default {
       }
     }
   },
-  computed: {
-    username () {
-      return !this.$store.getters.userData ? false : this.$store.getters.userData.username
-    }
-  },
   beforeMount () {
     this.getSKPosts()
   },
@@ -86,25 +81,3 @@ export default {
   }
 }
 </script>
-
-<style>
-.home-main {
-  margin-right: auto;
-  margin-left: auto;
-  margin-top: 50px;
-  max-width: 500px;
-}
-.home-title {
-  margin: 0px;
-  padding: 0px;
-  text-align: center;
-  letter-spacing: -1px;
-}
-.home-subtitle {
-  margin: 0px;
-  padding: 0px;
-  text-align: center;
-  letter-spacing: 1px;
-  color: #137E8D
-}
-</style>

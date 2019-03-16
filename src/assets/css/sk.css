@@ -1,0 +1,91 @@
+/* BIG REMINDER TRANSITION IN HOME FOR STYLEKARDS */
+
+/* home about login signup components */
+.auto-side-margin {
+  margin-right: auto;
+  margin-left: auto;
+  max-width: 500px;
+}
+
+/* login, signup, kast components */
+.sk-main-padding {
+  padding: 20px 15px 10px 15px;
+}
+
+/* login component */
+.error-msg {
+  text-align: center;
+  margin-right: auto;
+  margin-left: auto;
+  background-color: #f4cccc;
+  border-radius: 5px;
+  width: 250px;
+}
+
+/* sk-form used in login and signup components */
+.sk-form{
+  padding: 0px 15px 10px 15px;
+  margin-top: 0px;
+}
+.sk-form-item > label {
+  font-size: 16px;
+}
+.sk-form-item > p {
+  margin: 0px;
+  padding: 0px;
+  color: #ff0800;
+}
+.sk-form-item > input  {
+  width:100%;
+  height: 40px;
+  padding: 10px 15px;
+  box-sizing: border-box;
+  /* border: 2px solid rgb(245,0,87, .15); */
+  border: 2px solid rgb(176,176,176, .35);
+  border-radius: 5px;
+  background-color: rgb(237,237,237, .4);
+  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-size: 16px;
+}
+
+/* sk-intro used in home and about components */
+.sk-intro-title {
+  margin: 0px;
+  padding: 0px;
+  text-align: center;
+  letter-spacing: -1px;
+}
+
+.sk-intro-subtitle {
+  margin: 0px;
+  padding: 0px;
+  text-align: center;
+  letter-spacing: 1px;
+  color: #137E8D
+}
+
+.sk-intro-info {
+  margin: 10px;
+  padding: 10px;
+  font-size: 15px;
+  text-align: justify;
+}
+
+.sk-intro-first-word {
+  color: #137E8D;
+  font-size: 20px;
+}
+
+/* sk-auth used in login and about signup */
+.auth-heading{
+  text-align: center;
+}
+
+.auth-heading > h4{
+  padding-top: 0px;
+  margin-top: 0px;
+}
+
+.auth-heading > span {
+  font-size: 15px;
+}

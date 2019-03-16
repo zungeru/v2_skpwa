@@ -22,10 +22,10 @@
               <img src="./assets/svg/vertical.svg">
             </button>
             <ul class="mdl-menu mdl-js-menu mdl-js-ripple-effect mdl-menu--bottom-right" for="hdrbtn">
-              <router-link tag="li" class="mdl-menu__item header_menu" style="color: #ff0800" :to="{ name: 'home'}">Home</router-link>
-              <router-link tag="li" class="mdl-menu__item header_menu" style="color: #ff0800" :to="{ name: 'about'}">About</router-link>
-              <router-link v-if="!auth" tag="li" class="mdl-menu__item header_menu" style="color: #ff0800" :to="{ name: 'login'}">Log In</router-link>
-              <li  v-if="auth" @click="onLogout" class="mdl-menu__item header_menu" style="color: #ff0800">Log Out</li>
+              <router-link tag="li" class="mdl-menu__item header_menu" style="color: #ff0800" :to="{ name: 'home'}">home</router-link>
+              <router-link tag="li" class="mdl-menu__item header_menu" style="color: #ff0800" :to="{ name: 'about'}">about</router-link>
+              <router-link v-if="!auth" tag="li" class="mdl-menu__item header_menu" style="color: #ff0800" :to="{ name: 'login'}">log in</router-link>
+              <li  v-if="auth" @click="onLogout" class="mdl-menu__item header_menu" style="color: #ff0800">log out</li>
             </ul>
           </div>
         </header>
@@ -126,29 +126,7 @@
 </template>
 
 <script>
-// require('material-design-lite')
 import 'material-design-lite'
-
-// (function () {
-//   var IDLE_TIMEOUT = 45; // 45 minute in this example
-//   var idleCounter = 0;
-//   var reloadPage = false;
-//
-//   document.onmousemove = document.onkeydown = function () {
-//     if (reloadPage) {
-// 		    reloadPage = false
-//         window.location.reload();
-//     } else {
-//       idleCounter = 0;
-//     }
-//   };
-//
-// window.setInterval(function () {
-//     if (++idleCounter >= IDLE_TIMEOUT) {
-//         reloadPage = true;
-//       }
-//     }, 60000);
-//  }());
 
 function close () {
   let d = document.querySelector('.mdl-layout')
@@ -223,7 +201,6 @@ export default {
 <style>
 @import url('https://fonts.googleapis.com/icon?family=Material+Icons');
 @import url('https://code.getmdl.io/1.3.0/material.pink-blue.min.css');
-/* @import url('https://fonts.googleapis.com/css?family=Lato'); */
 
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;

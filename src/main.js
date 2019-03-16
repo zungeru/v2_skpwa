@@ -3,6 +3,8 @@ import App from './App'
 import moment from 'moment'
 import vuelidate from 'vuelidate'
 
+import './assets/css/sk.css'
+
 import store from './store/store'
 import router from './router/router'
 
