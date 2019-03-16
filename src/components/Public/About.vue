@@ -1,5 +1,5 @@
 <template>
-  <div class="auto-side-margin" style="margin-top: 50px;">
+  <div class="sk-auto-side-margin" style="margin-top: 50px;">
     <h5 class="sk-intro-subtitle">about</h5>
     <h3 class="sk-intro-title">styleKast</h3>
     <br>

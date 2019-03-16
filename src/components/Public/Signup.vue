@@ -1,6 +1,6 @@
 <template>
-  <div class="sk-main-padding auto-side-margin">
-    <div class="auth-heading">
+  <div class="sk-main-padding sk-auto-side-margin">
+    <div class="sk-auth-heading">
       <h4>signup</h4>
       <span>already have an account?</span>
       <router-link tag="span" :to="{ name: 'login'}" style="color: #ff0800; cursor: pointer;">&nbsp;login</router-link>

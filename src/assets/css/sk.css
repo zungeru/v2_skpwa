@@ -1,7 +1,7 @@
 /* BIG REMINDER TRANSITION IN HOME FOR STYLEKARDS */
 
-/* home about login signup components */
-.auto-side-margin {
+/* home about login signup feed kast components */
+.sk-auto-side-margin {
   margin-right: auto;
   margin-left: auto;
   max-width: 500px;
@@ -13,7 +13,7 @@
 }
 
 /* login component */
-.error-msg {
+.sk-error-msg {
   text-align: center;
   margin-right: auto;
   margin-left: auto;
@@ -22,7 +22,22 @@
   width: 250px;
 }
 
-/* sk-form used in login and signup components */
+/* feed component */
+.fade-enter{
+  opacity: 0;
+}
+.fade-enter-active{
+  transition: opacity 1s;
+}
+.fade-leave{
+  /* opacity: 1; */
+}
+.fade-leave-active{
+  transition: opacity 1s;
+  opacity: 0;
+}
+
+/* sk-form used in login, signup, kast components */
 .sk-form{
   padding: 0px 15px 10px 15px;
   margin-top: 0px;
@@ -44,6 +59,20 @@
   border: 2px solid rgb(176,176,176, .35);
   border-radius: 5px;
   background-color: rgb(237,237,237, .4);
+  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-size: 16px;
+}
+
+.sk-form-item > textarea {
+  width: 100%;
+  height: 100px;
+  padding: 10px 15px;
+  box-sizing: border-box;
+  /* border: 2px solid rgb(245,0,87, .15); */
+  border: 2px solid rgb(176,176,176, .35);
+  border-radius: 5px;
+  background-color: rgb(237,237,237, .4);
+  resize: none;
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   font-size: 16px;
 }
@@ -76,16 +105,95 @@
   font-size: 20px;
 }
 
-/* sk-auth used in login and about signup */
-.auth-heading{
+/* sk-auth-heading used in login and signup */
+.sk-auth-heading{
   text-align: center;
 }
 
-.auth-heading > h4{
+.sk-auth-heading > h4{
   padding-top: 0px;
   margin-top: 0px;
 }
 
-.auth-heading > span {
+.sk-auth-heading > span {
   font-size: 15px;
+}
+
+/* feed, kast, components */
+.sk-no-content-main {
+  margin-top: 50px;
+  text-align: center;
+}
+
+/* feed component */
+.sk-pink-link-sixteen{
+  color: #ff0800;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+/* used in kast, search, tags components */
+.sk-loader {
+  margin-right: auto;
+  margin-left: auto;
+  margin-top: 75px;
+  border: 7px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 7px solid #137E8D;
+  width: 40px;
+  height: 40px;
+  -webkit-animation: spin 2s linear infinite; /* Safari */
+  animation: spin 2s linear infinite;
+}
+
+/* Safari */
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* used in kast component */
+.sk-kast-link {
+  font-size: 25px;
+  font-weight: 500;
+  color: #ff0800;
+  cursor: pointer;
+}
+
+/* used in kast component */
+.sk-gray-note {
+  color: #ff0800;
+  font-weight: 500;
+  font-size: 14px;
+  text-align: center;
+  padding-top:10px;
+  padding-bottom: 10px;
+}
+
+/* used in editkast component */
+.sk-position-relative {
+  position: relative;
+}
+
+.sk-fixed-header {
+  position: fixed;
+  top: 0px;
+  background-color: #ededed;
+  margin-top: 56px;
+  height: 45px;
+  width: 100%;
+}
+
+.sk-fixed-header-item-flex {
+  margin-right: auto;
+  margin-left: auto;
+  margin-top: 12px;
+  max-width: 500px;
+  display: flex;
+  justify-content: space-between;
 }

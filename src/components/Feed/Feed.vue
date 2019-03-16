@@ -8,28 +8,27 @@
     </StyleKard>
   </transition-group>
   <transition-group name="fade" appear mode="out-in" v-else>
-    <div class="no-feed-main" key="nofeed">
+    <div class="sk-auto-side-margin sk-no-content-main" key="nofeed">
       <div>
         <img src="../../assets/svg/shop.svg">
-        <br>
+        <br/>
         <span>no posts to view yet...</span>
-        <br>
-        <br>
+        <br/><br/>
         <span>when you follow styleKasters</span>
-        <br>
+        <br/>
         <span>their posts appear here</span>
-
-        <div class="no-feed-links">
+        <br/><br/><br/>
+        <div>
           <router-link
             tag="span"
             :to="{ name: 'editprofile'}"
-            style="color: #ff0800; cursor: pointer;">update profile
+            class="sk-pink-link-sixteen">update profile
           </router-link>
           &nbsp;&nbsp;&nbsp;&nbsp;
           <router-link
             tag="span"
             :to="{ name: 'people'}"
-            style="color: #ff0800 ; cursor: pointer;">find styleKasters
+            class="sk-pink-link-sixteen">find styleKasters
           </router-link>
         </div>
       </div>
@@ -71,9 +70,6 @@ export default {
   components: {
     StyleKard
   },
-  // beforeMount () {
-  //   this.getInitialPosts()
-  // },
   mounted () {
     document.querySelector('.mdl-layout__content').addEventListener('scroll', this.scroll)
   },
@@ -112,34 +108,5 @@ export default {
 </script>
 
 <style>
-.fade-enter{
-  opacity: 0;
-}
-.fade-enter-active{
-  transition: opacity 1s;
-}
-.fade-leave{
-  /* opacity: 1; */
-}
-.fade-leave-active{
-  transition: opacity 1s;
-  opacity: 0;
-}
-.no-feed-main {
-  margin-right: auto;
-  margin-left: auto;
-  margin-top: 50px;
-  max-width: 500px;
-  text-align: center;
-}
-.no-feed-main span {
-  font-size: 16px;
-}
-.no-feed-links {
-  margin-top: 30px;
-}
-.no-feed-links span {
-  font-size: 16px;
-  font-weight: 500;
-}
+
 </style>

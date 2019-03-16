@@ -1,12 +1,12 @@
 <template>
-  <div class="sk-main-padding auto-side-margin">
-    <div class="auth-heading">
+  <div class="sk-main-padding sk-auto-side-margin">
+    <div class="sk-auth-heading">
       <h4>login</h4>
       <span>don't have an account?</span>
       <router-link tag="span" :to="{ name: 'signup'}" style="color: #ff0800; cursor: pointer;">&nbsp;signup</router-link>
     </div>
     <br/>
-    <div v-if="logInIss" class="error-msg">
+    <div v-if="logInIss" class="sk-error-msg">
       <span>invalid username or password</span>
     </div>
     <br/>
@@ -41,7 +41,7 @@
       </div>
     </form>
     <hr>
-    <div class="auth-heading">
+    <div class="sk-auth-heading">
       <router-link tag="span" :to="{ name: 'forgot'}" style="color: #137E8D; cursor: pointer;">&nbsp;forgot password</router-link>
     </div>
 

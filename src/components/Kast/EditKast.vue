@@ -1,16 +1,16 @@
 <template>
   <!-- The Main Div -->
-  <div class="edit-kast-main">
+  <div class="sk-position-relative">
 
     <!-- The Header Div -->
     <!-- isLoading is vuex variable used for page reload -->
-    <div class="edit-kast-fixed-header" v-if="!isLoading">
-      <div class="edit-kast-header-item">
-        <span @click="goBack">
+    <div class="sk-fixed-header" v-if="!isLoading">
+      <div class="sk-fixed-header-item-flex">
+        <span style="cursor: pointer;" @click="goBack">
           <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
           <img src="../../assets/svg/backarrow.svg">
         </span>
-        <span @click="deleteCheck">
+        <span style="cursor: pointer;" @click="deleteCheck">
           <img src="../../assets/svg/delete.svg">
           <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
         </span>
@@ -20,15 +20,15 @@
     <!-- The Loading Div -->
     <!-- loading variable => For the updating the kast -->
     <!-- kast-loader class from kast component -->
-    <div v-if="loading" class="kast-loader"></div>
+    <div v-if="loading" class="sk-loader"></div>
 
     <!-- The v-else to the Loading Div Above -->
     <div v-else>
 
-      <div class="edit-kast-body">
+      <div class="sk-auto-side-margin sk-main-padding" style="margin-top:50px;">
         <div class="edit-kast-pics" v-if="!picUploaded && !confirmDelete">
           <span
-              class="edit-kast-button"
+              class="sk-pink-link-sixteen"
               @click="onPickFile">
             reupload photo
           </span>
@@ -48,9 +48,12 @@
             accept="image/*"
             multiple
             @change="onFilePicked">
-          <ul>
+          <ul style="text-align: center; padding-right: 30px;">
             <draggable v-model="pics">
-              <li v-for="p in pics" :key="p.id">
+              <li
+                  v-for="p in pics"
+                  :key="p.id"
+                  style="display: inline; padding: 5px; cursor: pointer;">
                   <img v-bind:src="p.url" height="65" />
               </li>
             </draggable>
@@ -62,7 +65,7 @@
           style="color: #696969; font-size: 14px; text-align: center;"
           >drag photos to reorder
         </div>
-        <div v-if="picUploaded && !confirmDelete" class="edit-change-photo">
+        <div v-if="picUploaded && !confirmDelete" class="sk-gray-note">
           <span style="cursor: pointer;" @click="onPickFileChange">change photo<span v-if="picsLength > 1">s</span></span>
         </div>
         <form v-if="!confirmDelete" class="edit-form-main" action="#">
@@ -336,35 +339,13 @@ export default {
 </script>
 
 <style>
-.edit-kast-main {
-  position: relative;
-}
-.edit-kast-fixed-header {
-  position: fixed;
-  top: 0px;
-  background-color: #ededed;
-  margin-top: 56px;
-  height: 45px;
-  width: 100%;
-}
-.edit-kast-header-item {
-  margin-right: auto;
-  margin-left: auto;
-  margin-top: 12px;
-  max-width: 500px;
-  display: flex;
-  justify-content: space-between;
-}
-.edit-kast-header-item span {
-  cursor: pointer;
-}
-.edit-kast-body {
+/* .edit-kast-body {
   padding: 0px 15px 10px 15px;
   margin-right: auto;
   margin-left: auto;
   margin-top: 70px;
   max-width: 500px;
-}
+} */
 .edit-kast-pics {
   text-align: center;
 }
@@ -403,23 +384,6 @@ export default {
   resize: none;
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   font-size: 16px;
-}
-.edit-kast-button {
-  color: #ff0800;
-  font-weight: 500;
-  font-size: 16px;
-  text-align: center;
-  padding-top:10px;
-  padding-bottom: 10px;
-  cursor: pointer;
-}
-.edit-change-photo{
-  color: #ff0800;
-  font-weight: 500;
-  font-size: 14px;
-  text-align: center;
-  padding-top:10px;
-  padding-bottom: 10px;
 }
 .confirm-delete{
   margin-right: auto;
