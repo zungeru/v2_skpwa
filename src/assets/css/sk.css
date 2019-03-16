@@ -197,3 +197,22 @@
   display: flex;
   justify-content: space-between;
 }
+
+/* Don't know why sk-fixed-header-item-flex is not working in search component */
+.sk-fixed-header-item-flex-2 {
+  margin-right: auto;
+  margin-left: auto;
+  margin-top: 20px;
+  max-width: 200px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.sk-fixed-header-item-flex-2 div {
+  cursor: pointer;
+  font-size: 16px;
+}
+.sk-search-active {
+  font-weight: 500;
+  color: #ff0800;
+}

@@ -26,7 +26,7 @@
     <div v-else>
 
       <div class="sk-auto-side-margin sk-main-padding" style="margin-top:50px;">
-        <div class="edit-kast-pics" v-if="!picUploaded && !confirmDelete">
+        <div style="text-align: center;" v-if="!picUploaded && !confirmDelete">
           <span
               class="sk-pink-link-sixteen"
               @click="onPickFile">
@@ -68,8 +68,8 @@
         <div v-if="picUploaded && !confirmDelete" class="sk-gray-note">
           <span style="cursor: pointer;" @click="onPickFileChange">change photo<span v-if="picsLength > 1">s</span></span>
         </div>
-        <form v-if="!confirmDelete" class="edit-form-main" action="#">
-          <div class="edit-form-item">
+        <form v-if="!confirmDelete" class="sk-form" action="#">
+          <div class="sk-form-item">
             <label for="piece">piece</label><span>&nbsp;({{pieceCharsLeft()}})</span>
             <input
               type="text"
@@ -81,7 +81,7 @@
               <p v-if="!$v.piece.required && $v.piece.$dirty"> field required</p>
           </div>
           <br>
-          <div class="edit-form-item">
+          <div class="sk-form-item">
             <label for="price">price</label>
             <input
               name="price"
@@ -92,7 +92,7 @@
               <p v-if="!$v.price.decimal && $v.price.$dirty"> enter a dollar amount</p>
           </div>
           <br>
-          <div class="edit-form-item">
+          <div class="sk-form-item">
             <label for="place">place</label>
             <input
               type="text"
@@ -103,7 +103,7 @@
               <p v-if="!$v.place.required && $v.place.$dirty"> field required</p>
           </div>
           <br>
-          <div class="edit-form-item">
+          <div class="sk-form-item">
             <label for="style-note">style note </label><span>&nbsp;({{noteCharsLeft()}})</span>
             <textarea
               type="text"
@@ -126,18 +126,18 @@
           </div>
         </form>
       </div>
-      <div v-if="confirmDelete" class="confirm-delete">
+      <div v-if="confirmDelete" class="sk-auto-side-margin sk-no-content-main">
         <span style="font-size: 18px;">delete post?</span>
         <br><br>
         <span
           @click="deletePost"
-          style="font-size: 18px; color: #ff0800; font-weight:500; cursor:pointer;">
+          style="font-size: 17px; color: #ff0800; cursor:pointer;">
             delete
         </span>
         <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
         <span
           @click="deleteCancel"
-          style="font-size: 18px; color: #137E8D; font-weight:500; cursor:pointer;">
+          style="font-size: 17px; color: #137E8D; cursor:pointer;">
             cancel
         </span>
       </div>
@@ -337,59 +337,3 @@ export default {
   }
 }
 </script>
-
-<style>
-/* .edit-kast-body {
-  padding: 0px 15px 10px 15px;
-  margin-right: auto;
-  margin-left: auto;
-  margin-top: 70px;
-  max-width: 500px;
-} */
-.edit-kast-pics {
-  text-align: center;
-}
-.edit-form-main {
-  padding: 0px 15px 10px 15px;
-}
-.edit-form-item > label {
-  font-size: 16px;
-}
-.edit-form-item > p {
-  margin: 0px;
-  padding: 0px;
-  color: #f50057;
-}
-.edit-form-item > input  {
-  width:100%;
-  height: 40px;
-  padding: 10px 15px;
-  box-sizing: border-box;
-  /* border: 2px solid rgb(245,0,87, .15); */
-  border: 2px solid rgb(176,176,176, .35);
-  border-radius: 5px;
-  background-color: rgb(237,237,237, .4);
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  font-size: 16px;
-}
-.edit-form-item > textarea {
-  width: 100%;
-  height: 100px;
-  padding: 10px 15px;
-  box-sizing: border-box;
-  /* border: 2px solid rgb(245,0,87, .15); */
-  border: 2px solid rgb(176,176,176, .35);
-  border-radius: 5px;
-  background-color: rgb(237,237,237, .4);
-  resize: none;
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  font-size: 16px;
-}
-.confirm-delete{
-  margin-right: auto;
-  margin-left: auto;
-  margin-top: 50px;
-  max-width: 500px;
-  text-align: center;
-}
-</style>
