@@ -1,32 +1,32 @@
 <template>
-  <div class="followers-main">
-    <div class="followers-fixed-header" v-if="!isLoading">
-      <div class="followers-header-item">
+  <div class="sk-position-relative">
+    <div class="sk-fixed-header" v-if="!isLoading">
+      <div class="sk-fixed-header-item-flex-3">
         <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-        <span @click="goBack">
+        <span style="cursor: pointer;" @click="goBack">
           <img src="../../../assets/svg/backarrow.svg">
         </span>
       </div>
     </div>
 
-    <div class="followers-list">
+    <div class="sk-auto-side-margin sk-main-padding">
       <div
         v-if="followers.length === 0"
-        class="no-followers-main" >
+        class="sk-no-follow-main" >
           <img src="../../../assets/svg/shop.svg">
-          <br>
-          <br>
-          <span>no followers yet...</span>
+          <br/>
+          <br/>
+          <span style="font-size: 16px">no followers yet...</span>
       </div>
       <div
         v-else
         v-for="(follower,index) in followers"
         :key="index"
-        class="followers">
-        <div class="avatar" @click="goToUser(follower.username)">
+        class="sk-follow">
+        <div class="sk-follow-avatar" @click="goToUser(follower.username)">
             <img :src="follower.url"/>
         </div>
-        <div class="followers-details">
+        <div class="sk-follow-details">
           <span style="cursor: pointer;" @click="goToUser(follower.username)">{{ follower.username}} </span> &nbsp;
           <span
             v-if="(loggedInUser !== follower.username) && (!follower.is_following)"
@@ -173,87 +173,3 @@ export default {
   }
 }
 </script>
-
-<style>
-.followers-main {
-  position: relative;
-}
-.followers-fixed-header {
-  position: fixed;
-  top: 0px;
-  background-color: #ededed;
-  margin-top: 56px;
-  height: 45px;
-  width: 100%;
-}
-.followers-header-item{
-  margin-right: auto;
-  margin-left: auto;
-  margin-top: 12px;
-  max-width: 500px;
-  display: flex;
-  justify-content: flex-start;
-}
-.followers-header-item span {
-  cursor: pointer;
-}
-.followers-list{
-  /* top right bottom left */
-  padding: 20px 15px 10px 15px;
-  margin-right: auto;
-  margin-left: auto;
-  margin-top: 5px;
-  max-width: 500px;
-}
-.no-followers-main{
-  margin-right: auto;
-  margin-left: auto;
-  margin-top: 100px;
-  max-width: 500px;
-  text-align: center;
-}
-.no-followers-main span {
-  font-size: 16px;
-}
-/* .no-followers-links {
-  margin-top: 30px;
-}
-.no-followers-links span {
-  font-size: 16px;
-  font-weight: 500;
-} */
-/* .no-followers-main{
-  margin-right: auto;
-  margin-left: auto;
-  margin-top: 100px;
-  max-width: 500px;
-  text-align: center;
-}
-.no-followers-main span {
-  font-size: 16px;
-}
-. */
-.followers {
-  padding: 10px 15px 10px 15px;
-  margin-right: auto;
-  margin-left: auto;
-  margin-top: 50px;
-  max-width: 500px;
-}
-.avatar > img {
-  float:left;
-  border: 1px solid #4db6ac;
-  border-radius: 50%;
-  height: 55px;
-  width: 55px;
-  padding: 2px;
-  margin-left: 5px;
-  cursor: pointer;
-}
-.followers-details  {
-  font-size: 16px;
-  padding-left: 75px;
-  padding-right: 10px;
-  padding-top: 15px;
-}
-</style>

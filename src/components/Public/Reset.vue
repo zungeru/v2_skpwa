@@ -1,16 +1,16 @@
 <template>
-  <div class="sk-reset-main">
-    <div class="reset-heading">
+  <div class="sk-auto-side-margin sk-main-padding">
+    <div class="sk-auth-heading">
       <h4>reset password</h4>
     </div>
-    <div v-if="showError" class="login-error">
+    <div v-if="showError" class="sk-error-msg">
       <span>link expired or incorrect email entered</span>
     </div>
-    <div v-if="inProgress" class="tags-loader"></div>
+    <div v-if="inProgress" class="sk-loader"></div>
     <br/>
 
-    <form v-if="!passwordReset" class="reset-form" action="#" >
-      <div class="reset-item">
+    <form v-if="!passwordReset" class="sk-form" action="#" >
+      <div class="sk-form-item">
         <label for="email">email</label>
         <input
           type="email"
@@ -21,18 +21,18 @@
           <p v-if="!$v.email.required && $v.email.$dirty"> email required</p>
       </div>
       <br>
-      <div class="reset-item">
+      <div class="sk-form-item">
         <label for="password">new password</label>
         <input
           type="password"
           id="password"
-          @input=""
+          @input="$v.password.$touch()"
           v-model="password">
           <p v-if="!$v.password.required && $v.password.$dirty"> password required</p>
           <p v-if="!$v.password.minLen && $v.password.$dirty"> min 6 characters</p>
       </div>
       <br>
-      <div class="reset-item">
+      <div class="sk-form-item">
         <label for="confirm-password">confirm password</label>
         <input
           type="password"
@@ -86,6 +86,7 @@ export default {
           if (res.data.authStatus === 'Fail') {
             this.showError = true
             this.inProgress = false
+            document.querySelector('.mdl-layout__content').scrollTop = 0
           }
           if (res.data.authStatus === 'Pass') {
             console.log(res.data)
@@ -124,52 +125,5 @@ export default {
 </script>
 
 <style>
-.sk-reset-main{
-  padding: 20px 15px 10px 15px;
-  margin-right: auto;
-  margin-left: auto;
-  max-width: 500px;
-}
-.reset-heading{
-  text-align: center;
-}
-.reset-heading > h4{
-  padding-top: 0px;
-  margin-top: 0px;
-}
-.email-msg {
-  text-align: center;
-  margin-right: auto;
-  margin-left: auto;
-  background-color: #B9D3D8;
-  border-radius: 5px;
-  width: 250px;
-}
-.reset-form{
-  padding: 0px 15px 10px 15px;
-  margin-right: auto;
-  margin-left: auto;
-  margin-top: 0px;
-  max-width: 500px;
-}
-.reset-item > label {
-  font-size: 16px;
-}
-.reset-item > p {
-  margin: 0px;
-  padding: 0px;
-  color: #ff0800;
-}
-.reset-item > input  {
-  width:100%;
-  height: 40px;
-  padding: 10px 15px;
-  box-sizing: border-box;
-  /* border: 2px solid rgb(245,0,87, .15); */
-  border: 2px solid rgb(176,176,176, .35);
-  border-radius: 5px;
-  background-color: rgb(237,237,237, .4);
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  font-size: 16px;
-}
+
 </style>

@@ -1,28 +1,23 @@
 <template>
-    <div class="edit-comment-main">
+    <div class="sk-position-relative">
 
       <!-- Edit Comment Header -->
-      <div class="edit-comment-fixed-header" v-if="!isLoading">
-        <div class="edit-comment-header-item">
+      <div class="sk-fixed-header" v-if="!isLoading">
+        <div class="sk-fixed-header-item-flex">
 
           <span @click="goBack">
             <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                <path d="M0 0h24v24H0z" fill="none"/>
-                <path d="M21 11H6.83l3.58-3.59L9 6l-6 6 6 6 1.41-1.41L6.83 13H21z"/>
-            </svg>
+            <img style="cursor: pointer;" src="../../../../assets/svg/backarrow.svg">
           </span>
           <span @click="deleteCheck">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-              <path fill="none" d="M0 0h24v24H0V0z"/><path d="M6 21h12V7H6v14zm2.46-9.12l1.41-1.41L12 12.59l2.12-2.12 1.41 1.41L13.41 14l2.12 2.12-1.41 1.41L12 15.41l-2.12 2.12-1.41-1.41L10.59 14l-2.13-2.12zM15.5 4l-1-1h-5l-1 1H5v2h14V4h-3.5z"/>
-            </svg>
+            <img style="cursor: pointer;" src="../../../../assets/svg/delete.svg">
             <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
           </span>
         </div>
       </div>
       <!-- End Edit Comment Header -->
 
-      <div v-if="confirmDelete" class="confirm-comment-delete">
+      <div v-if="confirmDelete" class="sk-auto-side-margin sk-no-content-main">
         <span style="font-size: 18px;">delete comment?</span>
         <br><br>
         <span
@@ -39,7 +34,7 @@
       </div>
 
       <div v-else>
-        <form class="edit-comment-form" action="#">
+        <form class="add-comment-form sk-auto-side-margin" action="#">
               <label for="comment">edit your comment...({{commentCharsLeft()}})</label>
               <hr>
               <textarea
@@ -153,8 +148,9 @@ export default {
     }
   },
   activated () {
-    document.querySelector('.mdl-layout__content').scrollTop = 0
     this.getComment()
+    document.querySelector('.mdl-layout__content').scrollTop = 0
+    this.confirmDelete = false
   },
   beforeRouteEnter (to, from, next) {
     const now = (new Date()).getTime()
@@ -168,55 +164,3 @@ export default {
   }
 }
 </script>
-
-<style>
-.edit-comment-main {
-  position: relative;
-}
-.edit-comment-fixed-header {
-  position: fixed;
-  top: 0px;
-  background-color: #ededed;
-  margin-top: 56px;
-  height: 45px;
-  width: 100%;
-}
-.edit-comment-header-item {
-  margin-right: auto;
-  margin-left: auto;
-  margin-top: 12px;
-  max-width: 500px;
-  justify-content: space-between;
-  display: flex;
-}
-.edit-comment-header-item span {
-  cursor: pointer;
-}
-.edit-comment-form {
-  margin-top: 60px;
-  padding: 10px 30px 10px 30px;
-  margin-right: auto;
-  margin-left: auto;
-  max-width: 500px;
-}
-textarea {
-    width: 100%;
-    height: 100px;
-    padding: 10px 15px;
-    box-sizing: border-box;
-    border: 2px solid rgb(245,0,87, .15);
-    border-radius: 5px;
-    background-color: rgb(237,237,237, .4);
-    resize: none;
-    font-family: 'Avenir', Helvetica, Arial, sans-serif;
-    font-size: 14px;
-
-}
-.confirm-comment-delete{
-  margin-right: auto;
-  margin-left: auto;
-  margin-top: 100px;
-  max-width: 500px;
-  text-align: center;
-}
-</style>

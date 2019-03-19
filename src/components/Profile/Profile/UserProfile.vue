@@ -1,8 +1,8 @@
 <template>
-  <div class="user-profile-main">
+  <div class="sk-auto-side-margin">
     <!-- BEGIN PROFILE TOP -->
     <transition-group name="fade" appear mode="in-out">
-      <div class="user-profile-top" key="profileTop">
+      <div style="padding: 15px 15px 10px 15px;" key="profileTop">
         <div class="user-profile-avatar">
           <img :src='profiledUser.url'/>
         </div>
@@ -285,72 +285,3 @@ export default {
 }
 
 </script>
-
-<style>
-.fade-enter{
-  opacity: 0;
-}
-.fade-enter-active{
-  transition: opacity 1s;
-}
-.fade-leave{
-  /* opacity: 1; */
-}
-.fade-leave-active{
-  transition: opacity 1s;
-  opacity: 0;
-}
-.user-profile-main{
-  margin-right: auto;
-  margin-left: auto;
-  max-width: 500px;
-}
-.user-profile-top {
-  padding: 15px 15px 10px 15px;
-}
-.user-profile-avatar > img {
-  float:left;
-  border: 2px solid #4db6ac;
-  border-radius: 50%;
-  height: 75px;
-  width: 75px;
-  padding: 3px;
-  margin-left: 10px;
-}
-.user-profile-stats {
-  padding-top: 10px;
-  padding-right: 10px;
-  margin-left: 110px;
-}
-.user-profile-info {
-  padding-top: 5px;
-  padding-right: 10px;
-  margin-left: 20px;
-}
-.no-userPosts-main {
-  margin-right: auto;
-  margin-left: auto;
-  margin-top: 50px;
-  max-width: 500px;
-  text-align: center;
-}
-
-.no-userPosts-main span {
-  font-size: 16px;
-}
-
-.no-userPosts-links {
-  margin-top: 5px;
-}
-
-.no-userPosts-links p {
-  margin-top: 0px;
-  font-size:16px;
-
-}
-
-.no-userPosts-links span {
-  font-size: 18px;
-  font-weight: 500;
-}
-</style>

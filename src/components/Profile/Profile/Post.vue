@@ -1,25 +1,22 @@
 <template>
   <div>
-    <div class="post-fixed-header" v-if="!isLoading">
-      <div class="post-header-item">
-        <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-        <span span @click="goBack">
+    <div class="sk-fixed-header" v-if="!isLoading">
+      <div class="sk-fixed-header-item-flex-3">
+        <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+        <span style="cursor: pointer;" @click="goBack">
           <img src="../../../assets/svg/backarrow.svg">
         </span>
       </div>
     </div>
 
-    <div class="post-body">
+    <div style="margin-top:70px;">
       <StyleKard
-        class="post-body"
         v-for="(post,index) in posts"
         :key="index"
         :id="post.id"
         :post="post">
       </StyleKard>
-
     </div>
-
   </div>
 </template>
 
@@ -58,7 +55,6 @@ export default {
             this.$router.push({name: 'error'})
           }
           if (res.data.skStatus === 'Pass') {
-            console.log(res.data)
             this.posts.push(res.data.post)
           }
         })
@@ -79,31 +75,3 @@ export default {
   }
 }
 </script>
-
-<style>
-.post-main {
-  position: relative;
-}
-.post-fixed-header {
-  position: fixed;
-  top: 0px;
-  background-color: #ededed;
-  margin-top: 56px;
-  height: 45px;
-  width: 100%;
-}
-.post-header-item {
-  margin-right: auto;
-  margin-left: auto;
-  margin-top: 12px;
-  max-width: 500px;
-  display: flex;
-  justify-content: flex-start;
-}
-.post-header-item span {
-  cursor: pointer;
-}
-.post-body {
-  margin-top: 70px;
-}
-</style>

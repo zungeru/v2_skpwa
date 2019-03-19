@@ -40,7 +40,7 @@
         <input
           type="password"
           id="password"
-          @input=""
+          @input="$v.password.$touch()"
           v-model="password">
           <p v-if="!$v.password.required && $v.password.$dirty"> password required</p>
           <p v-if="!$v.password.minLen && $v.password.$dirty"> min 6 characters</p>

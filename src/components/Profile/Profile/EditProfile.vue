@@ -1,23 +1,25 @@
 <template>
   <!-- The Main Div -->
-  <div class="edit-profile-main">
+  <div class="sk-position-relative">
 
     <!-- The Header Div -->
     <!-- isLoading is vuex variable used for page reload -->
-    <div class="edit-fixed-header" v-if="!isLoading">
-      <div class="edit-header-items">
+    <div class="sk-fixed-header" v-if="!isLoading">
+      <div class="sk-fixed-header-item-flex-4">
         <span>&nbsp;&nbsp;</span>
         <span @click="goBack">
           <img src="../../../assets/svg/backarrow.svg">
         </span>
         <span
           @click="selectProfile"
-          :class="{active: profileView}">
+          style="cursor: pointer;font-size: 15px;"
+          :class="{skactive: profileView}">
             update profile
         </span>
         <span
           @click="selectLogin"
-          :class="{active: !profileView}">
+          style="cursor: pointer;font-size: 15px;"
+          :class="{skactive: !profileView}">
             update login
         </span>
         <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
@@ -31,13 +33,16 @@
 
     <!-- The v-else to the Loading Div Above -->
     <div>
-      <div v-if="profileView" class="edit-form">
-        <div class="avatar-form">
+      <div
+        v-if="profileView"
+        class="sk-form sk-auto-side-margin"
+        style="margin-top: 70px;">
+        <div class="user-profile-avatar">
             <img :src="profileURL"/>
         </div>
 
-        <div class="upload">
-          <p class="upload-button" @click="onPickPhoto">upload photo</p>
+        <div class="sk-profile-upload">
+          <p class="sk-profile-upload-button" @click="onPickPhoto">upload photo</p>
           <input
             type="file"
             style="display: none;"
@@ -49,7 +54,7 @@
         <br/><br/><br/>
 
         <form>
-            <div class="edit-item">
+            <div class="sk-form-item">
               <label for="name">name</label><span>&nbsp;({{nameCharsLeft()}})</span>
               <input
                 type="text"
@@ -60,7 +65,7 @@
                 v-model="name">
             </div>
             <br>
-            <div class="edit-item">
+            <div class="sk-form-item">
               <label for="about">about you</label><span>&nbsp;({{aboutCharsLeft()}})</span>
               <textarea
                 type="text"
@@ -90,7 +95,7 @@
             @click.prevent="confirmDelete=!confirmDelete">
             delete account
           </span>
-          <div class="edit-item" v-if="confirmDelete">
+          <div class="sk-form-item" v-if="confirmDelete">
             <p>Delete your account? There is no going back. Enter your password below to confirm delete.</p>
             <br/>
             <label for="confirmdelete">password</label>
@@ -109,9 +114,12 @@
         </div>
       </div>
 
-      <form v-if="!profileView" class="edit-form">
+      <form
+        v-if="!profileView"
+        class="sk-form sk-auto-side-margin"
+        style="margin-top: 70px;">
         <p
-          class="update-button"
+          class="sk-toggle"
           v-if="!updateEmail"
           @click.prevent="showEmail">
           email
@@ -119,7 +127,7 @@
 
         </p>
         <p
-          class="update-button"
+          class="sk-toggle"
           v-if="updateEmail"
           @click.prevent="hideEmail">
           email
@@ -127,7 +135,7 @@
         </p>
 
         <div v-if="updateEmail">
-          <div class="edit-item">
+          <div class="sk-form-item">
             <label for="currentemail">current email</label>
             <input
               type="email"
@@ -136,7 +144,7 @@
               id="currentemail">
           </div>
           <br/>
-          <div class="edit-item">
+          <div class="sk-form-item">
             <label for="newemail">new email</label>
             <input
               type="email"
@@ -152,21 +160,21 @@
 
         <p
           v-if="!updatePassword"
-          class="update-button"
+          class="sk-toggle"
           @click.prevent="showPassword">
           password
           <img src="../../../assets/svg/toggle_off.svg">
         </p>
         <p
           v-if="updatePassword"
-          class="update-button"
+          class="sk-toggle"
           @click.prevent="hidePassword">
           password
           <img src="../../../assets/svg/toggle_on.svg">
         </p>
 
         <div v-if="updatePassword">
-          <div class="edit-item">
+          <div class="sk-form-item">
             <label for="newpassword">new password</label>
             <input
               type="password"
@@ -176,7 +184,7 @@
               <p v-if="!$v.newPassword.minLen && $v.newPassword.$dirty"> min 6 characters</p>
           </div>
           <br>
-          <div class="edit-item">
+          <div class="sk-form-item">
             <label for="confirmpassword">confirm new password</label>
             <input
               type="password"
@@ -189,7 +197,7 @@
 
         <br/><hr/><br/>
 
-        <div class="edit-item">
+        <div class="sk-form-item">
           <label for="currentpassword">enter current password to confirm updates</label>
           <input
             type="password"
@@ -425,102 +433,3 @@ export default {
   }
 }
 </script>
-
-<style>
-.edit-profile-main{
-  position: relative;
-}
-.edit-fixed-header {
-  position: fixed;
-  top: 0px;
-  background-color: #ededed;
-  margin-top: 56px;
-  height: 45px;
-  width: 100%;
-}
-.edit-header-items{
-  margin-right: auto;
-  margin-left: auto;
-  margin-top: 17px;
-  max-width: 500px;
-  justify-content: space-between;
-  display: flex;
-}
-.edit-header-items span {
-  cursor: pointer;
-  font-size: 15px;
-}
-.active {
-  color: #ff0800;
-  font-weight: 500;
-}
-.edit-form{
-  padding: 0px 15px 10px 15px;
-  margin-right: auto;
-  margin-left: auto;
-  margin-top: 70px;
-  max-width: 500px;
-}
-.avatar-form > img {
-  float:left;
-  border: 2px solid #4db6ac;
-  border-radius: 50%;
-  height: 75px;
-  width: 75px;
-  padding: 2px;
-  margin-left: 5px;
-}
-.upload  {
-  font-size: 15px;
-  padding-top: 15px;
-  padding-left: 80px;
-  padding-right: 10px;
-}
-.upload-button{
-  padding-top: 10px;
-  padding-left: 15px;
-  max-width: 100px;
-  font-size: 15px;
-  cursor: pointer;
-  color: #ff0800;
-  font-weight: 450;
-}
-.update-button{
-  max-width: 180px;
-  font-size: 15px;
-  cursor: pointer;
-  color: #137E8D;
-  font-weight: 450;
-}
-.edit-item > label {
-  font-size: 16px;
-}
-.edit-item > p {
-  margin: 0px;
-  padding: 0px;
-  color: #ff0800;
-}
-.edit-item > input {
-  width:100%;
-  height: 40px;
-  padding: 10px 15px;
-  box-sizing: border-box;
-  /* border: 2px solid rgb(245,0,87, .15); */
-  border: 2px solid rgb(176,176,176, .35);
-  border-radius: 5px;
-  background-color: rgb(237,237,237, .4);
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  font-size: 16px;
-}
-.edit-item > textarea {
-  width:100%;
-  padding: 10px 15px;
-  box-sizing: border-box;
-  /* border: 2px solid rgb(245,0,87, .15); */
-  border: 2px solid rgb(176,176,176, .35);
-  border-radius: 5px;
-  background-color: rgb(237,237,237, .4);
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  font-size: 16px;
-}
-</style>

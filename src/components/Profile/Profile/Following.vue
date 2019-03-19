@@ -1,39 +1,32 @@
 <template>
-  <div class="following-main">
-    <div class="following-fixed-header" v-if="!isLoading">
-      <div class="following-header-item">
+  <div class="sk-position-relative">
+    <div class="sk-fixed-header" v-if="!isLoading">
+      <div class="sk-fixed-header-item-flex-3">
         <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-        <span @click="goBack">
+        <span style="cursor: pointer;" @click="goBack">
           <img src="../../../assets/svg/backarrow.svg">
         </span>
       </div>
     </div>
 
-    <div class="following-list">
+    <div class="sk-auto-side-margin sk-main-padding">
       <div
         v-if="following.length === 0"
-        class="no-following-main">
+        class="sk-no-follow-main">
           <img src="../../../assets/svg/shop.svg">
-          <br>
-          <br>
-          <span>no following yet...</span>
-          <div class="no-following-links">
-            <router-link
-              tag="span"
-              :to="{ name: 'people'}"
-              style="color: #ff0800; cursor: pointer;">find styleKasters &nbsp;
-            </router-link>
-          </div>
+          <br/>
+          <br/>
+          <span style="font-size: 16px">no following yet...</span>
       </div>
       <div
         v-else
         v-for="(follow,index) in following"
         :key="index"
-        class="following">
-        <div class="avatar" @click="goToUser(follow.username)">
+        class="sk-follow">
+        <div class="sk-follow-avatar" @click="goToUser(follow.username)">
             <img :src="follow.url"/>
         </div>
-        <div class="following-details">
+        <div class="sk-follow-details">
           <span style="cursor: pointer;" @click="goToUser(follow.username)">{{ follow.username}} </span> &nbsp;
           <span
             v-if="(loggedInUser !== follow.username) && (!follow.is_following)"
@@ -185,77 +178,3 @@ export default {
   }
 }
 </script>
-
-<style>
-.following-main {
-  position: relative;
-}
-.following-fixed-header {
-  position: fixed;
-  top: 0px;
-  background-color: #ededed;
-  margin-top: 56px;
-  height: 45px;
-  width: 100%;
-}
-.following-header-item{
-  margin-right: auto;
-  margin-left: auto;
-  margin-top: 12px;
-  max-width: 500px;
-  display: flex;
-  justify-content: flex-start;
-}
-.following-header-item span {
-  cursor: pointer;
-}
-.following-list{
-  /* top right bottom left */
-  padding: 20px 15px 10px 15px;
-  margin-right: auto;
-  margin-left: auto;
-  margin-top: 5px;
-  max-width: 500px;
-}
-.no-following-main{
-  margin-right: auto;
-  margin-left: auto;
-  margin-top: 100px;
-  max-width: 500px;
-  text-align: center;
-}
-.no-following-main span {
-  font-size: 16px;
-}
-.no-following-links {
-  margin-top: 30px;
-}
-
-.no-following-links span {
-  font-size: 16px;
-  font-weight: 500;
-}
-.following {
-  padding: 10px 15px 10px 15px;
-  margin-right: auto;
-  margin-left: auto;
-  margin-top: 50px;
-  max-width: 500px;
-}
-.avatar > img {
-  float:left;
-  border: 1px solid #4db6ac;
-  border-radius: 50%;
-  height: 55px;
-  width: 55px;
-  padding: 2px;
-  margin-left: 5px;
-  cursor: pointer;
-}
-.following-details  {
-  font-size: 16px;
-  padding-left: 75px;
-  padding-right: 10px;
-  padding-top: 15px;
-}
-</style>

@@ -160,7 +160,12 @@ export default {
       }
     },
     canEditPost () {
-      if ((!localStorage.getItem('username')) || (localStorage.getItem('username') !== this.post.username)) {
+      // if ((!localStorage.getItem('username')) || (localStorage.getItem('username') !== this.post.username)) {
+      //   return false
+      // } else {
+      //   return true
+      // }
+      if ( (!this.$store.getters.userData) || (this.$store.getters.userData.username !== this.post.username) ) {
         return false
       } else {
         return true

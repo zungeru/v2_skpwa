@@ -22,6 +22,15 @@
   width: 250px;
 }
 
+.sk-info-msg {
+  text-align: center;
+  margin-right: auto;
+  margin-left: auto;
+  background-color: #B9D3D8;
+  border-radius: 5px;
+  width: 300px;
+}
+
 /* feed component */
 .fade-enter{
   opacity: 0;
@@ -37,13 +46,22 @@
   opacity: 0;
 }
 
+.sk-toggle{
+  max-width: 180px;
+  font-size: 15px;
+  cursor: pointer;
+  color: #137E8D;
+  font-weight: 450;
+}
+
 /* sk-form used in login, signup, kast components */
 .sk-form{
   padding: 0px 15px 10px 15px;
   margin-top: 0px;
 }
 .sk-form-item > label {
-  font-size: 16px;
+  font-size: 15px;
+  padding: 0px 0px 0px 3px;
 }
 .sk-form-item > p {
   margin: 0px;
@@ -165,8 +183,8 @@
   cursor: pointer;
 }
 
-/* used in kast component */
-.sk-gray-note {
+/* used in kast people and tags component */
+.sk-pink-note {
   color: #ff0800;
   font-weight: 500;
   font-size: 14px;
@@ -175,6 +193,11 @@
   padding-bottom: 10px;
 }
 
+.sk-gray-note {
+  color: #696969;
+  font-size: 14px;
+  text-align: center;
+}
 /* used in editkast component */
 .sk-position-relative {
   position: relative;
@@ -208,11 +231,271 @@
   justify-content: space-between;
 }
 
-.sk-fixed-header-item-flex-2 div {
+/* .sk-fixed-header-item-flex-2 div {
+  cursor: pointer;
+  font-size: 16px;
+} */
+
+.sk-pointer-16 {
   cursor: pointer;
   font-size: 16px;
 }
-.sk-search-active {
+
+.skactive {
   font-weight: 500;
   color: #ff0800;
 }
+
+/* Don't know why sk-fixed-header-item-flex is not working in post followers following components */
+.sk-fixed-header-item-flex-3  {
+  margin-right: auto;
+  margin-left: auto;
+  margin-top: 12px;
+  max-width: 500px;
+  display: flex;
+  justify-content: flex-start;
+}
+
+/* again different one for editprofile component */
+.sk-fixed-header-item-flex-4 {
+  margin-right: auto;
+  margin-left: auto;
+  margin-top: 17px;
+  max-width: 500px;
+  justify-content: space-between;
+  display: flex;
+}
+
+/* used in tags search for the icon */
+.hash {
+  border: 2px solid #137E8D;
+  border-radius: 50%;
+  height: 40px;
+  width: 40px;
+  padding: 5px;
+  background: #137E8D;
+  margin-top: 3px;
+}
+
+/* start search (people and tags) css */
+.search-fixed-header {
+  position: fixed;
+  top: 41px;
+  text-align: center;
+  padding: 10px 0px 0px 15px;
+  background-color: white;
+  margin-top: 60px;
+}
+.search-form > input {
+  outline: 0;
+  margin-top: 10px;
+  border-width: 0 0 2px;
+  border-color: black;
+  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-size: 15px;
+}
+.search-form > input:focus {
+  border-color: #ff0800;
+}
+.no-result-main{
+  margin-top: 120px;
+  text-align: center;
+}
+
+.search-result {
+  margin-top:110px;
+  margin-left: 45px;
+}
+.search-result-item{
+  margin-top: 25px;
+  cursor: pointer;
+  max-width: 350px;
+}
+.search-image {
+  float:left;
+  border: 2px solid #4db6ac;
+  border-radius: 50%;
+  height: 45px;
+  width: 45px;
+  padding: 2px;
+  margin-left: 5px;
+}
+.search-details  {
+  padding-left: 10px;
+  padding-top: 5px;
+  font-size: 15px;
+  margin-left: 55px;
+  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+}
+/* end search (people and tags) css */
+
+/* start userprofile css  */
+.user-profile-avatar > img {
+  float:left;
+  border: 2px solid #4db6ac;
+  border-radius: 50%;
+  height: 75px;
+  width: 75px;
+  padding: 3px;
+  margin-left: 10px;
+}
+.user-profile-stats {
+  padding-top: 10px;
+  padding-right: 10px;
+  margin-left: 110px;
+}
+.user-profile-info {
+  padding-top: 5px;
+  padding-right: 10px;
+  margin-left: 20px;
+}
+.no-userPosts-main {
+  margin-right: auto;
+  margin-left: auto;
+  margin-top: 50px;
+  max-width: 500px;
+  text-align: center;
+}
+.no-userPosts-main span {
+  font-size: 16px;
+}
+.no-userPosts-links {
+  margin-top: 5px;
+}
+.no-userPosts-links p {
+  margin-top: 0px;
+  font-size:16px;
+
+}
+.no-userPosts-links span {
+  font-size: 18px;
+  font-weight: 500;
+}
+/* end userprofile css  */
+
+/* start editprofile css */
+.sk-profile-upload {
+  font-size: 15px;
+  padding-top: 15px;
+  padding-left: 85px;
+  padding-right: 10px;
+}
+.sk-profile-upload-button {
+  padding-top: 10px;
+  padding-left: 15px;
+  max-width: 100px;
+  font-size: 15px;
+  cursor: pointer;
+  color: #ff0800;
+}
+/* start editprofile css*/
+
+/* start followers and following css */
+.sk-no-follow-main {
+  margin-right: auto;
+  margin-left: auto;
+  margin-top: 100px;
+  max-width: 500px;
+  text-align: center;
+}
+.sk-follow {
+  padding: 10px 15px 10px 15px;
+  margin-right: auto;
+  margin-left: auto;
+  margin-top: 50px;
+  max-width: 500px;
+}
+.sk-follow-avatar > img {
+  float:left;
+  border: 1px solid #4db6ac;
+  border-radius: 50%;
+  height: 55px;
+  width: 55px;
+  padding: 2px;
+  margin-left: 5px;
+  cursor: pointer;
+}
+.sk-follow-details  {
+  font-size: 16px;
+  padding-left: 75px;
+  padding-right: 10px;
+  padding-top: 15px;
+}
+
+/* end followers and following css */
+
+/* start comments css */
+.no-comments {
+  margin-right: auto;
+  margin-left: auto;
+  margin-top: 70px;
+  max-width: 500px;
+  text-align: center;
+}
+.no-comments span {
+  font-size: 18px;
+  color: #137E8D;
+}
+.comments {
+  padding: 10px 15px 10px 15px;
+  margin-right: auto;
+  margin-left: auto;
+  margin-top: 10px;
+  max-width: 500px;
+}
+.avatar-comments > img {
+  float:left;
+  border: 1px solid #4db6ac;
+  border-radius: 50%;
+  height: 40px;
+  width: 40px;
+  padding: 2px;
+  margin-left: 5px;
+}
+.comments-details  {
+  font-size: 15px;
+  padding-left: 60px;
+  padding-right: 10px;
+}
+.add-comment-form {
+  margin-top: 60px;
+  padding: 10px 30px 10px 30px;
+}
+.add-comment-form > p {
+  margin: 0px;
+  padding: 0px;
+  color: #ff0800;
+}
+.add-comment-form > textarea {
+    width: 100%;
+    height: 100px;
+    padding: 10px 15px;
+    box-sizing: border-box;
+    border: 2px solid rgb(176,176,176, .35);
+    border-radius: 5px;
+    background-color: rgb(237,237,237, .4);
+    resize: none;
+    font-family: 'Avenir', Helvetica, Arial, sans-serif;
+    font-size: 14px;
+
+}
+/* end comments css */
+
+/* start error deleted css */
+.no-result-main h5 {
+  color: #A9A9A9;
+  font-size: 24px;
+
+}
+
+.no-result-main h4 {
+  color: #137E8D
+}
+
+.no-result-main span {
+  color: #ff0800;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 500;
+}
+/* end error deleted css */

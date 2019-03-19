@@ -1,16 +1,16 @@
 <template>
-    <div class="comments-main">
+    <div class="sk-position-relative">
 
       <!-- Header -->
-      <div class="comments-fixed-header" v-if="!isLoading">
+      <div class="sk-fixed-header" v-if="!isLoading">
 
-        <div class="comments-header-items">
+        <div class="sk-fixed-header-item-flex">
           <span @click="goBack">
             <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-            <img src="../../../../assets/svg/backarrow.svg">
+            <img style="cursor: pointer;" src="../../../../assets/svg/backarrow.svg">
           </span>
           <span @click="goPost">
-            <img src="../../../../assets/svg/add.svg">
+            <img style="cursor: pointer;" src="../../../../assets/svg/add.svg">
             <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
           </span>
         </div>
@@ -19,11 +19,11 @@
       <!-- End Header -->
 
       <!-- Post Note -->
-      <div class="post-note">
+      <div class="sk-auto-side-margin sk-main-padding" style="margin-top: 45px;">
         <div class="avatar-comments" style="cursor: pointer;" @click="goToUser(post.username)">
             <img :src="post.user_url"/>
         </div>
-        <div class="details">
+        <div class="comments-details">
           <span style="font-weight: bold;">{{post.username}} </span>
           {{post.postnote}} &nbsp;
           <span style="font-size: 12px; font-weight: 500;"> {{ post.date_created | fromDate }}</span>
@@ -47,7 +47,7 @@
           <div class="avatar-comments" style="cursor: pointer;" @click="goToUser(comment.username)">
               <img :src="comment.user_url"/>
           </div>
-          <div class="details">
+          <div class="comments-details">
             <span style="font-weight: bold;">{{ comment.username}}  </span>
             {{ comment.comment}} &nbsp;
             <span style="font-size: 12px; font-weight: 500;"> {{comment.date_updated | fromDate }}</span>
@@ -181,68 +181,3 @@ export default {
   }
 }
 </script>
-
-<style>
-.comments-main {
-  position: relative;
-}
-.comments-fixed-header {
-  position: fixed;
-  top: 0px;
-  background-color: #ededed;
-  margin-top: 56px;
-  height: 45px;
-  width: 100%;
-}
-.comments-header-items{
-  margin-right: auto;
-  margin-left: auto;
-  margin-top: 12px;
-  max-width: 500px;
-  justify-content: space-between;
-  display: flex;
-}
-.comments-header-items span {
-  cursor: pointer;
-}
-.post-note {
-  /* top right bottom left */
-  padding: 20px 15px 10px 15px;
-  margin-right: auto;
-  margin-left: auto;
-  margin-top: 45px;
-  max-width: 500px;
-}
-.no-comments {
-  margin-right: auto;
-  margin-left: auto;
-  margin-top: 70px;
-  max-width: 500px;
-  text-align: center;
-}
-.no-comments span {
-  font-size: 18px;
-  color: #137E8D;
-}
-.comments {
-  padding: 10px 15px 10px 15px;
-  margin-right: auto;
-  margin-left: auto;
-  margin-top: 10px;
-  max-width: 500px;
-}
-.avatar-comments > img {
-  float:left;
-  border: 1px solid #4db6ac;
-  border-radius: 50%;
-  height: 40px;
-  width: 40px;
-  padding: 2px;
-  margin-left: 5px;
-}
-.details  {
-  font-size: 15px;
-  padding-left: 60px;
-  padding-right: 10px;
-}
-</style>

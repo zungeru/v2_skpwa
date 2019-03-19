@@ -1,12 +1,12 @@
 <template>
-    <div class="add-comment-main">
+    <div class="sk-position-relative">
 
       <!-- Fixed Header -->
-      <div class="add-comment-fixed-header" v-if="!isLoading" >
-        <div class="add-comment-header-item">
+      <div class="sk-fixed-header" v-if="!isLoading" >
+        <div class="sk-fixed-header-item-flex-3">
           <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
           <span @click="goBack">
-            <img src="../../../../assets/svg/backarrow.svg">
+            <img style="cursor: pointer;" src="../../../../assets/svg/backarrow.svg">
           </span>
         </div>
       </div>
@@ -14,7 +14,7 @@
 
 
       <!-- Add Comment Form -->
-      <form class="add-comment-form" action="#">
+      <form class="add-comment-form sk-auto-side-margin" action="#">
             <label for="comment">add a comment...({{commentCharsLeft()}})</label>
             <hr>
             <textarea
@@ -106,48 +106,3 @@ export default {
   }
 }
 </script>
-
-<style>
-.add-comment-main {
-  position: relative;
-}
-.add-comment-fixed-header {
-  position: fixed;
-  top: 0px;
-  background-color: #ededed;
-  margin-top: 56px;
-  height: 45px;
-  width: 100%;
-}
-.add-comment-header-item {
-  margin-right: auto;
-  margin-left: auto;
-  margin-top: 12px;
-  max-width: 500px;
-  display: flex;
-  justify-content: flex-start;
-}
-.add-comment-header-item span {
-  cursor: pointer;
-}
-.add-comment-form {
-  margin-top: 60px;
-  padding: 10px 30px 10px 30px;
-  margin-right: auto;
-  margin-left: auto;
-  max-width: 500px;
-}
-textarea {
-    width: 100%;
-    height: 100px;
-    padding: 10px 15px;
-    box-sizing: border-box;
-    border: 2px solid rgb(245,0,87, .15);
-    border-radius: 5px;
-    background-color: rgb(237,237,237, .4);
-    resize: none;
-    font-family: 'Avenir', Helvetica, Arial, sans-serif;
-    font-size: 14px;
-
-}
-</style>

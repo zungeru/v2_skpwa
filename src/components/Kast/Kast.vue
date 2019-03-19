@@ -47,10 +47,10 @@
             <hr>
             <div
               v-if="picsLength > 1"
-              style="color: #696969; font-size: 14px; text-align: center;"
+              class="sk-gray-note"
               >drag photos to reorder
             </div>
-            <div class="sk-gray-note">
+            <div class="sk-pink-note">
               <span style="cursor: pointer;" @click="onPickFileChange">change photo<span v-if="picsLength > 1">s</span></span>
             </div>
             <div class="sk-form-item">
