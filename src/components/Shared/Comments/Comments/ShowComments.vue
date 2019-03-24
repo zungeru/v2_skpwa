@@ -36,7 +36,7 @@
 
       <!-- when there are no comments -->
       <div class="no-comments" v-if="comments.length === 0">
-        <span>no comments to view yet...</span>
+        <span>no comments yet...</span>
       </div>
 
       <!-- when there are comments -->
